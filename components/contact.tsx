@@ -1,16 +1,25 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Mail, MapPin, Phone, Github, Linkedin, Twitter, Gitlab, Instagram } from "lucide-react"
+import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Mail,
+  MapPin,
+  Phone,
+  Github,
+  Linkedin,
+  Twitter,
+  Gitlab,
+  Instagram,
+} from "lucide-react";
 
 export default function Contact() {
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
-  }
+  };
 
   const contactInfo = [
     {
@@ -31,7 +40,7 @@ export default function Contact() {
       value: "Malang, East Java, Indonesia",
       link: null,
     },
-  ]
+  ];
 
   const socialLinks = [
     {
@@ -59,7 +68,7 @@ export default function Contact() {
     //   name: "Twitter",
     //   url: "https://twitter.com",
     // },
-  ]
+  ];
 
   return (
     <section id="contact" className="py-20 bg-muted/30">
@@ -91,11 +100,21 @@ export default function Contact() {
               <CardContent className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {contactInfo.map((info, index) => (
-                    <div key={index} className="flex flex-col items-center text-center p-4">
-                      <div className="bg-primary/10 p-4 rounded-full mb-4">{info.icon}</div>
-                      <h3 className="text-lg font-semibold mb-2">{info.title}</h3>
+                    <div
+                      key={index}
+                      className="flex flex-col items-center text-center p-4"
+                    >
+                      <div className="bg-primary/10 p-4 rounded-full mb-4">
+                        {info.icon}
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2">
+                        {info.title}
+                      </h3>
                       {info.link ? (
-                        <a href={info.link} className="text-muted-foreground hover:text-primary transition-colors">
+                        <a
+                          href={info.link}
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                        >
                           {info.value}
                         </a>
                       ) : (
@@ -117,13 +136,25 @@ export default function Contact() {
           >
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-6 text-center">Connect With Me</h3>
-                <div className="flex justify-center gap-6">
+                <h3 className="text-xl font-semibold mb-6 text-center">
+                  Connect With Me
+                </h3>
+                <div className="flex flex-col md:flex-row justify-center gap-6">
                   {socialLinks.map((social, index) => (
-                    <Button key={index} variant="outline" size="lg" className="flex items-center gap-2 px-6" asChild>
-                      <a href={social.url} target="_blank" rel="noopener noreferrer">
-                        {social.icon}
-                        <span>{social.name}</span>
+                    <Button
+                      key={index}
+                      variant="outline"
+                      size="lg"
+                      className="flex items-center gap-2 px-6"
+                    >
+                      <a
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center"
+                      >
+                        {social.icon} 
+                        <span className="ms-1">{social.name}</span>
                       </a>
                     </Button>
                   ))}
@@ -134,6 +165,5 @@ export default function Contact() {
         </div>
       </div>
     </section>
-  )
+  );
 }
-
