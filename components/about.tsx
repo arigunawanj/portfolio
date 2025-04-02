@@ -19,11 +19,13 @@ import {
   Cpu,
   Globe,
 } from "lucide-react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function About() {
   const [activeTab, setActiveTab] = useState("professional");
   const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: false, amount: 0.3 });
+  const isInView = useInView(containerRef, { once: false, amount: 0.1 });
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -38,37 +40,37 @@ export default function About() {
 
   const professionalSkills = [
     {
-      icon: <Code className="h-6 w-6 text-primary" />,
+      icon: <Code className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Clean Code",
       description:
         "I write maintainable, scalable, and efficient code following best practices and industry standards.",
     },
     {
-      icon: <Lightbulb className="h-6 w-6 text-primary" />,
+      icon: <Lightbulb className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Problem Solver",
       description:
         "I enjoy tackling complex challenges and finding elegant solutions through creative thinking.",
     },
     {
-      icon: <Rocket className="h-6 w-6 text-primary" />,
+      icon: <Rocket className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Fast Learner",
       description:
         "I quickly adapt to new technologies and environments, constantly expanding my skill set.",
     },
     {
-      icon: <Cpu className="h-6 w-6 text-primary" />,
+      icon: <Cpu className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "System Design",
       description:
         "I architect robust, scalable systems that can handle complex requirements and high loads.",
     },
     {
-      icon: <Globe className="h-6 w-6 text-primary" />,
+      icon: <Globe className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Global Perspective",
       description:
         "I've worked with international teams and understand the nuances of global software development.",
     },
     {
-      icon: <Zap className="h-6 w-6 text-primary" />,
+      icon: <Zap className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Performance Optimizer",
       description:
         "I'm passionate about making software run faster and more efficiently.",
@@ -77,37 +79,37 @@ export default function About() {
 
   const personalTraits = [
     {
-      icon: <Coffee className="h-6 w-6 text-primary" />,
+      icon: <Coffee className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Coffee Enthusiast",
       description:
         "I believe the best code is written with a perfect cup of coffee by your side.",
     },
     {
-      icon: <Music className="h-6 w-6 text-primary" />,
+      icon: <Music className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Music Lover",
       description:
         "I enjoy listening to electronic and ambient music while coding to stay in the flow state.",
     },
     {
-      icon: <Gamepad2 className="h-6 w-6 text-primary" />,
+      icon: <Gamepad2 className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Casual Gamer",
       description:
         "I unwind by playing strategy and simulation games that challenge my problem-solving skills.",
     },
     {
-      icon: <BookOpen className="h-6 w-6 text-primary" />,
+      icon: <BookOpen className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Avid Reader",
       description:
         "I love reading technical books and science fiction to expand my imagination and knowledge.",
     },
     {
-      icon: <Heart className="h-6 w-6 text-primary" />,
+      icon: <Heart className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Open Source Contributor",
       description:
         "I'm passionate about giving back to the community through open source contributions.",
     },
     {
-      icon: <Sparkles className="h-6 w-6 text-primary" />,
+      icon: <Sparkles className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
       title: "Minimalist",
       description:
         "I appreciate clean, minimal design in both code and life - less is often more.",
@@ -134,7 +136,7 @@ export default function About() {
             animate={isInView ? "visible" : "hidden"}
             variants={fadeIn}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
           >
             {professionalSkills.map((skill, index) => (
               <motion.div
@@ -143,12 +145,15 @@ export default function About() {
                 animate={
                   isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                 }
-                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.2 + (isMobile ? 0 : index * 0.1),
+                }}
               >
                 <Card className="h-full hover:shadow-md transition-all duration-300 group">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/10 p-3 rounded-full group-hover:bg-primary/20 transition-colors">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex items-start gap-3 md:gap-4">
+                      <div className="bg-primary/10 p-2 md:p-3 rounded-full group-hover:bg-primary/20 transition-colors shrink-0">
                         <motion.div
                           whileHover={{ rotate: 360 }}
                           transition={{ duration: 0.5 }}
@@ -157,10 +162,10 @@ export default function About() {
                         </motion.div>
                       </div>
                       <div>
-                        <h4 className="text-xl font-semibold mb-2">
+                        <h4 className="text-base md:text-xl font-semibold mb-1 md:mb-2">
                           {skill.title}
                         </h4>
-                        <p className="text-muted-foreground">
+                        <p className="text-sm md:text-base text-muted-foreground">
                           {skill.description}
                         </p>
                       </div>
@@ -178,7 +183,7 @@ export default function About() {
             animate={isInView ? "visible" : "hidden"}
             variants={fadeIn}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
           >
             {personalTraits.map((trait, index) => (
               <motion.div
@@ -187,12 +192,15 @@ export default function About() {
                 animate={
                   isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                 }
-                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.2 + (isMobile ? 0 : index * 0.1),
+                }}
               >
                 <Card className="h-full hover:shadow-md transition-all duration-300 group">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/10 p-3 rounded-full group-hover:bg-primary/20 transition-colors">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex items-start gap-3 md:gap-4">
+                      <div className="bg-primary/10 p-2 md:p-3 rounded-full group-hover:bg-primary/20 transition-colors shrink-0">
                         <motion.div
                           whileHover={{ scale: 1.2 }}
                           transition={{ duration: 0.3 }}
@@ -201,10 +209,10 @@ export default function About() {
                         </motion.div>
                       </div>
                       <div>
-                        <h4 className="text-xl font-semibold mb-2">
+                        <h4 className="text-base md:text-xl font-semibold mb-1 md:mb-2">
                           {trait.title}
                         </h4>
-                        <p className="text-muted-foreground">
+                        <p className="text-sm md:text-base text-muted-foreground">
                           {trait.description}
                         </p>
                       </div>
@@ -225,8 +233,8 @@ export default function About() {
             className="max-w-3xl mx-auto"
           >
             <Card>
-              <CardContent className="p-6">
-                <ul className="space-y-4">
+              <CardContent className="p-4 md:p-6">
+                <ul className="space-y-3 md:space-y-4">
                   {funFacts.map((fact, index) => (
                     <motion.li
                       key={index}
@@ -234,7 +242,10 @@ export default function About() {
                       animate={
                         isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }
                       }
-                      transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                      transition={{
+                        duration: 0.5,
+                        delay: 0.2 + (isMobile ? 0.1 : index * 0.1),
+                      }}
                       className="flex items-start gap-3"
                     >
                       <motion.div
@@ -244,16 +255,16 @@ export default function About() {
                           type: "spring",
                           stiffness: 260,
                           damping: 20,
-                          delay: 0.3 + index * 0.1,
+                          delay: 0.3 + (isMobile ? 0.1 : index * 0.1),
                         }}
-                        className="mt-1 min-w-[24px]"
+                        className="mt-1 min-w-[20px] md:min-w-[24px] shrink-0"
                       >
-                        <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center text-primary font-medium">
+                        <div className="w-5 h-5 md:w-6 md:h-6 bg-primary/20 rounded-full flex items-center justify-center text-primary font-medium text-xs md:text-sm">
                           {index + 1}
                         </div>
                       </motion.div>
                       <motion.p
-                        className="text-muted-foreground"
+                        className="text-sm md:text-base text-muted-foreground"
                         whileHover={{ x: 5 }}
                         transition={{
                           type: "spring",
@@ -275,7 +286,7 @@ export default function About() {
     }
   };
 
-  // Animated code elements for the background
+  // Animated code elements for the background - reduced for mobile
   const codeElements = [
     { id: 1, content: "<div>", x: "10%", y: "15%", delay: 0, duration: 15 },
     {
@@ -288,28 +299,24 @@ export default function About() {
     },
     { id: 3, content: "{}", x: "20%", y: "80%", delay: 1, duration: 18 },
     { id: 4, content: "</>", x: "75%", y: "70%", delay: 3, duration: 25 },
-    { id: 5, content: "return()", x: "5%", y: "40%", delay: 2.5, duration: 22 },
-    {
-      id: 6,
-      content: "const x = []",
-      x: "90%",
-      y: "50%",
-      delay: 1.5,
-      duration: 17,
-    },
   ];
+
+  // Only show all code elements on larger screens
+  const displayedCodeElements = isMobile
+    ? codeElements.slice(0, 2)
+    : codeElements;
 
   return (
     <section
       id="about"
-      className="py-20 bg-muted/30 relative overflow-hidden"
+      className="py-12 md:py-20 bg-muted/30 relative overflow-hidden"
       ref={containerRef}
     >
-      {/* Animated code elements in background */}
-      {codeElements.map((el) => (
+      {/* Animated code elements in background - fewer on mobile */}
+      {displayedCodeElements.map((el) => (
         <motion.div
           key={el.id}
-          className="absolute text-primary/5 font-mono text-4xl md:text-6xl font-bold pointer-events-none select-none"
+          className="absolute text-primary/5 font-mono text-2xl md:text-4xl lg:text-6xl font-bold pointer-events-none select-none"
           style={{ left: el.x, top: el.y }}
           initial={{ opacity: 0 }}
           animate={
@@ -336,21 +343,23 @@ export default function About() {
           animate={isInView ? "visible" : "hidden"}
           variants={fadeIn}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-center mb-8 md:mb-12"
         >
-          <Badge variant="outline" className="mb-4">
+          <Badge variant="outline" className="mb-3 md:mb-4">
             About Me
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Who I Am</h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4">
+            Who I Am
+          </h2>
           <motion.div
-            className="w-20 h-1 bg-primary mx-auto"
+            className="w-16 md:w-20 h-1 bg-primary mx-auto"
             initial={{ width: 0 }}
-            animate={isInView ? { width: 80 } : { width: 0 }}
+            animate={isInView ? { width: isMobile ? 64 : 80 } : { width: 0 }}
             transition={{ duration: 0.8 }}
           ></motion.div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
           <motion.div
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -366,9 +375,9 @@ export default function About() {
                 className="absolute left-0 top-0 w-1 bg-primary/30 rounded-full"
               ></motion.div>
 
-              <div className="pl-6">
+              <div className="pl-4 md:pl-6">
                 <motion.h3
-                  className="text-2xl font-bold mb-4 text-primary"
+                  className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-primary"
                   initial={{ x: -20, opacity: 0 }}
                   animate={
                     isInView ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }
@@ -511,38 +520,42 @@ export default function About() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex justify-center"
           >
-            <div className="relative w-full max-w-xs">
-              {/* Decorative elements */}
-              <motion.div
-                className="absolute -top-4 -left-4 w-24 h-24 bg-primary/10 rounded-full"
-                animate={
-                  isInView
-                    ? {
-                        scale: [1, 1.1, 1],
-                        transition: {
-                          repeat: Number.POSITIVE_INFINITY,
-                          duration: 3,
-                        },
-                      }
-                    : {}
-                }
-              ></motion.div>
+            <div className="relative w-full max-w-[200px] md:max-w-xs">
+              {/* Decorative elements - simplified on mobile */}
+              {!isMobile && (
+                <>
+                  <motion.div
+                    className="absolute -top-4 -left-4 w-16 md:w-24 h-16 md:h-24 bg-primary/10 rounded-full"
+                    animate={
+                      isInView
+                        ? {
+                            scale: [1, 1.1, 1],
+                            transition: {
+                              repeat: Number.POSITIVE_INFINITY,
+                              duration: 3,
+                            },
+                          }
+                        : {}
+                    }
+                  ></motion.div>
 
-              <motion.div
-                className="absolute -bottom-4 -right-4 w-32 h-32 bg-destructive/10 rounded-full"
-                animate={
-                  isInView
-                    ? {
-                        scale: [1, 1.15, 1],
-                        transition: {
-                          repeat: Number.POSITIVE_INFINITY,
-                          duration: 4,
-                          delay: 1,
-                        },
-                      }
-                    : {}
-                }
-              ></motion.div>
+                  <motion.div
+                    className="absolute -bottom-4 -right-4 w-20 md:w-32 h-20 md:h-32 bg-destructive/10 rounded-full"
+                    animate={
+                      isInView
+                        ? {
+                            scale: [1, 1.15, 1],
+                            transition: {
+                              repeat: Number.POSITIVE_INFINITY,
+                              duration: 4,
+                              delay: 1,
+                            },
+                          }
+                        : {}
+                    }
+                  ></motion.div>
+                </>
+              )}
 
               {/* Profile image */}
               <motion.div
@@ -560,57 +573,61 @@ export default function About() {
                   className="w-full h-auto"
                 />
 
-                {/* Floating badges */}
-                <motion.div
-                  className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={
-                    isInView
-                      ? { opacity: 1, scale: 1 }
-                      : { opacity: 0, scale: 0 }
-                  }
-                  transition={{ delay: 0.8 }}
-                >
-                  <span className="flex items-center gap-1">
-                    <Coffee className="h-3 w-3" />
-                    Coffee Powered
-                  </span>
-                </motion.div>
+                {/* Floating badges - only on larger screens */}
+                {!isMobile && (
+                  <>
+                    <motion.div
+                      className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium"
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={
+                        isInView
+                          ? { opacity: 1, scale: 1 }
+                          : { opacity: 0, scale: 0 }
+                      }
+                      transition={{ delay: 0.8 }}
+                    >
+                      <span className="flex items-center gap-1">
+                        <Coffee className="h-3 w-3" />
+                        Coffee Powered
+                      </span>
+                    </motion.div>
 
-                <motion.div
-                  className="absolute bottom-4 left-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={
-                    isInView
-                      ? { opacity: 1, scale: 1 }
-                      : { opacity: 0, scale: 0 }
-                  }
-                  transition={{ delay: 1 }}
-                >
-                  <span className="flex items-center gap-1">
-                    <Code className="h-3 w-3" />
-                    Code Artisan
-                  </span>
-                </motion.div>
+                    <motion.div
+                      className="absolute bottom-4 left-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium"
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={
+                        isInView
+                          ? { opacity: 1, scale: 1 }
+                          : { opacity: 0, scale: 0 }
+                      }
+                      transition={{ delay: 1 }}
+                    >
+                      <span className="flex items-center gap-1">
+                        <Code className="h-3 w-3" />
+                        Code Artisan
+                      </span>
+                    </motion.div>
+                  </>
+                )}
               </motion.div>
             </div>
           </motion.div>
         </div>
 
-        {/* Tabs for different content sections */}
+        {/* Tabs for different content sections - more compact on mobile */}
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={fadeIn}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex justify-center mb-8"
+          className="flex justify-center mb-6 md:mb-8 overflow-x-auto pb-2"
         >
           <div className="bg-muted/50 rounded-full p-1 flex">
             {tabs.map((tab) => (
               <Button
                 key={tab.id}
                 variant={activeTab === tab.id ? "default" : "ghost"}
-                className={`rounded-full ${
+                className={`rounded-full text-xs md:text-sm px-3 md:px-4 ${
                   activeTab === tab.id ? "" : "text-muted-foreground"
                 }`}
                 onClick={() => setActiveTab(tab.id)}

@@ -1,27 +1,24 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { ExternalLink, Github, ChevronDown } from "lucide-react";
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { ExternalLink, Github, ChevronDown } from "lucide-react"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 export default function Projects() {
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [expandedProject, setExpandedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null)
+  const [expandedProject, setExpandedProject] = useState(null)
+  const isMobile = useMediaQuery("(max-width: 768px)")
+  const isTablet = useMediaQuery("(max-width: 1024px)")
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
-  };
+  }
 
   const projects = [
     {
@@ -257,7 +254,7 @@ export default function Projects() {
   ];
 
   return (
-    <section id="projects" className="py-20 bg-muted/30">
+    <section id="projects" className="py-12 md:py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -265,36 +262,30 @@ export default function Projects() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           variants={fadeIn}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-16"
         >
-          <Badge variant="outline" className="mb-4">
+          <Badge variant="outline" className="mb-3 md:mb-4">
             Portfolio
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Featured Projects
-          </h2>
-          <div className="w-20 h-1 bg-primary mx-auto"></div>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4">Featured Projects</h2>
+          <div className="w-16 md:w-20 h-1 bg-primary mx-auto"></div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {projects.map((project, index) => (
             <motion.div
               key={project.id}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.5, delay: isMobile ? 0.1 : index * 0.1 }}
               variants={fadeIn}
             >
               <Card
                 className={`group h-full cursor-pointer transition-all duration-300 hover:shadow-lg ${
                   expandedProject === project.id ? "ring-2 ring-primary" : ""
                 }`}
-                onClick={() =>
-                  setExpandedProject(
-                    expandedProject === project.id ? null : project.id
-                  )
-                }
+                onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
               >
                 <CardContent className="p-0">
                   <div className="relative overflow-hidden">
@@ -303,13 +294,9 @@ export default function Projects() {
                       alt={project.title}
                       className="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-background/20 p-6 flex flex-col justify-end">
-                      <h3 className="text-xl font-bold mb-2">
-                        {project.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm">
-                        {project.shortDescription}
-                      </p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-background/20 p-4 md:p-6 flex flex-col justify-end">
+                      <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2">{project.title}</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground">{project.shortDescription}</p>
                     </div>
                   </div>
 
@@ -320,54 +307,57 @@ export default function Projects() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="p-6 border-t"
+                        className="p-4 md:p-6 border-t"
                       >
-                        <div className="space-y-4">
-                          <div className="flex flex-wrap gap-2">
+                        <div className="space-y-3 md:space-y-4">
+                          <div className="flex flex-wrap gap-1 md:gap-2">
                             {project.tags.map((tag, i) => (
-                              <Badge key={i} variant="secondary">
+                              <Badge key={i} variant="secondary" className="text-xs">
                                 {tag}
                               </Badge>
                             ))}
                           </div>
 
-                          <div className="space-y-2">
-                            <h4 className="font-semibold">Key Features:</h4>
-                            <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+                          <div className="space-y-1 md:space-y-2">
+                            <h4 className="text-sm md:text-base font-semibold">Key Features:</h4>
+                            <ul className="list-disc list-inside text-xs md:text-sm text-muted-foreground space-y-0.5 md:space-y-1">
                               {project.features.map((feature, i) => (
                                 <li key={i}>{feature}</li>
                               ))}
                             </ul>
                           </div>
 
-                          <div className="flex gap-4 pt-2">
+                          <div className="flex flex-wrap gap-2 md:gap-4 pt-2">
                             <Button
-                              size="sm"
+                              size={isMobile ? "sm" : "default"}
                               variant="outline"
+                              className="text-xs md:text-sm"
                               onClick={(e) => {
-                                e.stopPropagation();
-                                window.open(project.githubLink, "_blank");
+                                e.stopPropagation()
+                                window.open(project.githubLink, "_blank")
                               }}
                             >
-                              <Github className="h-4 w-4 mr-2" />
+                              <Github className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
                               Code
                             </Button>
                             <Button
-                              size="sm"
+                              size={isMobile ? "sm" : "default"}
+                              className="text-xs md:text-sm"
                               onClick={(e) => {
-                                e.stopPropagation();
-                                window.open(project.demoLink, "_blank");
+                                e.stopPropagation()
+                                window.open(project.demoLink, "_blank")
                               }}
                             >
-                              <ExternalLink className="h-4 w-4 mr-2" />
+                              <ExternalLink className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
                               Demo
                             </Button>
                             <Button
-                              size="sm"
+                              size={isMobile ? "sm" : "default"}
                               variant="outline"
+                              className="text-xs md:text-sm"
                               onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedProject(project);
+                                e.stopPropagation()
+                                setSelectedProject(project)
                               }}
                             >
                               Learn More
@@ -378,9 +368,9 @@ export default function Projects() {
                     )}
                   </AnimatePresence>
 
-                  <div className="p-4 text-center">
+                  <div className="p-2 md:p-4 text-center">
                     <ChevronDown
-                      className={`w-6 h-6 mx-auto transition-transform duration-300 ${
+                      className={`w-5 h-5 md:w-6 md:h-6 mx-auto transition-transform duration-300 ${
                         expandedProject === project.id ? "rotate-180" : ""
                       }`}
                     />
@@ -393,58 +383,45 @@ export default function Projects() {
       </div>
 
       {selectedProject && (
-        <Dialog
-          open={!!selectedProject}
-          onOpenChange={() => setSelectedProject(null)}
-        >
-          <DialogContent className="max-w-3xl">
+        <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
+          <DialogContent className="max-w-[90vw] md:max-w-2xl lg:max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>{selectedProject.title}</DialogTitle>
+              <DialogTitle className="text-xl md:text-2xl">{selectedProject.title}</DialogTitle>
               <DialogDescription>
-                <div className="flex flex-wrap gap-2 mt-2 mb-4">
+                <div className="flex flex-wrap gap-1 md:gap-2 mt-2 mb-3 md:mb-4">
                   {selectedProject.tags.map((tag, i) => (
-                    <Badge key={i} variant="secondary">
+                    <Badge key={i} variant="secondary" className="text-xs">
                       {tag}
                     </Badge>
                   ))}
                 </div>
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4 px-1">
               <img
                 src={selectedProject.image || "/placeholder.svg"}
                 alt={selectedProject.title}
                 className="w-full rounded-md object-cover aspect-video"
               />
-              <p className="text-muted-foreground">
-                {selectedProject.fullDescription}
-              </p>
-              <div className="space-y-4">
-                <h4 className="font-semibold">Key Features:</h4>
-                <ul className="list-disc list-inside text-muted-foreground space-y-2">
+              <p className="text-sm md:text-base text-muted-foreground">{selectedProject.fullDescription}</p>
+              <div className="space-y-2 md:space-y-4">
+                <h4 className="text-sm md:text-base font-semibold">Key Features:</h4>
+                <ul className="list-disc list-inside text-xs md:text-sm text-muted-foreground space-y-1 md:space-y-2">
                   {selectedProject.features.map((feature, i) => (
                     <li key={i}>{feature}</li>
                   ))}
                 </ul>
               </div>
-              <div className="flex justify-end gap-4 mt-4">
-                <Button variant="outline" asChild>
-                  <a
-                    href={selectedProject.githubLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github className="h-4 w-4 mr-2" />
+              <div className="flex flex-wrap justify-end gap-2 md:gap-4 mt-4">
+                <Button variant="outline" size={isMobile ? "sm" : "default"} asChild>
+                  <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer">
+                    <Github className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
                     View Code
                   </a>
                 </Button>
-                <Button asChild>
-                  <a
-                    href={selectedProject.demoLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2" />
+                <Button size={isMobile ? "sm" : "default"} asChild>
+                  <a href={selectedProject.demoLink} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
                     Live Demo
                   </a>
                 </Button>
@@ -454,5 +431,6 @@ export default function Projects() {
         </Dialog>
       )}
     </section>
-  );
+  )
 }
+
