@@ -177,8 +177,8 @@ export default function Hero() {
               {/* Main image container */}
               <div className="absolute inset-4 bg-muted rounded-full overflow-hidden border-4 border-background shadow-2xl">
                 <img
-                  src="/material/ari.jpg"
-                  alt="MemoryLeaked"
+                  src="/foto/10.jpg"
+                  alt="Ari Gunawan Jatmiko"
                   className="w-full h-full object-cover"
                 />
               </div>
