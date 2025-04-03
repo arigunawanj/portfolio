@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,6 +12,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
   const { theme, setTheme } = useTheme()
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,20 +42,46 @@ export default function Navbar() {
       }
     }
 
+    // Close mobile menu when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isOpen && mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
     window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside)
+
+    // Handle body scroll lock when mobile menu is open
+    if (isOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.body.style.overflow = ""
+    }
+  }, [isOpen])
 
   const scrollToSection = (sectionId: string) => {
-    setIsOpen(false)
-    const element = document.getElementById(sectionId)
-    if (element) {
-      const offsetTop = element.getBoundingClientRect().top + window.pageYOffset
-      window.scrollTo({
-        top: offsetTop,
-        behavior: "smooth",
-      })
-    }
+    setIsOpen(false) // Close the mobile menu
+
+    // Small timeout to ensure the mobile menu closes first
+    setTimeout(() => {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        const offsetTop = element.getBoundingClientRect().top + window.pageYOffset
+        const navbarHeight = 80 // Approximate navbar height
+
+        window.scrollTo({
+          top: offsetTop - navbarHeight, // Adjust scroll position to account for navbar height
+          behavior: "smooth",
+        })
+      }
+    }, 10)
   }
 
   const navLinks = [
@@ -83,11 +110,11 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <motion.button
             onClick={() => scrollToSection("home")}
-            className="relative text-2xl font-bold z-10"
+            className="relative text-xl font-bold z-10"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <span className="text-primary">Ari Gunawan </span>
+            <span className="text-primary">Ari Gunawan</span>
             <span className="text-destructive">Jatmiko</span>
             <motion.div
               className="absolute -bottom-1 left-0 h-1 bg-primary rounded-full"
@@ -136,7 +163,13 @@ export default function Navbar() {
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="rounded-full">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsOpen(!isOpen)}
+              className="rounded-full"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
@@ -147,11 +180,13 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            ref={mobileMenuRef}
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: "calc(100vh - 70px)" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-background/95 backdrop-blur-md border-b"
+            className="md:hidden bg-background/95 backdrop-blur-md border-b overflow-auto"
+            style={{ maxHeight: "calc(100vh - 70px)" }}
           >
             <div className="container mx-auto px-4 py-4">
               <nav className="flex flex-col space-y-4">
@@ -163,7 +198,7 @@ export default function Navbar() {
                     transition={{ delay: index * 0.05 }}
                     onClick={() => scrollToSection(link.href)}
                     className={cn(
-                      "py-2 px-4 text-left rounded-lg transition-colors",
+                      "py-3 px-4 text-left rounded-lg transition-colors w-full", // Increased padding for better touch target
                       activeSection === link.href
                         ? "bg-primary/10 text-primary font-medium"
                         : "text-muted-foreground hover:bg-muted/50",
@@ -176,6 +211,7 @@ export default function Navbar() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: navLinks.length * 0.05 }}
+                  className="pt-4 mt-4 border-t border-border/30"
                 >
                   <Button className="w-full">Resume</Button>
                 </motion.div>
