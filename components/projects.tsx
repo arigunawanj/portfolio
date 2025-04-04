@@ -60,6 +60,7 @@ export default function Projects() {
     Typescript: <Cpu className="h-3 w-3 md:h-4 md:w-4" />,
     Redis: <Database className="h-3 w-3 md:h-4 md:w-4" />,
     Linux: <Server className="h-3 w-3 md:h-4 md:w-4" />,
+    "Next.js": <Monitor className="h-3 w-3 md:h-4 md:w-4" />,
   };
 
   const projects = [
@@ -258,16 +259,13 @@ export default function Projects() {
     {
       id: 9,
       title: "AGJ Split Bill Food Order Online",
-      shortDescription:
-        " A platform for splitting purchase costs when ordering food online, simplifying bill division.",
-      description:
-        "A deep learning framework with CUDA acceleration and optimization features.",
+      shortDescription: "A platform for splitting food order costs online via apps like ShopeeFood, GoFood, or GrabFood.",
+      description: "A web application that simplifies bill-splitting when ordering food online with friends or groups.",
       images: [
-        "/placeholder.svg?height=400&width=600&text=Neural+Network+Visualization",
-        "/placeholder.svg?height=400&width=600&text=Training+Interface",
-        "/placeholder.svg?height=400&width=600&text=Performance+Benchmarks",
+        "/portfolio/splitbill/1.png",
+        "/portfolio/splitbill/2.png",
       ],
-      tags: ["PHP", "Laravel", "Tailwind"],
+      tags: ["PHP", "Laravel", "Tailwind", "Next.js", "Livewire"],
       features: [
         "Split by number of people",
         "Split by items ordered",
@@ -275,10 +273,9 @@ export default function Projects() {
         "Payment integration",
         "Transaction history",
       ],
-      demoLink: "#",
-      githubLink: "#",
-      fullDescription:
-        "This neural network framework provides high-performance deep learning capabilities. Built primarily in C++ with CUDA acceleration, it offers comprehensive tools for building and training neural networks. Features include automatic differentiation, model optimization, and detailed performance profiling.",
+      demoLink: "https://splitbill.arigunawanj.com/",
+      githubLink: "https://github.com/arigunawanj/split-bill-fe",
+      fullDescription: "AGJ Split Bill is a web app that helps users fairly split food order costs from services like ShopeeFood, GoFood, and GrabFood. It supports splitting by person or item, with automatic calculations, payment integration, and transaction history.",
       color: "from-blue-500/20 to-cyan-500/20",
     },
     {
