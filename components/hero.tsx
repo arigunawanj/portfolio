@@ -218,7 +218,7 @@ export default function Hero() {
                   >
                     <div className="flex items-center gap-2">
                       <MousePointer className="w-4 h-4 text-primary" />
-                      <span className="text-sm font-medium">5+ years experience</span>
+                      <span className="text-sm font-medium">3+ years experience</span>
                     </div>
                   </motion.div>
                 </>

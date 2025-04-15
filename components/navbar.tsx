@@ -115,7 +115,7 @@ export default function Navbar() {
             whileTap={{ scale: 0.95 }}
           >
             <span className="text-primary">Ari Gunawan</span>
-            <span className="text-destructive">Jatmiko</span>
+            <span className="text-destructive"> Jatmiko</span>
             <motion.div
               className="absolute -bottom-1 left-0 h-1 bg-primary rounded-full"
               layoutId="underline"

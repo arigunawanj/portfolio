@@ -117,14 +117,12 @@ export default function About() {
   ];
 
   const funFacts = [
-    "I once debugged a production issue while hiking in the mountains",
-    "My first computer was a Commodore 64 that I still keep as a memento",
-    "I can type at 120 words per minute when I'm in the zone",
-    "I've written over 1 million lines of code (and deleted probably twice as many)",
-    "I maintain a collection of vintage programming books from the 80s and 90s",
-    "I once stayed awake for 36 hours straight to finish a project (don't try this at home!)",
-    "My rubber duck debugger has a name - it's Professor Quackers",
-    "I can recite the first 100 digits of Pi (a useless but fun party trick)",
+    "I have a pre-deploy ritual — it includes turning on my favorite coding playlist",
+    "I can recognize a programming language from just a single line of code.",
+    "I once built a complete application fueled only by coffee and a looming deadline.",
+    "I once dreamed about a bug, and when I woke up — it actually existed.",
+    "I once named every variable in a project after Marvel characters.",
+    "After a lifetime without game consoles, I finally got my first one — a PS5!",
   ];
 
   const renderTabContent = () => {

@@ -216,9 +216,8 @@ export default function Projects() {
       description:
         "A deep learning framework with CUDA acceleration and optimization features.",
       images: [
-        "/placeholder.svg?height=400&width=600&text=Neural+Network+Visualization",
-        "/placeholder.svg?height=400&width=600&text=Training+Interface",
-        "/placeholder.svg?height=400&width=600&text=Performance+Benchmarks",
+        "/portfolio/masjidana/1.png",
+        "/portfolio/masjidana/2.png",
       ],
       tags: ["PHP", "Laravel", "MySQL", "Tailwind", "Vue"],
       features: [
@@ -228,7 +227,7 @@ export default function Projects() {
         "Training pipelines",
         "Performance profiling",
       ],
-      demoLink: "#",
+      demoLink: "https://masjidana.com/",
       githubLink: "#",
       fullDescription:
         "This neural network framework provides high-performance deep learning capabilities. Built primarily in C++ with CUDA acceleration, it offers comprehensive tools for building and training neural networks. Features include automatic differentiation, model optimization, and detailed performance profiling.",
