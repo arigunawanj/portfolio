@@ -5,21 +5,10 @@ import { motion, useInView } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Code,
-  Lightbulb,
-  Rocket,
-  Coffee,
-  Sparkles,
-  Zap,
-  Heart,
-  Music,
-  Gamepad2,
-  BookOpen,
-  Cpu,
-  Globe,
-} from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { tabs, professionalSkills, personalTraits, funFacts } from "@/data/about";
+import { getIconByName } from "@/helpers/icon-mapping";
+import { Code, Coffee } from 'lucide-react';
 
 export default function About() {
   const [activeTab, setActiveTab] = useState("professional");
@@ -31,99 +20,6 @@ export default function About() {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
-
-  const tabs = [
-    { id: "professional", label: "Professional" },
-    { id: "personal", label: "Personal" },
-    { id: "fun-facts", label: "Fun Facts" },
-  ];
-
-  const professionalSkills = [
-    {
-      icon: <Code className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Clean Code",
-      description:
-        "I write maintainable, scalable, and efficient code following best practices and industry standards.",
-    },
-    {
-      icon: <Lightbulb className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Problem Solver",
-      description:
-        "I enjoy tackling complex challenges and finding elegant solutions through creative thinking.",
-    },
-    {
-      icon: <Rocket className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Fast Learner",
-      description:
-        "I quickly adapt to new technologies and environments, constantly expanding my skill set.",
-    },
-    {
-      icon: <Cpu className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "System Design",
-      description:
-        "I architect robust, scalable systems that can handle complex requirements and high loads.",
-    },
-    {
-      icon: <Globe className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Global Perspective",
-      description:
-        "I've worked with international teams and understand the nuances of global software development.",
-    },
-    {
-      icon: <Zap className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Performance Optimizer",
-      description:
-        "I'm passionate about making software run faster and more efficiently.",
-    },
-  ];
-
-  const personalTraits = [
-    {
-      icon: <Coffee className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Coffee Enthusiast",
-      description:
-        "I believe the best code is written with a perfect cup of coffee by your side.",
-    },
-    {
-      icon: <Music className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Music Lover",
-      description:
-        "I enjoy listening to electronic and ambient music while coding to stay in the flow state.",
-    },
-    {
-      icon: <Gamepad2 className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Casual Gamer",
-      description:
-        "I unwind by playing strategy and simulation games that challenge my problem-solving skills.",
-    },
-    {
-      icon: <BookOpen className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Avid Reader",
-      description:
-        "I love reading technical books and science fiction to expand my imagination and knowledge.",
-    },
-    {
-      icon: <Heart className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Open Source Contributor",
-      description:
-        "I'm passionate about giving back to the community through open source contributions.",
-    },
-    {
-      icon: <Sparkles className="h-5 w-5 md:h-6 md:w-6 text-primary" />,
-      title: "Minimalist",
-      description:
-        "I appreciate clean, minimal design in both code and life - less is often more.",
-    },
-  ];
-
-  const funFacts = [
-    "I have a pre-deploy ritual — it includes turning on my favorite coding playlist",
-    "I can recognize a programming language from just a single line of code.",
-    "I once built a complete application fueled only by coffee and a looming deadline.",
-    "I once dreamed about a bug, and when I woke up — it actually existed.",
-    "I once named every variable in a project after Marvel characters.",
-    "After a lifetime without game consoles, I finally got my first one — a PS5!",
-  ];
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -156,7 +52,7 @@ export default function About() {
                           whileHover={{ rotate: 360 }}
                           transition={{ duration: 0.5 }}
                         >
-                          {skill.icon}
+                          {getIconByName(skill.icon, "h-5 w-5 md:h-6 md:w-6 text-primary")}
                         </motion.div>
                       </div>
                       <div>
@@ -203,7 +99,7 @@ export default function About() {
                           whileHover={{ scale: 1.2 }}
                           transition={{ duration: 0.3 }}
                         >
-                          {trait.icon}
+                          {getIconByName(trait.icon, "h-5 w-5 md:h-6 md:w-6 text-primary")}
                         </motion.div>
                       </div>
                       <div>

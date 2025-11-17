@@ -4,80 +4,11 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { Code2, Layout, Server, Database, Wrench, Binary } from "lucide-react"
+import { technologies } from "@/data/tech-stack"
+import { getIconByName } from "@/helpers/icon-mapping"
 
 export default function TechStack() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-
-  const technologies = {
-    languages: {
-      icon: <Code2 className="h-6 w-6" />,
-      title: "Programming Languages",
-      description: "Core languages for systems and application development",
-      skills: [
-        { name: "PHP", level: 85 },
-        { name: "JavaScript", level: 90 },
-        { name: "TypeScript", level: 90 },
-      ],
-    },
-    concepts: {
-      icon: <Binary className="h-6 w-6" />,
-      title: "Engineering Concepts",
-      description: "Fundamental software engineering principles",
-      skills: [
-        { name: "Data Structures", level: 95 },
-        { name: "Algorithms", level: 90 },
-        { name: "OOP", level: 85 },
-        { name: "System Design", level: 80 },
-      ],
-    },
-    frontend: {
-      icon: <Layout className="h-6 w-6" />,
-      title: "Frontend Development",
-      description: "Modern web development technologies",
-      skills: [
-        { name: "React", level: 85 },
-        { name: "Next.js", level: 85 },
-        { name: "HTML/CSS", level: 95 },
-        { name: "Tailwind CSS", level: 95 },
-        { name: "Vue", level: 85 },
-        { name: "Angular", level: 90 },
-        { name: "Livewire", level: 90 },
-      ],
-    },
-    backend: {
-      icon: <Server className="h-6 w-6" />,
-      title: "Backend Development",
-      description: "Server-side frameworks and technologies",
-      skills: [
-        { name: "Node.js", level: 85 },
-        { name: "Express", level: 80 },
-        { name: "Laravel", level: 95 },
-      ],
-    },
-    database: {
-      icon: <Database className="h-6 w-6" />,
-      title: "Database Systems",
-      description: "Database management and optimization",
-      skills: [
-        { name: "MongoDB", level: 85 },
-        { name: "PostgreSQL", level: 80 },
-        { name: "MySQL", level: 90 },
-      ],
-    },
-    tools: {
-      icon: <Wrench className="h-6 w-6" />,
-      title: "Development Tools",
-      description: "Tools and environments for development",
-      skills: [
-        { name: "Git", level: 90 },
-        { name: "Docker", level: 80 },
-        { name: "AWS", level: 75 },
-        { name: "Linux/Unix", level: 85 },
-        { name: "Visual Studio", level: 85 },
-      ],
-    },
-  }
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -125,7 +56,9 @@ export default function TechStack() {
               >
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-primary/10 p-3 rounded-full">{category.icon}</div>
+                    <div className="bg-primary/10 p-3 rounded-full">
+                      {getIconByName(category.icon, "h-6 w-6")}
+                    </div>
                     <div>
                       <h3 className="text-lg font-semibold">{category.title}</h3>
                       <p className="text-sm text-muted-foreground">{category.description}</p>

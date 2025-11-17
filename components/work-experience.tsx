@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Briefcase, Calendar, MapPin, ExternalLink, ChevronDown, ChevronUp } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { experiences } from "@/data/work-experience"
 
 export default function WorkExperience() {
   const [expandedId, setExpandedId] = useState<number | null>(null)
@@ -18,57 +19,6 @@ export default function WorkExperience() {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   }
-
-  const experiences = [
-    {
-      id: 1,
-      position: "Senior Web Developer",
-      company: "Venturo Profesional Programmer",
-      duration: "July 2023 - July 2025",
-      location: "Malang, Indonesia",
-      description: [
-        "Led the development of a high-performance distributed system that improved data processing speed by 40%",
-        "Architected and implemented microservices using C++ and gRPC, handling over 10,000 requests per second",
-        "Mentored junior developers and conducted code reviews to ensure code quality and best practices",
-        "Collaborated with product managers to define technical requirements and roadmaps for new features",
-      ],
-      skills: ["Laravel", "Vue.js", "MySQL", "Docker", "Git", "Angular", "React", "MongoDB"],
-      companyUrl: "https://venturo.id",
-      color: "from-blue-500/20 to-indigo-500/20",
-    },
-    {
-      id: 2,
-      position: "Internship Web Developer",
-      company: "Madani Jayantara",
-      duration: "April 2023 - July 2023",
-      location: "Malang, Indonesia",
-      description: [
-        "Developed and maintained backend services for a financial technology platform using Java and Spring Boot",
-        "Implemented RESTful APIs that processed over £1 million in daily transactions",
-        "Optimized database queries resulting in a 30% reduction in response time",
-        "Participated in agile development processes, including daily stand-ups and sprint planning",
-      ],
-      skills: ["PHP", "Laravel", "MySQL", "JavaScript", "Tailwind"],
-      companyUrl: "#",
-      color: "from-green-500/20 to-emerald-500/20",
-    },
-    {
-      id: 3,
-      position: "Freelance Web Developer",
-      company: "Freelance",
-      duration: "January 2023 - March 2023",
-      location: "Malang, Indonesia",
-      description: [
-        "Built responsive web applications using React and Node.js for various clients",
-        "Implemented user authentication and authorization systems using JWT and OAuth",
-        "Collaborated with designers to translate UI/UX wireframes into functional components",
-        "Participated in code reviews and contributed to the company's internal component library",
-      ],
-      skills: ["PHP", "Laravel", "MySQL", "JavaScript", "Tailwind"],
-      companyUrl: "#",
-      color: "from-purple-500/20 to-pink-500/20",
-    },
-  ]
 
   const toggleExpand = (id: number) => {
     setExpandedId(expandedId === id ? null : id)
