@@ -269,22 +269,61 @@ export const projects = [
     id: 12,
     title: "Muat Trans",
     shortDescription:
-      " A platform for splitting purchase costs when ordering food online, simplifying bill division.",
+      "A platform e-commerce for selling products and services.",
     description:
-      "A deep learning framework with CUDA acceleration and optimization features.",
+      "A platform e-commerce for selling products and services.",
     images: ["/portfolio/agjsports/1.png"],
     tags: ["Next Js", "Express JS", "Tailwind", "Shadcn UI", "React"],
-    features: [
-      "CUDA acceleration",
-      "Automatic differentiation",
-      "Model optimization",
-      "Training pipelines",
-      "Performance profiling",
-    ],
+    features: ["Product management", "Order management", "Payment management", "Inventory management", "Customer management"],
     demoLink: "#",
     githubLink: "#",
     fullDescription:
       "This neural network framework provides high-performance deep learning capabilities. Built primarily in C++ with CUDA acceleration, it offers comprehensive tools for building and training neural networks. Features include automatic differentiation, model optimization, and detailed performance profiling.",
     color: "from-indigo-500/20 to-purple-500/20", 
+  },
+  {
+    id: 13,
+    title: "POS arigunawanj",
+    shortDescription:
+      "Aplikasi kasir untuk manajemen transaksi dan penjualan.",
+    description:
+      "Aplikasi kasir untuk manajemen transaksi dan penjualan.",
+    images: ["/portfolio/pos/1.png"],
+    tags: ["Next.js", "Laravel", "Shadcn UI", "TanStack Query", "Zod"],
+    features: [
+      "Transaction management",
+      "Payment processing",
+      "Receipt printing",
+      "Sales reporting",
+      "Product management",
+    ],
+    demoLink: "https://pos.arigunawanj.com/",
+    githubLink: "#",
+    fullDescription:
+      "POS arigunawanj is a modern point-of-sale application designed for efficient transaction and sales management. Built with Next.js for the frontend and Laravel for the backend, it provides a comprehensive cashier solution with features including transaction processing, payment handling, receipt generation, sales reporting, and product management.",
+    color: "from-slate-500/20 to-gray-500/20",
+  },
+  {
+    id: 14,
+    title: "Welantin 2.0",
+    shortDescription:
+      "An updated inventory management system with modern UI and enhanced features.",
+    description:
+      "An updated inventory management system with modern UI and enhanced features for CV companies.",
+    images: ["/portfolio/welantin2/1.png"],
+    tags: ["Next.js", "Laravel", "Shadcn UI", "TanStack Query", "Zod"],
+    features: [
+      "Stock tracking",
+      "Low stock notifications",
+      "Inventory reports",
+      "Supplier management",
+      "Real-time updates",
+      "Modern UI/UX",
+    ],
+    demoLink: "https://welantin.com/",
+    githubLink: "#",
+    fullDescription:
+      "Welantin 2.0 is the updated version of the inventory management system, rebuilt with modern technologies for better performance and user experience. Built with Next.js and Laravel, it features a modern UI using Shadcn UI components, real-time data synchronization with TanStack Query, and robust form validation with Zod. The system provides comprehensive inventory management capabilities including stock tracking, automated notifications, detailed reporting, and supplier management.",
+    color: "from-blue-500/20 to-indigo-500/20",
   }
 ];
