@@ -16,293 +16,157 @@ import {
   FileText,
   Lightbulb,
   Star,
+  Quote
 } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { education } from "@/data/education"
+import { cn } from "@/lib/utils"
 
 export default function Education() {
-  const [activeId, setActiveId] = useState<number | null>(null)
+  const [activeId, setActiveId] = useState<number | null>(education[0].id)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.1 })
-  const isMobile = useMediaQuery("(max-width: 768px)")
-
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  }
-
-  const handleToggle = (id: number) => {
-    setActiveId(activeId === id ? null : id)
-  }
 
   return (
-    <section id="education" className="py-16 md:py-24 bg-muted/30 relative overflow-hidden" ref={containerRef}>
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, -50, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
-          }}
-        />
-      </div>
-
-      {/* Floating education icons */}
-      {!isMobile && (
-        <>
-          <motion.div
-            className="absolute top-20 left-20 text-primary/10"
-            animate={{
-              y: [0, -15, 0],
-              rotate: [0, 5, 0, -5, 0],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: "reverse",
-            }}
-          >
-            <GraduationCap size={60} />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-20 right-20 text-primary/10"
-            animate={{
-              y: [0, 15, 0],
-              rotate: [0, -5, 0, 5, 0],
-            }}
-            transition={{
-              duration: 7,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: "reverse",
-            }}
-          >
-            <BookOpen size={50} />
-          </motion.div>
-          <motion.div
-            className="absolute top-40 right-40 text-primary/10"
-            animate={{
-              y: [0, 10, 0],
-              rotate: [0, 10, 0],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: "reverse",
-            }}
-          >
-            <Award size={40} />
-          </motion.div>
-        </>
-      )}
+    <section id="education" className="py-24 bg-background relative overflow-hidden" ref={containerRef}>
+      {/* Background decoration */}
+      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-purple-500/5 blur-[120px] rounded-full" />
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={fadeIn}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
         >
-          <Badge variant="outline" className="mb-4">
-            Education
+          <Badge variant="outline" className="mb-4 px-4 py-1 border-primary/20 bg-primary/5 text-primary">
+            Academic
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Academic Background</h2>
-          <motion.div
-            className="w-20 h-1 bg-primary mx-auto"
-            initial={{ width: 0 }}
-            animate={isInView ? { width: 80 } : { width: 0 }}
-            transition={{ duration: 0.8 }}
-          />
+          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">
+            Educational <span className="text-gradient">Background</span>
+          </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-purple-500 mx-auto rounded-full"></div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
           {education.map((item, index) => (
             <motion.div
               key={item.id}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              variants={fadeIn}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              className="relative"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300, damping: 10 }}>
-                <Card className={`h-full overflow-hidden bg-gradient-to-br ${item.color} border-0`}>
-                  <CardContent className="p-0">
-                    {/* Top decorative pattern */}
-                    <div className="h-3 w-full bg-gradient-to-r from-primary/40 via-primary/20 to-primary/40" />
-
-                    <div className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-background/50 backdrop-blur-sm p-3 rounded-full">
-                          <GraduationCap className="h-6 w-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold">{item.degree}</h3>
-                          <p className="font-medium">{item.institution}</p>
-                        </div>
+              <Card className="h-full glass-card border-primary/5 hover:border-primary/20 transition-all duration-500 group overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="h-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500" />
+                  <div className="p-8">
+                    <div className="flex items-start gap-6 mb-6">
+                      <div className="p-4 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
+                        <GraduationCap className="h-8 w-8" />
                       </div>
-
-                      <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4 text-primary" />
-                          <span>{item.duration}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-4 w-4 text-primary" />
-                          <span>{item.location}</span>
-                        </div>
+                      <div>
+                        <h3 className="text-2xl font-black mb-1 group-hover:text-primary transition-colors leading-tight">
+                          {item.degree}
+                        </h3>
+                        <p className="text-lg font-bold text-muted-foreground">{item.institution}</p>
                       </div>
+                    </div>
 
-                      <div className="mt-4">
-                        <p className="text-muted-foreground text-sm">{item.description}</p>
+                    <div className="flex flex-wrap gap-4 mb-6">
+                      <div className="flex items-center gap-2 text-sm font-bold text-primary">
+                        <Calendar className="h-4 w-4" />
+                        {item.duration}
                       </div>
-
-                      <div className="mt-6 flex flex-wrap gap-2">
-                        <Badge variant="outline" className="bg-background/50 backdrop-blur-sm">
-                          <Award className="h-3 w-3 mr-1" /> Achievements
-                        </Badge>
-                        <Badge variant="outline" className="bg-background/50 backdrop-blur-sm">
-                          <BookOpen className="h-3 w-3 mr-1" /> Courses
-                        </Badge>
-                        <Badge variant="outline" className="bg-background/50 backdrop-blur-sm">
-                          <FileText className="h-3 w-3 mr-1" /> Thesis
-                        </Badge>
+                      <div className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
+                        <MapPin className="h-4 w-4" />
+                        {item.location}
                       </div>
+                    </div>
 
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="mt-4 w-full justify-between bg-background/50 backdrop-blur-sm hover:bg-background/70"
-                        onClick={() => handleToggle(item.id)}
-                      >
-                        {activeId === item.id ? "Hide details" : "Show details"}
-                        {activeId === item.id ? (
-                          <ChevronUp className="h-4 w-4 ml-2" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4 ml-2" />
-                        )}
-                      </Button>
+                    <p className="text-muted-foreground leading-relaxed mb-8 font-medium italic">
+                      "{item.description}"
+                    </p>
 
-                      <AnimatePresence>
-                        {activeId === item.id && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="pt-4 border-t mt-4 border-border/30 space-y-6">
-                              {/* Achievements */}
-                              <div>
-                                <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                  <Award className="h-4 w-4 text-primary" />
-                                  Achievements
-                                </h4>
-                                <ul className="space-y-2">
-                                  {item.achievements.map((achievement, i) => (
-                                    <motion.li
-                                      key={i}
-                                      initial={{ opacity: 0, x: -10 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      transition={{ duration: 0.3, delay: i * 0.1 }}
-                                      className="flex items-start gap-2 text-sm text-muted-foreground"
-                                    >
-                                      <Star className="h-4 w-4 text-yellow-500 flex-shrink-0 mt-0.5" />
-                                      <span>{achievement}</span>
-                                    </motion.li>
-                                  ))}
-                                </ul>
-                              </div>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-between hover:bg-primary/5 font-bold h-12 rounded-xl group/btn border border-transparent hover:border-primary/10"
+                      onClick={() => setActiveId(activeId === item.id ? null : item.id)}
+                    >
+                      <span>{activeId === item.id ? "Hide Academic Details" : "View Academic Details"}</span>
+                      {activeId === item.id ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                    </Button>
 
-                              {/* Key Courses */}
-                              <div>
-                                <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                  <BookOpen className="h-4 w-4 text-primary" />
-                                  Key Courses
-                                </h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {item.courses.map((course, i) => (
-                                    <motion.div
-                                      key={i}
-                                      initial={{ opacity: 0, scale: 0.8 }}
-                                      animate={{ opacity: 1, scale: 1 }}
-                                      transition={{ duration: 0.3, delay: i * 0.1 }}
-                                    >
-                                      <Badge variant="secondary" className="bg-background/50 backdrop-blur-sm">
-                                        {course}
-                                      </Badge>
-                                    </motion.div>
-                                  ))}
-                                </div>
-                              </div>
-
-                              {/* Thesis */}
-                              <div>
-                                <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                  <FileText className="h-4 w-4 text-primary" />
-                                  Thesis
-                                </h4>
-                                <div className="bg-background/50 backdrop-blur-sm rounded-lg p-3 space-y-2">
-                                  <p className="text-sm font-medium">{item.thesis.title}</p>
-                                  <p className="text-xs text-muted-foreground">Advisor: {item.thesis.advisor}</p>
-                                  <div className="pt-2 border-t border-border/30">
-                                    <div className="flex items-start gap-2">
-                                      <Lightbulb className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                                      <p className="text-xs text-muted-foreground">{item.thesis.abstract}</p>
-                                    </div>
+                    <AnimatePresence>
+                      {activeId === item.id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-8 mt-6 border-t border-border/30 space-y-8">
+                            {/* Achievements */}
+                            <div className="space-y-4">
+                              <h4 className="font-black text-sm uppercase tracking-widest text-primary flex items-center gap-2">
+                                <Award className="h-4 w-4" /> Achievements
+                              </h4>
+                              <div className="grid grid-cols-1 gap-3">
+                                {item.achievements.map((achievement, i) => (
+                                  <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-muted/30 border border-border/50">
+                                    <Star className="h-4 w-4 text-yellow-500 shrink-0 mt-0.5" />
+                                    <span className="text-sm font-bold text-muted-foreground">{achievement}</span>
                                   </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Thesis */}
+                            <div className="space-y-4">
+                              <h4 className="font-black text-sm uppercase tracking-widest text-purple-500 flex items-center gap-2">
+                                <FileText className="h-4 w-4" /> Research / Thesis
+                              </h4>
+                              <div className="p-6 rounded-2xl glass border-purple-500/10 space-y-4">
+                                <p className="font-bold text-foreground leading-tight">{item.thesis.title}</p>
+                                <div className="flex items-start gap-3">
+                                  <Lightbulb className="h-5 w-5 text-yellow-500 shrink-0 mt-0.5" />
+                                  <p className="text-sm text-muted-foreground leading-relaxed italic">{item.thesis.abstract}</p>
                                 </div>
                               </div>
                             </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
         </div>
 
-        {/* Decorative bottom element */}
+        {/* Inspirational Quote */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-16 flex justify-center"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.4 }}
+          className="mt-20 flex justify-center"
         >
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/20 to-transparent blur-sm"></div>
-            <div className="relative bg-background/50 backdrop-blur-sm border border-border/30 rounded-full px-6 py-3 flex items-center gap-2">
-              <GraduationCap className="h-5 w-5 text-primary" />
-              <p className="text-sm text-muted-foreground">
-                Education is the passport to the future, for tomorrow belongs to those who prepare for it today.
+          <Card className="glass-card border-primary/10 max-w-3xl">
+            <CardContent className="p-8 flex items-center gap-6">
+              <div className="p-4 rounded-full bg-primary/10 text-primary hidden md:block">
+                <Quote className="h-8 w-8" />
+              </div>
+              <p className="text-lg md:text-xl font-bold text-muted-foreground text-center md:text-left leading-relaxed">
+                "Education is not the learning of facts, but the training of the mind to think."
+                <span className="block mt-2 text-primary font-black">— Albert Einstein</span>
               </p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </motion.div>
       </div>
     </section>
   )
 }
-

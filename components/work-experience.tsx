@@ -5,184 +5,148 @@ import { motion, useInView, AnimatePresence } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Briefcase, Calendar, MapPin, ExternalLink, ChevronDown, ChevronUp } from "lucide-react"
+import { Briefcase, Calendar, MapPin, ExternalLink, ChevronDown, ChevronUp, Circle } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { experiences } from "@/data/work-experience"
+import { cn } from "@/lib/utils"
 
 export default function WorkExperience() {
-  const [expandedId, setExpandedId] = useState<number | null>(null)
+  const [expandedId, setExpandedId] = useState<number | null>(experiences[0].id)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.1 })
-  const isMobile = useMediaQuery("(max-width: 768px)")
-
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  }
-
-  const toggleExpand = (id: number) => {
-    setExpandedId(expandedId === id ? null : id)
-  }
 
   return (
-    <section id="work-experience" className="py-16 md:py-24 relative overflow-hidden" ref={containerRef}>
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
-      </div>
+    <section id="work-experience" className="py-24 bg-background relative overflow-hidden" ref={containerRef}>
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-1/4 h-1/4 bg-primary/5 blur-[100px] rounded-full" />
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={fadeIn}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
         >
-          <Badge variant="outline" className="mb-4">
-            Experience
+          <Badge variant="outline" className="mb-4 px-4 py-1 border-primary/20 bg-primary/5 text-primary">
+            Journey
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Work Experience</h2>
-          <motion.div
-            className="w-20 h-1 bg-primary mx-auto"
-            initial={{ width: 0 }}
-            animate={isInView ? { width: 80 } : { width: 0 }}
-            transition={{ duration: 0.8 }}
-          ></motion.div>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">
+            Work <span className="text-gradient">Experience</span>
+          </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-purple-500 mx-auto rounded-full"></div>
         </motion.div>
 
-        <div className="space-y-12 relative">
-          {/* Timeline line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-primary/20 to-transparent transform md:translate-x-px hidden sm:block"></div>
+        <div className="max-w-5xl mx-auto space-y-12 relative">
+          {/* Main Timeline Line */}
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 via-primary/20 to-transparent transform -translate-x-1/2 hidden md:block" />
 
           {experiences.map((experience, index) => (
             <motion.div
               key={experience.id}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              variants={fadeIn}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              className="relative"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className={cn(
+                "relative flex flex-col md:flex-row gap-8 items-start",
+                index % 2 === 1 ? "md:flex-row-reverse" : ""
+              )}
             >
-              {/* Timeline dot */}
-              <motion.div
-                className="absolute left-0 md:left-1/2 top-7 w-5 h-5 rounded-full bg-primary/20 border-2 border-primary transform -translate-x-1/2 hidden sm:block"
-                initial={{ scale: 0 }}
-                animate={isInView ? { scale: 1 } : { scale: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.2 + 0.3 }}
-              ></motion.div>
+              {/* Timeline Indicator */}
+              <div className="absolute left-4 md:left-1/2 top-8 w-4 h-4 bg-background border-4 border-primary rounded-full transform -translate-x-1/2 z-20 hidden md:block" />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-start">
-                {/* Date and company - alternating sides */}
-                <motion.div
-                  className={`text-center md:text-right md:pr-12 ${
-                    index % 2 === 1 ? "md:order-2 md:pl-12 md:pr-0 md:text-left" : ""
-                  }`}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 + 0.1 }}
+              {/* Side Content: Date and Location */}
+              <div className={cn(
+                "md:w-1/2 flex flex-col gap-2 pt-6",
+                index % 2 === 0 ? "md:text-right md:pr-12" : "md:text-left md:pl-12"
+              )}>
+                <div className={cn(
+                  "flex items-center gap-2 text-primary font-bold text-lg",
+                  index % 2 === 0 ? "md:justify-end" : "md:justify-start"
+                )}>
+                  <Calendar className="h-5 w-5" />
+                  {experience.duration}
+                </div>
+                <div className={cn(
+                  "flex items-center gap-2 text-muted-foreground font-medium",
+                  index % 2 === 0 ? "md:justify-end" : "md:justify-start"
+                )}>
+                  <MapPin className="h-4 w-4" />
+                  {experience.location}
+                </div>
+              </div>
+
+              {/* Main Content Card */}
+              <div className="md:w-1/2 w-full">
+                <Card 
+                  className={cn(
+                    "glass-card border-primary/5 hover:border-primary/20 transition-all duration-500 shadow-xl shadow-primary/5 group overflow-hidden",
+                    expandedId === experience.id ? "ring-2 ring-primary/20" : ""
+                  )}
                 >
-                  <div className="mb-2 flex items-center justify-center md:justify-end gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    <span className="text-sm">{experience.duration}</span>
-                  </div>
-                  <div className="flex items-center justify-center md:justify-end gap-2 text-muted-foreground">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    <span className="text-sm">{experience.location}</span>
-                  </div>
-                </motion.div>
-
-                {/* Job details card */}
-                <motion.div
-                  className={`${index % 2 === 1 ? "md:order-1" : ""}`}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 + 0.1 }}
-                  whileHover={{ y: -5 }}
-                >
-                  <Card className={`overflow-hidden bg-gradient-to-br ${experience.color} border-0`}>
-                    <CardContent className="p-0">
-                      <div className="p-6">
-                        <div className="flex items-start gap-4">
-                          <div className="bg-background/50 backdrop-blur-sm p-3 rounded-full">
-                            <Briefcase className="h-6 w-6 text-primary" />
-                          </div>
-                          <div className="space-y-1">
-                            <h3 className="text-xl font-bold">{experience.position}</h3>
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium">{experience.company}</span>
-                              {experience.companyUrl !== "#" && (
-                                <a
-                                  href={experience.companyUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-primary hover:text-primary/80 transition-colors"
-                                >
-                                  <ExternalLink className="h-3 w-3" />
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {experience.skills.map((skill, i) => (
-                            <Badge key={i} variant="secondary" className="bg-background/50 backdrop-blur-sm text-xs">
-                              {skill}
-                            </Badge>
-                          ))}
-                        </div>
-
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="mt-4 w-full justify-between bg-background/50 backdrop-blur-sm hover:bg-background/70"
-                          onClick={() => toggleExpand(experience.id)}
-                        >
-                          {expandedId === experience.id ? "Hide details" : "Show details"}
-                          {expandedId === experience.id ? (
-                            <ChevronUp className="h-4 w-4 ml-2" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4 ml-2" />
-                          )}
-                        </Button>
-
-                        <AnimatePresence>
-                          {expandedId === experience.id && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="pt-4 border-t mt-4 border-border/30">
-                                <h4 className="font-medium mb-2">Key Responsibilities:</h4>
-                                <ul className="space-y-2 text-sm text-muted-foreground">
-                                  {experience.description.map((item, i) => (
-                                    <motion.li
-                                      key={i}
-                                      initial={{ opacity: 0, x: -10 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      transition={{ duration: 0.3, delay: i * 0.1 }}
-                                      className="flex items-start gap-2"
-                                    >
-                                      <span className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-primary"></span>
-                                      </span>
-                                      <span>{item}</span>
-                                    </motion.li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
+                  <CardContent className="p-8">
+                    <div className="flex items-start gap-6 mb-6">
+                      <div className="p-4 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
+                        <Briefcase className="h-8 w-8" />
                       </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-black mb-1 group-hover:text-primary transition-colors">
+                          {experience.position}
+                        </h3>
+                        <div className="flex items-center gap-2 text-lg font-bold text-muted-foreground">
+                          {experience.company}
+                          {experience.companyUrl !== "#" && (
+                            <a href={experience.companyUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:scale-125 transition-transform">
+                              <ExternalLink className="h-4 w-4" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {experience.skills.map((skill, i) => (
+                        <Badge key={i} variant="secondary" className="bg-primary/5 text-primary border-primary/10 font-bold px-3 py-1">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-between hover:bg-primary/5 font-bold h-12 rounded-xl group/btn"
+                      onClick={() => setExpandedId(expandedId === experience.id ? null : experience.id)}
+                    >
+                      <span>{expandedId === experience.id ? "Minimize Details" : "View Responsibilities"}</span>
+                      {expandedId === experience.id ? <ChevronUp className="h-5 w-5 group-hover/btn:-translate-y-1 transition-transform" /> : <ChevronDown className="h-5 w-5 group-hover/btn:translate-y-1 transition-transform" />}
+                    </Button>
+
+                    <AnimatePresence>
+                      {expandedId === experience.id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-8 mt-6 border-t border-border/30 space-y-4">
+                            {experience.description.map((item, i) => (
+                              <div key={i} className="flex items-start gap-4">
+                                <div className="mt-1.5 shrink-0">
+                                  <Circle className="h-2 w-2 fill-primary text-primary" />
+                                </div>
+                                <p className="text-muted-foreground leading-relaxed font-medium">
+                                  {item}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </CardContent>
+                </Card>
               </div>
             </motion.div>
           ))}
@@ -191,4 +155,3 @@ export default function WorkExperience() {
     </section>
   )
 }
-

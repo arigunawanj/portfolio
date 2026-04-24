@@ -23,7 +23,7 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 262.1 83.3% 57.8%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -54,7 +54,21 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary-foreground;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-background/60 backdrop-blur-md border border-white/10 dark:border-white/5;
+  }
+  
+  .glass-card {
+    @apply bg-card/40 backdrop-blur-sm border border-border/50 hover:bg-card/60 transition-all duration-300;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-pink-500;
   }
 }
 
@@ -63,12 +77,21 @@
 }
 
 @keyframes blink {
-  from,
-  to {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.bg-mesh {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(263, 70%, 50%, 0.15) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(280, 70%, 50%, 0.15) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(320, 70%, 50%, 0.15) 0, transparent 50%);
+}
+
+.dark .bg-mesh {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(263, 70%, 50%, 0.3) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(280, 70%, 50%, 0.3) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(320, 70%, 50%, 0.3) 0, transparent 50%);
 }
 

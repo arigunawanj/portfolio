@@ -2,7 +2,7 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { Heart, ArrowUp, Github, Linkedin, Instagram, Twitter } from "lucide-react"
+import { Heart, ArrowUp, Github, Linkedin, Instagram } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function Footer() {
@@ -18,113 +18,74 @@ export default function Footer() {
   }
 
   const socialLinks = [
-    { icon: <Github className="h-4 w-4" />, href: "https://github.com/arigunawanj", label: "GitHub" },
-    { icon: <Linkedin className="h-4 w-4" />, href: "https://www.linkedin.com/in/arigunawanj/", label: "LinkedIn" },
-    // { icon: <Twitter className="h-4 w-4" />, href: "https://twitter.com", label: "Twitter" },
-    { icon: <Instagram className="h-4 w-4" />, href: "http://instagram.com/awrigun/", label: "Instagram" },
+    { icon: <Github className="h-5 w-5" />, href: "https://github.com/arigunawanj", label: "GitHub" },
+    { icon: <Linkedin className="h-5 w-5" />, href: "https://www.linkedin.com/in/arigunawanj/", label: "LinkedIn" },
+    { icon: <Instagram className="h-5 w-5" />, href: "http://instagram.com/awrigun/", label: "Instagram" },
   ]
 
   return (
-    <footer ref={footerRef} className="relative bg-background border-t border-border/30 overflow-hidden">
-      {/* Decorative gradient blur */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-20 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        <div className="flex flex-col items-center">
-          {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.5 }}
-            className="mb-6"
-          >
-            <h3 className="text-2xl font-bold">
-              <span className="text-primary">Ari Gunawan </span>
-              <span className="text-destructive">Jatmiko</span>
+    <footer ref={footerRef} className="relative bg-background py-12 border-t border-border/30 overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+          {/* Logo & Info */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
+            <h3 className="text-2xl font-black mb-2">
+              Ari Gunawan <span className="text-primary">Jatmiko</span>
             </h3>
-          </motion.div>
+            <p className="text-muted-foreground font-medium max-w-xs">
+              Building high-performance digital experiences that matter.
+            </p>
+          </div>
 
           {/* Social Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex space-x-4 mb-6"
-          >
+          <div className="flex items-center gap-4">
             {socialLinks.map((link, i) => (
-              <motion.div key={i} whileHover={{ y: -5 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full bg-muted/50 hover:bg-primary/20 hover:text-primary"
-                  asChild
-                >
-                  <a href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.label}>
-                    {link.icon}
-                  </a>
-                </Button>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Divider with animation */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="h-px w-full max-w-xs bg-border/50 mb-6 origin-center"
-          ></motion.div>
-
-          {/* Copyright */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-center"
-          >
-            <p className="text-muted-foreground text-sm mb-2">© {currentYear} Ari Gunawan Jatmiko. All rights reserved.</p>
-            <p className="text-muted-foreground text-xs flex items-center justify-center">
-              Made with
-              <motion.span
-                animate={{
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: "loop",
-                  duration: 1.5,
-                }}
-                className="inline-block mx-1"
+              <Button
+                key={i}
+                variant="ghost"
+                size="icon"
+                className="h-12 w-12 rounded-2xl bg-muted/30 hover:bg-primary/10 hover:text-primary transition-all duration-300"
+                asChild
               >
-                <Heart className="h-3 w-3 text-destructive fill-destructive" />
-              </motion.span>
-              in Malang, Indonesia
-            </p>
-          </motion.div>
+                <a href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.label}>
+                  {link.icon}
+                </a>
+              </Button>
+            ))}
+          </div>
 
-          {/* Back to top button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="absolute right-4 bottom-4 md:right-8 md:bottom-8"
+          {/* Back to Top */}
+          <Button
+            onClick={scrollToTop}
+            variant="outline"
+            className="rounded-2xl h-12 px-6 font-bold border-2 gap-2 group"
           >
-            <motion.button
-              onClick={scrollToTop}
-              className="bg-muted/80 hover:bg-primary/20 text-muted-foreground hover:text-primary p-2 rounded-full transition-colors"
-              whileHover={{ y: -3 }}
-              whileTap={{ scale: 0.9 }}
-              aria-label="Back to top"
+            Back to Top
+            <ArrowUp className="h-4 w-4 group-hover:-translate-y-1 transition-transform" />
+          </Button>
+        </div>
+
+        <div className="h-px w-full bg-border/30 my-10" />
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-bold text-muted-foreground">
+          <p>© {currentYear} Ari Gunawan Jatmiko. All rights reserved.</p>
+          <div className="flex items-center gap-2">
+            Made with
+            <motion.span
+              animate={{
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 1.5,
+              }}
             >
-              <ArrowUp className="h-4 w-4" />
-            </motion.button>
-          </motion.div>
+              <Heart className="h-4 w-4 text-red-500 fill-red-500" />
+            </motion.span>
+            in Malang, Indonesia
+          </div>
         </div>
       </div>
     </footer>
   )
 }
-
