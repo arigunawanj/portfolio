@@ -20,7 +20,7 @@ export default function Footer() {
   const socialLinks = [
     { icon: <Github className="h-5 w-5" />, href: "https://github.com/arigunawanj", label: "GitHub" },
     { icon: <Linkedin className="h-5 w-5" />, href: "https://www.linkedin.com/in/arigunawanj/", label: "LinkedIn" },
-    { icon: <Instagram className="h-5 w-5" />, href: "http://instagram.com/awrigun/", label: "Instagram" },
+    { icon: <Instagram className="h-5 w-5" />, href: "http://instagram.com/arigunawanj/", label: "Instagram" },
   ]
 
   return (

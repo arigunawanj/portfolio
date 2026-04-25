@@ -70,9 +70,9 @@ export default function Contact() {
     {
       icon: <Instagram className="h-6 w-6" />,
       name: "Instagram",
-      url: "http://instagram.com/awrigun/",
+      url: "http://instagram.com/arigunawanj/",
       color: "hover:text-pink-500",
-      username: "@awrigun"
+      username: "@arigunawanj"
     },
     {
       icon: <Gitlab className="h-6 w-6" />,
