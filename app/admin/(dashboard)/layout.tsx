@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { logout } from "../actions/auth"
-import { Button } from "@/components/ui/button"
+import { prisma } from "@/lib/prisma"
+import AdminSidebar from "@/components/admin/sidebar"
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   robots: {
@@ -11,42 +12,23 @@ export const metadata: Metadata = {
   },
 }
 
-const NAV = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/profile", label: "Profile & Contact" },
-  { href: "/admin/projects", label: "Projects" },
-  { href: "/admin/experience", label: "Experience" },
-  { href: "/admin/education", label: "Education" },
-  { href: "/admin/certifications", label: "Certifications" },
-  { href: "/admin/tech-stack", label: "Tech Stack" },
-  { href: "/admin/about", label: "About" },
-  { href: "/admin/users", label: "Users" },
-]
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const profile = await prisma.siteProfile.findUnique({ where: { id: 1 } })
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
-          <nav className="flex flex-wrap gap-1">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="px-3 py-2 rounded-md text-sm font-medium hover:bg-muted transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <form action={logout}>
-            <Button variant="outline" size="sm" type="submit">
-              Logout
-            </Button>
-          </form>
-        </div>
+    <div className="min-h-screen bg-background text-foreground bg-mesh opacity-95">
+      <AdminSidebar
+        profileName={profile?.name || "Administrator"}
+        profileRole={profile?.role || "CMS Manager"}
+        logoUrl={profile?.logoUrl}
+        logoutAction={logout}
+      />
+      <div className="lg:pl-64 pt-16 lg:pt-0 min-h-screen flex flex-col">
+        <main className="flex-1 p-6 md:p-8 w-full">
+          {children}
+        </main>
       </div>
-      <div className="container mx-auto px-4 py-8">{children}</div>
+      <Toaster richColors position="top-right" />
     </div>
   )
 }

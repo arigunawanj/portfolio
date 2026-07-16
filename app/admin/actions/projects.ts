@@ -54,3 +54,15 @@ export async function deleteProject(id: number) {
   revalidatePath("/")
   revalidatePath("/admin/projects")
 }
+
+export async function updateProjectOrder(ids: number[]) {
+  const updates = ids.map((id, index) =>
+    prisma.project.update({
+      where: { id },
+      data: { order: index },
+    })
+  )
+  await prisma.$transaction(updates)
+  revalidatePath("/")
+  revalidatePath("/admin/projects")
+}

@@ -47,3 +47,15 @@ export async function deleteEducation(id: number) {
   revalidatePath("/")
   revalidatePath("/admin/education")
 }
+
+export async function updateEducationOrder(ids: number[]) {
+  const updates = ids.map((id, index) =>
+    prisma.education.update({
+      where: { id },
+      data: { order: index },
+    })
+  )
+  await prisma.$transaction(updates)
+  revalidatePath("/")
+  revalidatePath("/admin/education")
+}

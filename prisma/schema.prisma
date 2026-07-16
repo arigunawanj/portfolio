@@ -32,6 +32,9 @@ model SiteProfile {
   twitterUrl        String?
   metaTitle         String   @default("Ari Gunawan Jatmiko | Portfolio")
   metaDescription   String   @db.Text
+  faviconUrl        String   @default("/favicon.ico")
+  logoUrl           String   @default("/placeholder-logo.svg")
+  metaKeywords      String?  @db.Text
   updatedAt         DateTime @updatedAt
 }
 

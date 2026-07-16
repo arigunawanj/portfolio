@@ -65,3 +65,27 @@ export async function deleteSkill(id: number) {
   revalidatePath("/")
   revalidatePath("/admin/tech-stack")
 }
+
+export async function updateCategoryOrder(ids: number[]) {
+  const updates = ids.map((id, index) =>
+    prisma.techCategory.update({
+      where: { id },
+      data: { order: index },
+    })
+  )
+  await prisma.$transaction(updates)
+  revalidatePath("/")
+  revalidatePath("/admin/tech-stack")
+}
+
+export async function updateSkillOrder(ids: number[]) {
+  const updates = ids.map((id, index) =>
+    prisma.techSkill.update({
+      where: { id },
+      data: { order: index },
+    })
+  )
+  await prisma.$transaction(updates)
+  revalidatePath("/")
+  revalidatePath("/admin/tech-stack")
+}

@@ -22,6 +22,9 @@ export async function updateProfile(formData: FormData) {
       twitterUrl: String(formData.get("twitterUrl") ?? "") || null,
       metaTitle: String(formData.get("metaTitle") ?? ""),
       metaDescription: String(formData.get("metaDescription") ?? ""),
+      faviconUrl: String(formData.get("faviconUrl") ?? "/favicon.ico"),
+      logoUrl: String(formData.get("logoUrl") ?? "/placeholder-logo.svg"),
+      metaKeywords: String(formData.get("metaKeywords") ?? ""),
     },
     create: {
       id: 1,
@@ -40,6 +43,9 @@ export async function updateProfile(formData: FormData) {
       twitterUrl: String(formData.get("twitterUrl") ?? "") || null,
       metaTitle: String(formData.get("metaTitle") ?? ""),
       metaDescription: String(formData.get("metaDescription") ?? ""),
+      faviconUrl: String(formData.get("faviconUrl") ?? "/favicon.ico"),
+      logoUrl: String(formData.get("logoUrl") ?? "/placeholder-logo.svg"),
+      metaKeywords: String(formData.get("metaKeywords") ?? ""),
     },
   })
   revalidatePath("/")

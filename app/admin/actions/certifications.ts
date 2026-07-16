@@ -45,3 +45,15 @@ export async function deleteCertification(id: number) {
   revalidatePath("/")
   revalidatePath("/admin/certifications")
 }
+
+export async function updateCertificationOrder(ids: number[]) {
+  const updates = ids.map((id, index) =>
+    prisma.certification.update({
+      where: { id },
+      data: { order: index },
+    })
+  )
+  await prisma.$transaction(updates)
+  revalidatePath("/")
+  revalidatePath("/admin/certifications")
+}

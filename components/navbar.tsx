@@ -7,7 +7,12 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useTheme } from "@/components/theme-provider"
 
-export default function Navbar() {
+interface NavbarProps {
+  logoUrl?: string | null
+  siteName?: string | null
+}
+
+export default function Navbar({ logoUrl, siteName }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
@@ -110,12 +115,22 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <motion.button
             onClick={() => scrollToSection("home")}
-            className="relative text-2xl font-bold z-10 group"
+            className="relative flex items-center gap-2 text-2xl font-bold z-10 group"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-primary group-hover:text-primary/80 transition-colors">Ari Gunawan</span>
-            <span className="text-foreground group-hover:text-primary transition-colors"> Jatmiko</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt="Logo" className="h-8 w-auto object-contain max-w-[150px]" />
+            ) : (
+              <>
+                <span className="text-primary group-hover:text-primary/80 transition-colors">
+                  {siteName ? siteName.split(" ").slice(0, 2).join(" ") : "Ari Gunawan"}
+                </span>
+                <span className="text-foreground group-hover:text-primary transition-colors">
+                  {siteName ? " " + siteName.split(" ").slice(2).join(" ") : " Jatmiko"}
+                </span>
+              </>
+            )}
             <motion.div
               className="absolute -bottom-1 left-0 h-1 bg-gradient-to-r from-primary to-purple-500 rounded-full"
               layoutId="underline"

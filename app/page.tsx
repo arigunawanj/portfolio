@@ -12,14 +12,6 @@ import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
 import { AboutCategory } from "@prisma/client"
 
-export async function generateMetadata(): Promise<Metadata> {
-  const profile = await prisma.siteProfile.findUnique({ where: { id: 1 } })
-  return {
-    title: profile?.metaTitle ?? "Ari Gunawan Jatmiko | Portfolio",
-    description: profile?.metaDescription ?? "Professional portfolio of Ari Gunawan Jatmiko",
-  }
-}
-
 export default async function Home() {
   const [
     profile,
@@ -57,7 +49,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <Navbar logoUrl={profile?.logoUrl} siteName={profile?.name} />
       <main>
         {profile && (
           <Hero

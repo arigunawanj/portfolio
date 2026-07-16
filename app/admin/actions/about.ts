@@ -66,3 +66,27 @@ export async function deleteFunFact(id: number) {
   revalidatePath("/")
   revalidatePath("/admin/about")
 }
+
+export async function updateTraitOrder(ids: number[]) {
+  const updates = ids.map((id, index) =>
+    prisma.aboutTrait.update({
+      where: { id },
+      data: { order: index },
+    })
+  )
+  await prisma.$transaction(updates)
+  revalidatePath("/")
+  revalidatePath("/admin/about")
+}
+
+export async function updateFunFactOrder(ids: number[]) {
+  const updates = ids.map((id, index) =>
+    prisma.funFact.update({
+      where: { id },
+      data: { order: index },
+    })
+  )
+  await prisma.$transaction(updates)
+  revalidatePath("/")
+  revalidatePath("/admin/about")
+}

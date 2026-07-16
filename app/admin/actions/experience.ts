@@ -51,3 +51,15 @@ export async function deleteExperience(id: number) {
   revalidatePath("/")
   revalidatePath("/admin/experience")
 }
+
+export async function updateExperienceOrder(ids: number[]) {
+  const updates = ids.map((id, index) =>
+    prisma.workExperience.update({
+      where: { id },
+      data: { order: index },
+    })
+  )
+  await prisma.$transaction(updates)
+  revalidatePath("/")
+  revalidatePath("/admin/experience")
+}

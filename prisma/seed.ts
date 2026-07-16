@@ -30,6 +30,9 @@ async function main() {
       metaTitle: "Ari Gunawan Jatmiko | Portfolio",
       metaDescription:
         "Professional portfolio of Ari Gunawan Jatmiko - Full Stack Web Developer",
+      faviconUrl: "/favicon.ico",
+      logoUrl: "/placeholder-logo.svg",
+      metaKeywords: "portfolio, software developer, full stack developer, web developer",
     },
   })
 
