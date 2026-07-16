@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Briefcase, Heart, Smile, Sparkles } from "lucide-react"
 import TraitsListClient from "./traits-list"
 import FunFactsListClient from "./fun-facts-list"
-import { AboutCategory } from "@prisma/client"
 
 interface Trait {
   id: number
@@ -101,7 +100,7 @@ export default function AboutClient({ professional, personal, funFacts }: AboutC
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.2 }}
             >
-              <TraitsListClient title="Professional Skills" category={AboutCategory.PROFESSIONAL} initialTraits={professional} />
+              <TraitsListClient title="Professional Skills" category="PROFESSIONAL" initialTraits={professional} />
             </motion.div>
           )}
 
@@ -113,7 +112,7 @@ export default function AboutClient({ professional, personal, funFacts }: AboutC
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.2 }}
             >
-              <TraitsListClient title="Personal Traits" category={AboutCategory.PERSONAL} initialTraits={personal} />
+              <TraitsListClient title="Personal Traits" category="PERSONAL" initialTraits={personal} />
             </motion.div>
           )}
 

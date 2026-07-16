@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { AboutCategory } from "@prisma/client"
 import { updateTrait, deleteTrait, createTrait, updateTraitOrder } from "../../actions/about"
 import { GripVertical } from "lucide-react"
 
@@ -21,7 +20,7 @@ interface Trait {
 
 interface TraitsListClientProps {
   title: string
-  category: AboutCategory
+  category: "PROFESSIONAL" | "PERSONAL"
   initialTraits: Trait[]
 }
 
@@ -75,7 +74,7 @@ export default function TraitsListClient({ title, category, initialTraits }: Tra
             actionData.append("order", String(traits.length))
             
             try {
-              await createTrait(category, actionData)
+              await createTrait(category as any, actionData)
               toast.success("Created successfully!")
               const form = document.getElementById(`add-form-${category}`) as HTMLFormElement
               form?.reset()
