@@ -19,11 +19,23 @@ import {
   Quote
 } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { education } from "@/data/education"
 import { cn } from "@/lib/utils"
 
-export default function Education() {
-  const [activeId, setActiveId] = useState<number | null>(education[0].id)
+type EducationItem = {
+  id: number
+  degree: string
+  institution: string
+  duration: string
+  location: string
+  description: string
+  achievements: string[]
+  courses: string[]
+  thesis?: { title: string; advisor: string; abstract: string } | null
+  color: string
+}
+
+export default function Education({ education }: { education: EducationItem[] }) {
+  const [activeId, setActiveId] = useState<number | null>(education[0]?.id ?? null)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.1 })
 

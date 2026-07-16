@@ -4,11 +4,21 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { technologies } from "@/data/tech-stack"
 import { getIconByName } from "@/helpers/icon-mapping"
 import { cn } from "@/lib/utils"
 
-export default function TechStack() {
+type TechCategoryData = {
+  icon: string
+  title: string
+  description: string
+  skills: { name: string; level: number }[]
+}
+
+interface TechStackProps {
+  technologies: Record<string, TechCategoryData>
+}
+
+export default function TechStack({ technologies }: TechStackProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(Object.keys(technologies)[0])
 
   return (

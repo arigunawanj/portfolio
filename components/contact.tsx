@@ -20,68 +20,87 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export default function Contact() {
+type ContactProfile = {
+  email: string
+  phone: string | null
+  location: string | null
+  githubUrl: string | null
+  linkedinUrl: string | null
+  instagramUrl: string | null
+  gitlabUrl: string | null
+}
+
+function extractHandle(url: string) {
+  try {
+    const segment = new URL(url).pathname.split("/").filter(Boolean).pop()
+    return segment ? `@${segment}` : url
+  } catch {
+    return url
+  }
+}
+
+export default function Contact({ profile }: { profile: ContactProfile }) {
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.2 })
 
   const contactInfo = [
-     {
+    {
       icon: <Mail className="h-6 w-6" />,
       title: "Email",
-      value: "arigunawanjatmiko@gmail.com",
-      link: "mailto:arigunawanjatmiko@gmail.com",
+      value: profile.email,
+      link: `mailto:${profile.email}`,
       color: "text-blue-500",
       bg: "bg-blue-500/10"
     },
-    {
+    profile.phone && {
       icon: <Phone className="h-6 w-6" />,
       title: "Phone",
-      value: "+62 81 588 28 916",
-      link: "tel:+628158828916",
+      value: profile.phone,
+      link: `tel:${profile.phone.replace(/\s+/g, "")}`,
       color: "text-green-500",
       bg: "bg-green-500/10"
     },
-    {
+    profile.location && {
       icon: <MapPin className="h-6 w-6" />,
       title: "Location",
-      value: "Malang, Indonesia",
+      value: profile.location,
       link: null,
       color: "text-red-500",
       bg: "bg-red-500/10"
     },
-  ]
+  ].filter((x): x is Exclude<typeof x, false | null> => Boolean(x))
 
   const socialLinks = [
-    {
+    profile.githubUrl && {
       icon: <Github className="h-6 w-6" />,
       name: "GitHub",
-      url: "https://github.com/arigunawanj",
+      url: profile.githubUrl,
       color: "hover:text-primary",
-      username: "@arigunawanj"
+      username: extractHandle(profile.githubUrl)
     },
-    {
+    profile.linkedinUrl && {
       icon: <Linkedin className="h-6 w-6" />,
       name: "LinkedIn",
-      url: "https://www.linkedin.com/in/arigunawanj/",
+      url: profile.linkedinUrl,
       color: "hover:text-blue-600",
-      username: "Ari Gunawan J."
+      username: extractHandle(profile.linkedinUrl)
     },
-    {
+    profile.instagramUrl && {
       icon: <Instagram className="h-6 w-6" />,
       name: "Instagram",
-      url: "http://instagram.com/arigunawanj/",
+      url: profile.instagramUrl,
       color: "hover:text-pink-500",
-      username: "@arigunawanj"
+      username: extractHandle(profile.instagramUrl)
     },
-    {
+    profile.gitlabUrl && {
       icon: <Gitlab className="h-6 w-6" />,
       name: "Gitlab",
-      url: "https://gitlab.com/arigunawanj",
+      url: profile.gitlabUrl,
       color: "hover:text-orange-500",
-      username: "arigunawanj"
+      username: extractHandle(profile.gitlabUrl)
     },
-  ]
+  ].filter((x): x is Exclude<typeof x, false | null> => Boolean(x))
 
   const handleCopy = (text: string, field: string) => {
     navigator.clipboard.writeText(text)
@@ -215,7 +234,7 @@ export default function Contact() {
               Let's turn your vision into a digital masterpiece.
             </p>
             <Button size="lg" className="h-16 px-12 text-xl rounded-2xl shadow-xl shadow-primary/20 font-black" asChild>
-              <a href="mailto:arigunawanjatmiko@gmail.com">
+              <a href={`mailto:${profile.email}`}>
                 Send Me a Message
                 <Mail className="ml-3 h-6 w-6" />
               </a>

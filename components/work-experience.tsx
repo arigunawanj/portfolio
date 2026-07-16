@@ -7,11 +7,22 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Briefcase, Calendar, MapPin, ExternalLink, ChevronDown, ChevronUp, Circle } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { experiences } from "@/data/work-experience"
 import { cn } from "@/lib/utils"
 
-export default function WorkExperience() {
-  const [expandedId, setExpandedId] = useState<number | null>(experiences[0].id)
+type Experience = {
+  id: number
+  position: string
+  company: string
+  duration: string
+  location: string
+  description: string[]
+  skills: string[]
+  companyUrl: string
+  color: string
+}
+
+export default function WorkExperience({ experiences }: { experiences: Experience[] }) {
+  const [expandedId, setExpandedId] = useState<number | null>(experiences[0]?.id ?? null)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.1 })
 

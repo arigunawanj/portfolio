@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+// Singleton row holding hero/profile/contact/SEO info
+model SiteProfile {
+  id                Int      @id @default(1)
+  name              String   @default("Ari Gunawan Jatmiko")
+  role              String   @default("Software Developer")
+  heroBadge         String   @default("Available for New Projects")
+  heroDescription   String   @db.Text
+  photoUrl          String   @default("/foto/10.jpg")
+  email             String
+  phone             String?
+  location          String?
+  githubUrl         String?
+  linkedinUrl       String?
+  instagramUrl      String?
+  gitlabUrl         String?
+  twitterUrl        String?
+  metaTitle         String   @default("Ari Gunawan Jatmiko | Portfolio")
+  metaDescription   String   @db.Text
+  updatedAt         DateTime @updatedAt
+}
+
+enum AboutCategory {
+  PROFESSIONAL
+  PERSONAL
+}
+
+model AboutTrait {
+  id          Int           @id @default(autoincrement())
+  category    AboutCategory
+  icon        String
+  title       String
+  description String        @db.Text
+  order       Int           @default(0)
+}
+
+model FunFact {
+  id    Int    @id @default(autoincrement())
+  text  String @db.Text
+  order Int    @default(0)
+}
+
+model TechCategory {
+  id          Int         @id @default(autoincrement())
+  key         String      @unique
+  icon        String
+  title       String
+  description String
+  order       Int         @default(0)
+  skills      TechSkill[]
+}
+
+model TechSkill {
+  id         Int          @id @default(autoincrement())
+  categoryId Int
+  category   TechCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name       String
+  level      Int
+  order      Int          @default(0)
+}
+
+model Project {
+  id               Int      @id @default(autoincrement())
+  title            String
+  shortDescription String   @db.Text
+  description      String   @db.Text
+  fullDescription  String   @db.Text
+  images           Json
+  tags             Json
+  features         Json
+  demoLink         String?
+  githubLink       String?
+  color            String   @default("from-blue-500/20 to-cyan-500/20")
+  published        Boolean  @default(true)
+  order            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model WorkExperience {
+  id          Int      @id @default(autoincrement())
+  position    String
+  company     String
+  duration    String
+  location    String
+  description Json
+  skills      Json
+  companyUrl  String?
+  color       String   @default("from-blue-500/20 to-indigo-500/20")
+  order       Int      @default(0)
+}
+
+model Education {
+  id             Int      @id @default(autoincrement())
+  degree         String
+  institution    String
+  duration       String
+  location       String
+  description    String   @db.Text
+  achievements   Json
+  courses        Json
+  thesisTitle    String?
+  thesisAdvisor  String?
+  thesisAbstract String?  @db.Text
+  color          String   @default("from-blue-500/20 to-indigo-500/20")
+  order          Int      @default(0)
+}
+
+model Certification {
+  id            Int      @id @default(autoincrement())
+  name          String
+  issuer        String
+  date          String
+  description   String   @db.Text
+  credentialId  String?
+  credentialUrl String?
+  skills        Json
+  color         String   @default("from-blue-500/20 via-indigo-500/20 to-blue-600/20")
+  icon          String   @default("Zap")
+  order         Int      @default(0)
+}

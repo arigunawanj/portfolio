@@ -14,10 +14,22 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react"
-import { certifications } from "@/data/certifications"
 import { cn } from "@/lib/utils"
 
-export default function Certification() {
+type CertificationItem = {
+  id: number
+  name: string
+  issuer: string
+  date: string
+  description: string
+  credentialId: string
+  credentialUrl: string
+  skills: string[]
+  color: string
+  icon: string
+}
+
+export default function Certification({ certifications }: { certifications: CertificationItem[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.1 })

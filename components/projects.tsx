@@ -19,7 +19,6 @@ import {
   Code
 } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { projects } from "@/data/projects";
 import { getIconByName } from "@/helpers/icon-mapping";
 import { projectIconMap } from "@/helpers/icon-mapping";
 import { cn } from "@/lib/utils";
@@ -38,7 +37,7 @@ type Project = {
   color: string;
 };
 
-export default function Projects() {
+export default function Projects({ projects }: { projects: Project[] }) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const containerRef = useRef(null);

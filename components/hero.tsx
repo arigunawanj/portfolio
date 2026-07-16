@@ -7,9 +7,19 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Github, Linkedin, Twitter, ChevronDown, MousePointer } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
-export default function Hero() {
+type HeroProfile = {
+  name: string
+  role: string
+  heroBadge: string
+  heroDescription: string
+  photoUrl: string
+  githubUrl: string | null
+  linkedinUrl: string | null
+}
+
+export default function Hero({ profile }: { profile: HeroProfile }) {
   const [text, setText] = useState("")
-  const fullText = "Software Developer"
+  const fullText = profile.role
   const containerRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -92,12 +102,12 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <Badge variant="outline" className="mb-6 px-4 py-1 text-sm font-medium border-primary/20 bg-primary/5 text-primary animate-pulse">
-                Available for New Projects
+                {profile.heroBadge}
               </Badge>
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.1] tracking-tight">
                 Hi, I'm{" "}
                 <span className="text-gradient">
-                  Ari Gunawan
+                  {profile.name}
                 </span>
               </h1>
             </motion.div>
@@ -122,10 +132,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.6 }}
               className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed"
             >
-              🚀 Specialized in building 
-              <span className="text-foreground font-semibold"> high-performance </span> 
-              web applications that are scalable, secure, and lightning fast. 
-              Turning complex problems into elegant digital solutions.
+              {profile.heroDescription}
             </motion.p>
 
             <motion.div
@@ -149,14 +156,18 @@ export default function Hero() {
               transition={{ duration: 1, delay: 1.2 }}
               className="flex gap-6 mt-12 justify-center lg:justify-start"
             >
-              <a href="https://github.com/arigunawanj" target="_blank" rel="noopener noreferrer" 
-                className="p-3 rounded-2xl glass-card text-muted-foreground hover:text-primary hover:scale-110 transition-all duration-300 shadow-lg">
-                <Github className="h-6 w-6" />
-              </a>
-              <a href="https://www.linkedin.com/in/arigunawanj/" target="_blank" rel="noopener noreferrer" 
-                className="p-3 rounded-2xl glass-card text-muted-foreground hover:text-primary hover:scale-110 transition-all duration-300 shadow-lg">
-                <Linkedin className="h-6 w-6" />
-              </a>
+              {profile.githubUrl && (
+                <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer"
+                  className="p-3 rounded-2xl glass-card text-muted-foreground hover:text-primary hover:scale-110 transition-all duration-300 shadow-lg">
+                  <Github className="h-6 w-6" />
+                </a>
+              )}
+              {profile.linkedinUrl && (
+                <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer"
+                  className="p-3 rounded-2xl glass-card text-muted-foreground hover:text-primary hover:scale-110 transition-all duration-300 shadow-lg">
+                  <Linkedin className="h-6 w-6" />
+                </a>
+              )}
             </motion.div>
           </motion.div>
 
@@ -185,8 +196,8 @@ export default function Hero() {
               {/* Main image container */}
               <div className="absolute inset-6 rounded-full overflow-hidden border-8 border-background shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_50px_rgba(255,255,255,0.05)] glass z-10">
                 <img
-                  src="/foto/10.jpg"
-                  alt="Ari Gunawan Jatmiko"
+                  src={profile.photoUrl}
+                  alt={profile.name}
                   className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"
                 />
               </div>

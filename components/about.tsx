@@ -6,12 +6,25 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { tabs, professionalSkills, personalTraits, funFacts } from "@/data/about";
 import { getIconByName } from "@/helpers/icon-mapping";
 import { Code, Coffee, Sparkles, User, Target, Zap } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
-export default function About() {
+const tabs = [
+  { id: "professional", label: "Professional" },
+  { id: "personal", label: "Personal" },
+  { id: "fun-facts", label: "Fun Facts" },
+];
+
+type Trait = { icon: string; title: string; description: string };
+
+interface AboutProps {
+  professionalSkills: Trait[];
+  personalTraits: Trait[];
+  funFacts: string[];
+}
+
+export default function About({ professionalSkills, personalTraits, funFacts }: AboutProps) {
   const [activeTab, setActiveTab] = useState("professional");
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: false, amount: 0.1 });
