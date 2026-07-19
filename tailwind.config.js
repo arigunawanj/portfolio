@@ -57,6 +57,12 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        departure: ["var(--font-departure)", "monospace"],
+        jetbrains: ["var(--font-jetbrains)", "monospace"],
+        ibm: ["var(--font-ibm)", "monospace"],
+        geist: ["var(--font-geist)", "monospace"],
+      },
       keyframes: {
         "accordion-down": {
           from: { height: 0 },

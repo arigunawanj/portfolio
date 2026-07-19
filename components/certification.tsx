@@ -1,20 +1,9 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { motion, useInView, AnimatePresence } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import {
-  Award,
-  ExternalLink,
-  Calendar,
-  CheckCircle2,
-  ChevronRight,
-  Sparkles,
-  Zap,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Award, ExternalLink, Calendar, ShieldCheck, X } from "lucide-react"
+import SectionHeader from "./section-header"
 
 type CertificationItem = {
   id: number
@@ -29,126 +18,162 @@ type CertificationItem = {
   icon: string
 }
 
-export default function Certification({ certifications }: { certifications: CertificationItem[] }) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const containerRef = useRef(null)
-  const isInView = useInView(containerRef, { once: false, amount: 0.1 })
+interface CertificationProps {
+  certifications: CertificationItem[]
+}
+
+export default function Certification({ certifications }: CertificationProps) {
+  const [activeCert, setActiveCert] = useState<CertificationItem | null>(null)
 
   return (
-    <section id="certification" className="py-24 bg-background relative overflow-hidden" ref={containerRef}>
-      {/* Background Decorative Blob */}
-      <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+    <section id="certs" className="relative py-16 md:py-24 font-jetbrains">
+      <div className="max-w-6xl mx-auto px-5 md:px-8">
+        <SectionHeader command="ls certs/" title="Certifications" />
 
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
-          <Badge variant="outline" className="mb-4 px-4 py-1 border-primary/20 bg-primary/5 text-primary">
-            Achievements
-          </Badge>
-          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">
-            Professional <span className="text-gradient">Certifications</span>
-          </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-purple-500 mx-auto rounded-full"></div>
-        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-start items-start">
+        {certifications.map((cert, idx) => (
+          <motion.div
+            key={cert.id}
+            initial={{ y: 14 }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.4, delay: Math.min(idx, 5) * 0.05 }}
+            className="p-3.5 rounded-xl border border-white/[0.04] bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10 transition-all duration-300 flex flex-col justify-between"
+          >
+            <div className="space-y-2">
+              {/* Badge/Issuer & Date */}
+              <div className="flex items-center justify-between gap-2 text-[8px] md:text-[9px] text-muted-foreground/80 font-ibm font-medium uppercase tracking-wider">
+                <span className="text-[#4F8CFF] font-bold">{cert.issuer}</span>
+                <span className="flex items-center gap-1 font-geist"><Calendar className="w-2.5 h-2.5" /> {cert.date}</span>
+              </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {certifications.map((cert, index) => (
-            <motion.div
-              key={cert.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
-              <Card className="h-full glass-card border-primary/5 hover:border-primary/20 transition-all duration-500 group overflow-hidden">
-                <CardContent className="p-8">
-                  {/* Icon & Name */}
-                  <div className="relative mb-8 flex justify-between items-start">
-                    <div className="p-4 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
-                      <Award className="h-8 w-8" />
-                    </div>
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                      className="p-2 rounded-full bg-primary/5"
-                    >
-                      <Sparkles className="h-5 w-5 text-primary/40" />
-                    </motion.div>
-                  </div>
+              {/* Certificate Name */}
+              <h3 className="text-xs font-bold font-departure text-white leading-normal tracking-wide line-clamp-2">
+                {cert.name}
+              </h3>
 
-                  <div className="space-y-4 mb-8">
-                    <h3 className="text-2xl font-black group-hover:text-primary transition-colors leading-tight">
-                      {cert.name}
-                    </h3>
-                    <p className="text-lg font-bold text-muted-foreground">{cert.issuer}</p>
-                    <div className="flex items-center gap-2 text-sm font-bold text-primary">
-                      <Calendar className="h-4 w-4" />
-                      {cert.date}
-                    </div>
-                  </div>
+              <span className="inline-block text-[8px] bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-muted-foreground/80 font-mono tracking-wider">
+                ID: {cert.credentialId || "N/A"}
+              </span>
+            </div>
 
-                  <div className="pt-6 border-t border-border/30 space-y-6">
-                    <p className="text-muted-foreground font-medium line-clamp-3">
-                      {cert.description}
-                    </p>
-                    
-                    <div className="flex items-center gap-2 text-xs font-black text-muted-foreground uppercase tracking-widest bg-muted/30 p-2 rounded-lg border border-border/50">
-                      ID: {cert.credentialId}
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      <Button 
-                        variant="ghost" 
-                        className="flex-1 h-12 rounded-xl font-bold border border-transparent hover:border-primary/20"
-                        onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-                      >
-                        {activeIndex === index ? "Hide Skills" : "View Skills"}
-                        <ChevronRight className={cn("ml-2 h-4 w-4 transition-transform", activeIndex === index ? "rotate-90" : "")} />
-                      </Button>
-                      
-                      <Button className="flex-1 h-12 rounded-xl font-bold shadow-lg shadow-primary/20" asChild>
-                        <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          Verify
-                        </a>
-                      </Button>
-                    </div>
-
-                    <AnimatePresence>
-                      {activeIndex === index && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.4 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="pt-6 space-y-3">
-                            <h4 className="font-black text-xs uppercase tracking-widest text-primary flex items-center gap-2">
-                              <CheckCircle2 className="h-4 w-4" /> Competencies
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {cert.skills.map((skill, i) => (
-                                <Badge key={i} variant="secondary" className="bg-primary/5 text-primary border-primary/10 font-bold">
-                                  {skill}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+            {/* Actions row */}
+            <div className="flex gap-2 pt-3 border-t border-white/[0.04] mt-3">
+              <button
+                onClick={() => setActiveCert(cert)}
+                className="flex-1 py-1.5 bg-[#4F8CFF]/10 hover:bg-[#4F8CFF] hover:text-white border border-[#4F8CFF]/20 text-[#4F8CFF] text-[9px] font-departure font-bold rounded transition-all active:scale-95 text-center block"
+              >
+                Preview
+              </button>
+              <a
+                href={cert.credentialUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 py-1.5 bg-[#161D2F] hover:bg-white/[0.04] border border-white/[0.06] text-white text-[9px] font-departure font-bold rounded transition-all active:scale-95 text-center flex items-center justify-center gap-1"
+              >
+                Verify
+                <ExternalLink className="w-2.5 h-2.5 text-muted-foreground" />
+              </a>
+            </div>
+          </motion.div>
+        ))}
         </div>
       </div>
+
+      {/* Retro Digital Certificate Lightbox Modal Overlay */}
+      <AnimatePresence>
+        {activeCert && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] flex items-center justify-center p-4 font-jetbrains"
+            onClick={() => setActiveCert(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              className="relative w-full max-w-xl bg-[#121826] border border-white/10 rounded-xl overflow-hidden shadow-2xl p-6 md:p-10 text-center select-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setActiveCert(null)}
+                className="absolute top-3.5 right-3.5 z-10 p-1 bg-white/5 hover:bg-white/10 text-white rounded-full border border-white/10 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {/* Styled Certificate layout */}
+              <div className="border-2 border-dashed border-[#4F8CFF]/30 p-6 md:p-8 rounded-lg relative bg-[#161D2F]/20 space-y-6">
+                
+                {/* Certificate details heading */}
+                <div className="flex flex-col items-center space-y-1">
+                  <ShieldCheck className="w-10 h-10 text-[#4F8CFF]" />
+                  <span className="text-[10px] text-muted-foreground/60 tracking-widest font-ibm uppercase pt-2">
+                    Verification Certificate
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-[9px] text-muted-foreground font-ibm font-medium uppercase tracking-wide block">
+                    This certifies that
+                  </span>
+                  <h3 className="text-lg md:text-xl font-bold font-departure text-white tracking-wide">
+                    Ari Gunawan
+                  </h3>
+                  <span className="text-[9px] text-muted-foreground font-ibm font-medium uppercase tracking-wide block">
+                    has successfully achieved the designation
+                  </span>
+                  <h2 className="text-sm md:text-base font-bold font-departure text-[#4F8CFF] leading-snug tracking-wide">
+                    {activeCert.name}
+                  </h2>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-5 text-[10px] text-left text-muted-foreground">
+                  <div className="space-y-0.5">
+                    <span className="text-muted-foreground/40 font-ibm uppercase tracking-wider text-[8px]">ISSUER</span>
+                    <p className="font-bold text-white font-departure">{activeCert.issuer}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <span className="text-muted-foreground/40 font-ibm uppercase tracking-wider text-[8px]">CREDENTIAL ID</span>
+                    <p className="font-bold text-white font-geist text-[9px]">{activeCert.credentialId || "N/A"}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <span className="text-muted-foreground/40 font-ibm uppercase tracking-wider text-[8px]">DATE ACHIEVED</span>
+                    <p className="font-bold text-white font-geist">{activeCert.date}</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <span className="text-muted-foreground/40 font-ibm uppercase tracking-wider text-[8px]">STATUS</span>
+                    <p className="font-bold text-[#22C55E] font-departure">● VERIFIED</p>
+                  </div>
+                </div>
+
+                {/* Stamp visual decoration */}
+                <div className="absolute bottom-6 right-6 w-16 h-16 rounded-full border border-dashed border-[#8B5CF6]/30 flex items-center justify-center text-[7px] text-[#8B5CF6] font-departure rotate-[15deg]">
+                  AG CERTIFIED
+                </div>
+
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex gap-3 justify-center pt-6">
+                <a
+                  href={activeCert.credentialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-[#4F8CFF] hover:bg-[#4F8CFF]/90 text-white text-xs font-departure font-bold rounded transition-all active:scale-95 shadow-md shadow-[#4F8CFF]/15"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Verify on Authority Site
+                </a>
+              </div>
+
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

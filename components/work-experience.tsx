@@ -1,13 +1,10 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { motion, useInView, AnimatePresence } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Briefcase, Calendar, MapPin, ExternalLink, ChevronDown, ChevronUp, Circle } from "lucide-react"
-import { useMediaQuery } from "@/hooks/use-media-query"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Briefcase, Calendar, MapPin, ExternalLink, ChevronDown, ChevronUp, CheckCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import SectionHeader from "./section-header"
 
 type Experience = {
   id: number
@@ -23,144 +20,118 @@ type Experience = {
 
 export default function WorkExperience({ experiences }: { experiences: Experience[] }) {
   const [expandedId, setExpandedId] = useState<number | null>(experiences[0]?.id ?? null)
-  const containerRef = useRef(null)
-  const isInView = useInView(containerRef, { once: false, amount: 0.1 })
 
   return (
-    <section id="work-experience" className="py-24 bg-background relative overflow-hidden" ref={containerRef}>
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-1/4 h-1/4 bg-primary/5 blur-[100px] rounded-full" />
+    <section id="experience" className="relative py-16 md:py-24 font-jetbrains">
+      <div className="max-w-5xl mx-auto px-5 md:px-8">
+        <SectionHeader
+          command="cat experience.log"
+          title="Where I've worked"
+          description="Roles, responsibilities, and what I actually shipped — not just job titles."
+        />
 
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
-          <Badge variant="outline" className="mb-4 px-4 py-1 border-primary/20 bg-primary/5 text-primary">
-            Journey
-          </Badge>
-          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">
-            Work <span className="text-gradient">Experience</span>
-          </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-purple-500 mx-auto rounded-full"></div>
-        </motion.div>
+        <div className="space-y-4">
+          {experiences.map((experience, index) => {
+            const isExpanded = expandedId === experience.id
 
-        <div className="max-w-5xl mx-auto space-y-12 relative">
-          {/* Main Timeline Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 via-primary/20 to-transparent transform -translate-x-1/2 hidden md:block" />
-
-          {experiences.map((experience, index) => (
-            <motion.div
-              key={experience.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={cn(
-                "relative flex flex-col md:flex-row gap-8 items-start",
-                index % 2 === 1 ? "md:flex-row-reverse" : ""
-              )}
-            >
-              {/* Timeline Indicator */}
-              <div className="absolute left-4 md:left-1/2 top-8 w-4 h-4 bg-background border-4 border-primary rounded-full transform -translate-x-1/2 z-20 hidden md:block" />
-
-              {/* Side Content: Date and Location */}
-              <div className={cn(
-                "md:w-1/2 flex flex-col gap-2 pt-6",
-                index % 2 === 0 ? "md:text-right md:pr-12" : "md:text-left md:pl-12"
-              )}>
-                <div className={cn(
-                  "flex items-center gap-2 text-primary font-bold text-lg",
-                  index % 2 === 0 ? "md:justify-end" : "md:justify-start"
-                )}>
-                  <Calendar className="h-5 w-5" />
-                  {experience.duration}
-                </div>
-                <div className={cn(
-                  "flex items-center gap-2 text-muted-foreground font-medium",
-                  index % 2 === 0 ? "md:justify-end" : "md:justify-start"
-                )}>
-                  <MapPin className="h-4 w-4" />
-                  {experience.location}
-                </div>
-              </div>
-
-              {/* Main Content Card */}
-              <div className="md:w-1/2 w-full">
-                <Card 
-                  className={cn(
-                    "glass-card border-primary/5 hover:border-primary/20 transition-all duration-500 shadow-xl shadow-primary/5 group overflow-hidden",
-                    expandedId === experience.id ? "ring-2 ring-primary/20" : ""
-                  )}
+            return (
+              <motion.div
+                key={experience.id}
+                initial={{ y: 14 }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: Math.min(index, 5) * 0.05 }}
+                className={cn(
+                  "p-5 rounded-xl border transition-all duration-300",
+                  isExpanded
+                    ? "bg-[#161D2F] border-white/[0.08] shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                    : "border-white/[0.05] bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10"
+                )}
+              >
+                <div
+                  onClick={() => setExpandedId(isExpanded ? null : experience.id)}
+                  className="flex flex-col md:flex-row md:items-center justify-between gap-3 cursor-pointer"
                 >
-                  <CardContent className="p-8">
-                    <div className="flex items-start gap-6 mb-6">
-                      <div className="p-4 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
-                        <Briefcase className="h-8 w-8" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-black mb-1 group-hover:text-primary transition-colors">
-                          {experience.position}
-                        </h3>
-                        <div className="flex items-center gap-2 text-lg font-bold text-muted-foreground">
-                          {experience.company}
-                          {experience.companyUrl !== "#" && (
-                            <a href={experience.companyUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:scale-125 transition-transform">
-                              <ExternalLink className="h-4 w-4" />
-                            </a>
-                          )}
-                        </div>
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded bg-[#4F8CFF]/10 text-[#4F8CFF] shrink-0 mt-0.5">
+                      <Briefcase className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold font-departure text-white tracking-wide flex items-center gap-1.5 flex-wrap">
+                        <span>{experience.position}</span>
+                        <span className="text-[#8B5CF6]">@</span>
+                        <span className="text-white/80">{experience.company}</span>
+                      </h3>
+
+                      <div className="flex items-center gap-3 text-[10px] text-muted-foreground/80 font-ibm mt-1.5">
+                        <span className="flex items-center gap-1"><Calendar className="w-3 h-3 text-[#4F8CFF]" /> {experience.duration}</span>
+                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {experience.location}</span>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {experience.skills.map((skill, i) => (
-                        <Badge key={i} variant="secondary" className="bg-primary/5 text-primary border-primary/10 font-bold px-3 py-1">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
+                  <div className="flex items-center gap-3 ml-auto md:ml-0 shrink-0">
+                    {experience.companyUrl && experience.companyUrl !== "#" && (
+                      <a
+                        href={experience.companyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-1.5 rounded bg-white/5 border border-white/10 text-muted-foreground hover:text-white transition-colors"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    <button className="text-muted-foreground hover:text-white transition-colors">
+                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
 
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-between hover:bg-primary/5 font-bold h-12 rounded-xl group/btn"
-                      onClick={() => setExpandedId(expandedId === experience.id ? null : experience.id)}
+                <AnimatePresence initial={false}>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
                     >
-                      <span>{expandedId === experience.id ? "Minimize Details" : "View Responsibilities"}</span>
-                      {expandedId === experience.id ? <ChevronUp className="h-5 w-5 group-hover/btn:-translate-y-1 transition-transform" /> : <ChevronDown className="h-5 w-5 group-hover/btn:translate-y-1 transition-transform" />}
-                    </Button>
+                      <div className="pt-4 mt-3 border-t border-white/[0.05] space-y-4">
+                        <div className="space-y-2 text-xs text-muted-foreground font-jetbrains">
+                          <span className="text-[9px] font-bold text-white/50 tracking-widest font-departure block">
+                            CONTRIBUTIONS & ACHIEVEMENTS
+                          </span>
+                          {experience.description.map((bullet, bIdx) => (
+                            <div key={bIdx} className="flex items-start gap-2.5 leading-relaxed">
+                              <CheckCircle className="w-3.5 h-3.5 text-[#22C55E] shrink-0 mt-0.5" />
+                              <span>{bullet}</span>
+                            </div>
+                          ))}
+                        </div>
 
-                    <AnimatePresence>
-                      {expandedId === experience.id && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.4 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="pt-8 mt-6 border-t border-border/30 space-y-4">
-                            {experience.description.map((item, i) => (
-                              <div key={i} className="flex items-start gap-4">
-                                <div className="mt-1.5 shrink-0">
-                                  <Circle className="h-2 w-2 fill-primary text-primary" />
-                                </div>
-                                <p className="text-muted-foreground leading-relaxed font-medium">
-                                  {item}
-                                </p>
-                              </div>
+                        <div className="space-y-2 pt-3 border-t border-white/[0.04]">
+                          <span className="text-[9px] font-bold text-white/50 tracking-widest font-departure block">
+                            TECH STACK USED
+                          </span>
+                          <div className="flex flex-wrap gap-1">
+                            {experience.skills.map((skill) => (
+                              <span
+                                key={skill}
+                                className="px-2 py-0.5 bg-[#121826] border border-white/[0.05] text-[10px] text-muted-foreground/80 font-ibm font-medium rounded hover:text-white transition-colors"
+                              >
+                                {skill}
+                              </span>
                             ))}
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </CardContent>
-                </Card>
-              </div>
-            </motion.div>
-          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>

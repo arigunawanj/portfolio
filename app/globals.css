@@ -1,78 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+@font-face {
+  font-family: 'DepartureMono';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2409-1@1.0/DepartureMono-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 262.1 83.3% 57.8%;
+    --background: 226 50% 8%; /* #0B1020 */
+    --foreground: 220 20% 90%;
+    --card: 223 36% 14%; /* #161D2F */
+    --card-foreground: 220 20% 95%;
+    --popover: 223 36% 14%;
+    --popover-foreground: 220 20% 95%;
+    --primary: 219 100% 66%; /* #4F8CFF (Electric Blue) */
     --primary-foreground: 210 20% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 262.1 83.3% 57.8%;
-    --radius: 0.75rem;
+    --secondary: 262 83% 58%; /* #8B5CF6 (Purple) */
+    --secondary-foreground: 210 20% 98%;
+    --muted: 222 30% 18%;
+    --muted-foreground: 220 15% 65%;
+    --accent: 219 100% 66%;
+    --accent-foreground: 210 20% 98%;
+    --border: 220 20% 90% / 0.08; /* rgba(255,255,255,.08) */
+    --input: 220 20% 90% / 0.08;
+    --ring: 219 100% 66%;
+    --radius: 1rem;
+
+    --font-departure: 'DepartureMono', monospace;
+    --font-jetbrains: 'JetBrains Mono', monospace;
+    --font-ibm: 'IBM Plex Mono', monospace;
+    --font-geist: 'Geist Mono', monospace;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 263.4 70% 50.4%;
+    --background: 226 50% 8%;
+    --foreground: 220 20% 90%;
+    --card: 223 36% 14%;
+    --card-foreground: 220 20% 95%;
+    --popover: 223 36% 14%;
+    --popover-foreground: 220 20% 95%;
+    --primary: 219 100% 66%;
     --primary-foreground: 210 20% 98%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 263.4 70% 50.4%;
+    --secondary: 262 83% 58%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 222 30% 18%;
+    --muted-foreground: 220 15% 65%;
+    --accent: 219 100% 66%;
+    --accent-foreground: 210 20% 98%;
+    --border: 220 20% 90% / 0.08;
+    --input: 220 20% 90% / 0.08;
+    --ring: 219 100% 66%;
+  }
+  .theme {
+    --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+    --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-white/5;
   }
+
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary-foreground;
+    @apply text-foreground antialiased selection:bg-primary/30 selection:text-primary-foreground font-jetbrains;
+    background-color: #0B1020;
+    overflow-x: hidden;
+  }
+
+  /* Custom terminal scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 }
 
-@layer components {
-  .glass {
-    @apply bg-background/60 backdrop-blur-md border border-white/10 dark:border-white/5;
-  }
-  
-  .glass-card {
-    @apply bg-card/40 backdrop-blur-sm border border-border/50 hover:bg-card/60 transition-all duration-300;
-  }
-
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-pink-500;
-  }
+/* Background grid styling */
+.bg-grid-subtle {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
-.animate-blink {
+/* Subtle noise texture */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0%200%20200%20200'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter%20id='noiseFilter'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.75'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23noiseFilter)'%20opacity='0.015'/%3E%3C/svg%3E");
+}
+
+/* Cursor typing animation */
+.terminal-cursor::after {
+  content: '_';
   animation: blink 1s step-end infinite;
 }
 
@@ -81,17 +119,24 @@
   50% { opacity: 0; }
 }
 
-.bg-mesh {
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(263, 70%, 50%, 0.15) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(280, 70%, 50%, 0.15) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(320, 70%, 50%, 0.15) 0, transparent 50%);
+@theme inline {
+  @keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+    }
+  15%, 35% {
+    transform: translateZ(0) rotate(90deg);
+    }
+  65%, 85% {
+    transform: translateZ(0) rotate(270deg);
+    }
+  100% {
+    transform: translateZ(0) rotate(360deg);
+    }
+  }
 }
-
-.dark .bg-mesh {
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(263, 70%, 50%, 0.3) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(280, 70%, 50%, 0.3) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(320, 70%, 50%, 0.3) 0, transparent 50%);
-}
-
