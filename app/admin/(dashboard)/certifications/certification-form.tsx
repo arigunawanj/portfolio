@@ -131,7 +131,7 @@ export function CertificationForm({ item, action }: CertificationFormProps) {
         {/* Form Card */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-xl relative overflow-hidden backdrop-blur-md dark:bg-black/40 dark:border-white/5 group p-6 sm:p-8">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/30 to-transparent" />
 
             <AnimatePresence mode="wait">
               {activeTab === "info" && (
@@ -218,7 +218,7 @@ export function CertificationForm({ item, action }: CertificationFormProps) {
                             key={g.value}
                             type="button"
                             onClick={() => handleGradientSelect(g.value)}
-                            className={`w-9 h-9 rounded-full bg-gradient-to-tr ${g.colors} border-2 flex items-center justify-center transition-all ${
+                            className={`w-9 h-9 rounded-full bg-linear-to-tr ${g.colors} border-2 flex items-center justify-center transition-all ${
                               isSelected 
                                 ? "border-slate-950 scale-110 shadow dark:border-white" 
                                 : "border-transparent hover:scale-105"
@@ -272,7 +272,7 @@ export function CertificationForm({ item, action }: CertificationFormProps) {
 
         {/* Certificate Card Mockup */}
         <div className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-xl relative overflow-hidden backdrop-blur-md dark:bg-black/40 dark:border-white/5 flex items-stretch select-none">
-          <div className={`w-1.5 bg-gradient-to-b ${form.color} rounded-l-2xl shrink-0 self-stretch`} />
+          <div className={`w-1.5 bg-linear-to-b ${form.color} rounded-l-2xl shrink-0 self-stretch`} />
 
           <div className="flex-1 flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 min-w-0">
             {/* Award icon mockup */}

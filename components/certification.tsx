@@ -38,7 +38,7 @@ export default function Certification({ certifications }: CertificationProps) {
             whileInView={{ y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.4, delay: Math.min(idx, 5) * 0.05 }}
-            className="p-3.5 rounded-xl border border-white/[0.04] bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10 transition-all duration-300 flex flex-col justify-between"
+            className="p-3.5 rounded-xl border border-white/4 bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10 transition-all duration-300 flex flex-col justify-between"
           >
             <div className="space-y-2">
               {/* Badge/Issuer & Date */}
@@ -58,7 +58,7 @@ export default function Certification({ certifications }: CertificationProps) {
             </div>
 
             {/* Actions row */}
-            <div className="flex gap-2 pt-3 border-t border-white/[0.04] mt-3">
+            <div className="flex gap-2 pt-3 border-t border-white/4 mt-3">
               <button
                 onClick={() => setActiveCert(cert)}
                 className="flex-1 py-1.5 bg-[#4F8CFF]/10 hover:bg-[#4F8CFF] hover:text-white border border-[#4F8CFF]/20 text-[#4F8CFF] text-[9px] font-departure font-bold rounded transition-all active:scale-95 text-center block"
@@ -69,7 +69,7 @@ export default function Certification({ certifications }: CertificationProps) {
                 href={cert.credentialUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 py-1.5 bg-[#161D2F] hover:bg-white/[0.04] border border-white/[0.06] text-white text-[9px] font-departure font-bold rounded transition-all active:scale-95 text-center flex items-center justify-center gap-1"
+                className="flex-1 py-1.5 bg-[#161D2F] hover:bg-white/4 border border-white/6 text-white text-[9px] font-departure font-bold rounded transition-all active:scale-95 text-center flex items-center justify-center gap-1"
               >
                 Verify
                 <ExternalLink className="w-2.5 h-2.5 text-muted-foreground" />
@@ -87,7 +87,7 @@ export default function Certification({ certifications }: CertificationProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] flex items-center justify-center p-4 font-jetbrains"
+            className="fixed inset-0 bg-black/90 backdrop-blur-md z-60 flex items-center justify-center p-4 font-jetbrains"
             onClick={() => setActiveCert(null)}
           >
             <motion.div
@@ -131,7 +131,7 @@ export default function Certification({ certifications }: CertificationProps) {
                   </h2>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-5 text-[10px] text-left text-muted-foreground">
+                <div className="grid grid-cols-2 gap-4 border-t border-white/6 pt-5 text-[10px] text-left text-muted-foreground">
                   <div className="space-y-0.5">
                     <span className="text-muted-foreground/40 font-ibm uppercase tracking-wider text-[8px]">ISSUER</span>
                     <p className="font-bold text-white font-departure">{activeCert.issuer}</p>
@@ -151,7 +151,7 @@ export default function Certification({ certifications }: CertificationProps) {
                 </div>
 
                 {/* Stamp visual decoration */}
-                <div className="absolute bottom-6 right-6 w-16 h-16 rounded-full border border-dashed border-[#8B5CF6]/30 flex items-center justify-center text-[7px] text-[#8B5CF6] font-departure rotate-[15deg]">
+                <div className="absolute bottom-6 right-6 w-16 h-16 rounded-full border border-dashed border-[#8B5CF6]/30 flex items-center justify-center text-[7px] text-[#8B5CF6] font-departure rotate-15">
                   AG CERTIFIED
                 </div>
 

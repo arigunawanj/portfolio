@@ -16,7 +16,7 @@ export default function LoginPage() {
     <div className="relative min-h-screen flex items-center justify-center bg-background px-4 overflow-hidden">
       {/* Background Decorative Mesh / Glows */}
       <div className="absolute inset-0 bg-mesh opacity-40 z-0" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] z-0" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-size-[24px_24px] z-0" />
 
       {/* Floating Animated Blobs */}
       <motion.div
@@ -54,7 +54,7 @@ export default function LoginPage() {
       >
         <Card className="glass shadow-2xl relative border border-white/10 dark:border-white/5 overflow-hidden">
           {/* Top glow line */}
-          <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-linear-to-r from-transparent via-primary/50 to-transparent" />
           
           <CardHeader className="space-y-1 text-center pt-8">
             <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-2">

@@ -70,7 +70,7 @@ export default function DashboardGrid({ cards }: DashboardGridProps) {
             <Link href={c.href} className="block h-full group">
               <Card className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-sm hover:border-primary/20 hover:shadow-md transition-all duration-300 relative overflow-hidden backdrop-blur-md dark:bg-black/40 dark:border-white/5 h-full flex flex-col justify-between p-5 select-none">
                 {/* Decorative background gradient accent */}
-                <div className={`absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 bg-gradient-to-tr ${c.color} opacity-[0.03] group-hover:opacity-[0.08] rounded-full blur-xl transition-all duration-300`} />
+                <div className={`absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 bg-linear-to-tr ${c.color} opacity-[0.03] group-hover:opacity-[0.08] rounded-full blur-xl transition-all duration-300`} />
 
                 <div className="space-y-4">
                   {/* Card Header Info */}
@@ -78,7 +78,7 @@ export default function DashboardGrid({ cards }: DashboardGridProps) {
                     <span className="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                       {c.label}
                     </span>
-                    <div className={`p-2.5 rounded-xl bg-gradient-to-tr ${c.color} bg-opacity-10 border border-primary/10 text-primary transition-all duration-300 group-hover:scale-105`}>
+                    <div className={`p-2.5 rounded-xl bg-linear-to-tr ${c.color} bg-opacity-10 border border-primary/10 text-primary transition-all duration-300 group-hover:scale-105`}>
                       <IconComponent className="h-4 w-4 text-primary" />
                     </div>
                   </div>

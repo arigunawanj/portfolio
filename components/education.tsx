@@ -31,7 +31,7 @@ export default function Education({ education }: { education: EducationItem[] })
             whileInView={{ y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.4, delay: Math.min(idx, 5) * 0.05 }}
-            className="p-5 rounded-xl border border-white/[0.05] bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10 transition-all duration-300 space-y-3"
+            className="p-5 rounded-xl border border-white/5 bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10 transition-all duration-300 space-y-3"
           >
             {/* Header tags */}
             <div className="flex items-center justify-between flex-wrap gap-2 text-[10px] text-muted-foreground/80 font-ibm font-medium uppercase tracking-wider">
@@ -62,7 +62,7 @@ export default function Education({ education }: { education: EducationItem[] })
 
             {/* Thesis Details (Markdown style layout block) */}
             {item.thesis && item.thesis.title && (
-              <div className="p-3 bg-[#121826]/60 border border-white/[0.04] rounded-lg space-y-1.5 font-jetbrains text-[10px]">
+              <div className="p-3 bg-[#121826]/60 border border-white/4 rounded-lg space-y-1.5 font-jetbrains text-[10px]">
                 <div className="flex items-center gap-1.5 text-[9px] text-[#22C55E] uppercase font-bold tracking-wider font-ibm">
                   <BookOpen className="w-3.5 h-3.5" />
                   <span>Research & Thesis</span>
@@ -82,7 +82,7 @@ export default function Education({ education }: { education: EducationItem[] })
         </div>
 
         {/* Footer Quote block */}
-        <div className="pt-5 mt-6 border-t border-white/[0.05] flex items-center gap-3">
+        <div className="pt-5 mt-6 border-t border-white/5 flex items-center gap-3">
           <Quote className="w-4 h-4 text-white/30 hidden md:block" />
           <p className="text-[10px] text-muted-foreground italic leading-relaxed">
             "Education is not the learning of facts, but the training of the mind to think."

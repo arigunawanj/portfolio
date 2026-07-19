@@ -49,7 +49,7 @@ export default function TechStack({ technologies }: TechStackProps) {
                 whileInView={{ y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.4, delay: Math.min(catIdx, 5) * 0.05 }}
-                className="rounded-xl border border-white/[0.06] bg-[#161D2F]/30 p-5 hover:border-white/10 transition-colors"
+                className="rounded-xl border border-white/6 bg-[#161D2F]/30 p-5 hover:border-white/10 transition-colors"
               >
                 <div className="flex items-center gap-2.5 mb-4">
                   <div className="p-2 rounded-lg bg-[#4F8CFF]/10 text-[#4F8CFF] shrink-0">

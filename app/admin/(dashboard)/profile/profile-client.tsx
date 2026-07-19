@@ -131,7 +131,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           {/* Form Card (Responsive Light/Dark theme styles) */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-xl relative overflow-hidden backdrop-blur-md dark:bg-black/40 dark:border-white/5 group">
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+              <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/30 to-transparent" />
               
               <div className="p-6 sm:p-8 space-y-6">
                 <AnimatePresence mode="wait">
@@ -405,7 +405,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
                 {/* Profile Photo */}
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-primary to-purple-500 rounded-full blur-md scale-105 animate-pulse opacity-60" />
+                  <div className="absolute inset-0 bg-linear-to-tr from-primary to-purple-500 rounded-full blur-md scale-105 animate-pulse opacity-60" />
                   <div className="relative w-28 h-28 rounded-full overflow-hidden border-[3px] border-background bg-muted dark:border-slate-900 dark:bg-slate-900">
                     {form.photoUrl ? (
                       <img src={form.photoUrl} alt={form.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder-user.jpg' }} />

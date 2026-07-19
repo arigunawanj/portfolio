@@ -93,14 +93,14 @@ export default function Hero({ profile }: { profile: HeroProfile }) {
             <a
               href="/resume.pdf"
               download
-              className="flex items-center gap-2 px-5 py-2.5 bg-[#161D2F] hover:bg-white/[0.04] border border-white/[0.06] text-white rounded-lg text-sm font-departure font-bold transition-all scale-100 hover:scale-[1.02] active:scale-95 shadow-sm"
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#161D2F] hover:bg-white/4 border border-white/6 text-white rounded-lg text-sm font-departure font-bold transition-all scale-100 hover:scale-[1.02] active:scale-95 shadow-sm"
             >
               Download CV
               <Download className="w-4 h-4" />
             </a>
           </div>
 
-          <div className="pt-8 mt-8 border-t border-white/[0.05]">
+          <div className="pt-8 mt-8 border-t border-white/5">
             <span className="text-[9px] font-bold text-muted-foreground/60 tracking-widest font-departure block mb-2.5">
               FAVORITE TECHNOLOGIES
             </span>
@@ -108,7 +108,7 @@ export default function Hero({ profile }: { profile: HeroProfile }) {
               {FAVORITE_TECH.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2.5 py-1 bg-[#121826]/60 border border-white/[0.05] text-[11px] text-muted-foreground hover:text-white hover:border-[#4F8CFF]/30 rounded transition-all font-ibm font-medium cursor-default"
+                  className="px-2.5 py-1 bg-[#121826]/60 border border-white/5 text-[11px] text-muted-foreground hover:text-white hover:border-[#4F8CFF]/30 rounded transition-all font-ibm font-medium cursor-default"
                 >
                   {tech}
                 </span>
@@ -125,7 +125,7 @@ export default function Hero({ profile }: { profile: HeroProfile }) {
           className="lg:col-span-5 flex justify-center lg:justify-end"
         >
           <div className="w-60 h-60 md:w-72 md:h-72 lg:w-80 lg:h-80 relative flex items-center justify-center select-none">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#4F8CFF]/20 to-[#8B5CF6]/20 blur-2xl" />
+            <div className="absolute inset-0 rounded-full bg-linear-to-tr from-[#4F8CFF]/20 to-[#8B5CF6]/20 blur-2xl" />
             <div className="absolute inset-3 rounded-full border border-dashed border-[#4F8CFF]/30 animate-[spin_40s_linear_infinite]" />
             <div className="absolute inset-6 rounded-full overflow-hidden border-4 border-[#121826] bg-[#121826] shadow-[0_10px_30px_rgba(0,0,0,0.4)] relative z-10">
               <img

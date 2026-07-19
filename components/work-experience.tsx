@@ -44,8 +44,8 @@ export default function WorkExperience({ experiences }: { experiences: Experienc
                 className={cn(
                   "p-5 rounded-xl border transition-all duration-300",
                   isExpanded
-                    ? "bg-[#161D2F] border-white/[0.08] shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
-                    : "border-white/[0.05] bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10"
+                    ? "bg-[#161D2F] border-white/8 shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                    : "border-white/5 bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10"
                 )}
               >
                 <div
@@ -97,7 +97,7 @@ export default function WorkExperience({ experiences }: { experiences: Experienc
                       transition={{ duration: 0.25 }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-4 mt-3 border-t border-white/[0.05] space-y-4">
+                      <div className="pt-4 mt-3 border-t border-white/5 space-y-4">
                         <div className="space-y-2 text-xs text-muted-foreground font-jetbrains">
                           <span className="text-[9px] font-bold text-white/50 tracking-widest font-departure block">
                             CONTRIBUTIONS & ACHIEVEMENTS
@@ -110,7 +110,7 @@ export default function WorkExperience({ experiences }: { experiences: Experienc
                           ))}
                         </div>
 
-                        <div className="space-y-2 pt-3 border-t border-white/[0.04]">
+                        <div className="space-y-2 pt-3 border-t border-white/4">
                           <span className="text-[9px] font-bold text-white/50 tracking-widest font-departure block">
                             TECH STACK USED
                           </span>
@@ -118,7 +118,7 @@ export default function WorkExperience({ experiences }: { experiences: Experienc
                             {experience.skills.map((skill) => (
                               <span
                                 key={skill}
-                                className="px-2 py-0.5 bg-[#121826] border border-white/[0.05] text-[10px] text-muted-foreground/80 font-ibm font-medium rounded hover:text-white transition-colors"
+                                className="px-2 py-0.5 bg-[#121826] border border-white/5 text-[10px] text-muted-foreground/80 font-ibm font-medium rounded hover:text-white transition-colors"
                               >
                                 {skill}
                               </span>

@@ -348,7 +348,7 @@ function SkillItem({
       <div className="pl-8 pr-1 flex items-center gap-3">
         <div className="flex-1 h-1.5 bg-muted/60 rounded-full overflow-hidden border border-border/10">
           <div
-            className="h-full bg-gradient-to-r from-primary/80 to-primary rounded-full transition-all duration-500"
+            className="h-full bg-linear-to-r from-primary/80 to-primary rounded-full transition-all duration-500"
             style={{ width: `${Math.min(Math.max(skillLevel, 0), 100)}%` }}
           />
         </div>

@@ -20,7 +20,7 @@ export function EditUserForm({
 
   return (
     <div className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-xl relative overflow-hidden backdrop-blur-md dark:bg-black/40 dark:border-white/5 p-6 sm:p-8">
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/30 to-transparent" />
       
       {/* Title block */}
       <div className="flex items-center gap-3 border-b border-border/40 pb-4 mb-6">

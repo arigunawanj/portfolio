@@ -42,7 +42,7 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-8">
       {/* Dynamic Welcoming Cockpit Banner */}
-      <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card/30 via-card/10 to-card/40 p-6 sm:p-8 backdrop-blur-md dark:bg-black/20 dark:border-white/5 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-linear-to-br from-card/30 via-card/10 to-card/40 p-6 sm:p-8 backdrop-blur-md dark:bg-black/20 dark:border-white/5 shadow-xl">
         {/* Glow Spheres */}
         <div className="absolute top-0 right-0 -mr-16 -mt-16 w-72 h-72 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-72 h-72 rounded-full bg-blue-500/5 blur-3xl pointer-events-none" />

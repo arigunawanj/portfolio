@@ -84,7 +84,7 @@ export default function Contact({ profile }: { profile: ContactProfile }) {
               whileInView={{ y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.35, delay: idx * 0.05 }}
-              className="group flex items-center justify-between p-4 rounded-lg border border-white/[0.06] bg-[#161D2F]/30 hover:bg-[#161D2F]/60 hover:border-[#4F8CFF]/25 transition-all duration-300"
+              className="group flex items-center justify-between p-4 rounded-lg border border-white/6 bg-[#161D2F]/30 hover:bg-[#161D2F]/60 hover:border-[#4F8CFF]/25 transition-all duration-300"
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div className="p-2 bg-white/5 rounded border border-white/10 group-hover:bg-[#4F8CFF]/10 group-hover:border-[#4F8CFF]/20 transition-all shrink-0">
@@ -113,7 +113,7 @@ export default function Contact({ profile }: { profile: ContactProfile }) {
       </div>
 
       {/* Footer bar */}
-      <div className="max-w-7xl mx-auto px-5 md:px-8 mt-16 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground/60 font-ibm">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 mt-16 pt-8 border-t border-white/6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground/60 font-ibm">
         <span>© {currentYear} {profile.name}. All rights reserved.</span>
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

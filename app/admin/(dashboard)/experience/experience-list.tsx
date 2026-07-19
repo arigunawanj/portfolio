@@ -145,7 +145,7 @@ function ExperienceItem({ e, onDelete }: { e: any; onDelete: (id: number) => voi
       className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-sm hover:border-primary/20 transition-all duration-300 relative overflow-hidden backdrop-blur-md flex items-stretch select-none"
     >
       {/* Accent Gradient Left Strip */}
-      <div className={`w-1.5 bg-gradient-to-b ${colorGradient} rounded-l-2xl shrink-0 self-stretch`} />
+      <div className={`w-1.5 bg-linear-to-b ${colorGradient} rounded-l-2xl shrink-0 self-stretch`} />
 
       <div className="flex-1 flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 min-w-0">
         {/* Grip handle & Logo Icon Mockup */}

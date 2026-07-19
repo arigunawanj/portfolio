@@ -49,8 +49,8 @@ export default async function Home() {
       {/* Ambient background */}
       <div className="fixed inset-0 bg-grid-subtle pointer-events-none z-0" />
       <div className="fixed inset-0 noise-overlay pointer-events-none z-0" />
-      <div className="fixed -top-[300px] left-1/3 w-[600px] h-[600px] bg-[#4F8CFF]/10 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="fixed -bottom-[200px] right-1/4 w-[500px] h-[500px] bg-[#8B5CF6]/[0.06] rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="fixed top-[-300px] left-1/3 w-[600px] h-[600px] bg-[#4F8CFF]/10 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="fixed bottom-[-200px] right-1/4 w-[500px] h-[500px] bg-[#8B5CF6]/6 rounded-full blur-[120px] pointer-events-none z-0" />
 
       <SiteNav name={profile?.name || "Ari Gunawan Jatmiko"} />
 

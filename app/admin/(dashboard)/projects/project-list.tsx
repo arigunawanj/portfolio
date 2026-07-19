@@ -146,7 +146,7 @@ function ProjectItem({ project, onDelete }: { project: any; onDelete: (id: numbe
       className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-sm hover:border-primary/20 transition-all duration-300 relative overflow-hidden backdrop-blur-md flex items-stretch select-none"
     >
       {/* Accent Color Left Band */}
-      <div className={`w-1.5 bg-gradient-to-b ${colorGradient} rounded-l-2xl shrink-0 self-stretch`} />
+      <div className={`w-1.5 bg-linear-to-b ${colorGradient} rounded-l-2xl shrink-0 self-stretch`} />
 
       <div className="flex-1 flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 min-w-0">
         {/* Grip & Image */}
@@ -206,7 +206,7 @@ function ProjectItem({ project, onDelete }: { project: any; onDelete: (id: numbe
         <div className="flex items-center gap-3 shrink-0 self-stretch sm:self-center justify-between sm:justify-start w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-border/30">
           <div className="flex items-center gap-2 px-2.5 py-1 bg-muted/40 border border-border/40 rounded-xl text-xs">
             <LinkIndicator hasUrl={!!project.githubLink} icon={Github} label="Repo" />
-            <div className="w-[1px] h-3.5 bg-border/80" />
+            <div className="w-px h-3.5 bg-border/80" />
             <LinkIndicator hasUrl={!!project.demoLink} icon={Globe} label="Live" />
           </div>
 

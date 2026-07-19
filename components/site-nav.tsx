@@ -75,7 +75,7 @@ export default function SiteNav({ name }: { name: string }) {
       className={cn(
         "fixed top-0 inset-x-0 z-50 font-jetbrains transition-all duration-300",
         scrolled
-          ? "bg-[#0B1020]/85 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+          ? "bg-[#0B1020]/85 backdrop-blur-xl border-b border-white/8 shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
           : "bg-transparent border-b border-transparent"
       )}
     >
@@ -106,7 +106,7 @@ export default function SiteNav({ name }: { name: string }) {
               {activeSection === link.id && (
                 <motion.div
                   layoutId="site-nav-pill"
-                  className="absolute inset-0 bg-white/[0.06] border border-white/[0.08] rounded-lg"
+                  className="absolute inset-0 bg-white/6 border border-white/8 rounded-lg"
                   transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                 />
               )}
@@ -129,7 +129,7 @@ export default function SiteNav({ name }: { name: string }) {
         {/* Mobile toggle */}
         <button
           onClick={() => setIsOpen((v) => !v)}
-          className="lg:hidden p-2 rounded-lg text-white border border-white/[0.08] bg-white/[0.03]"
+          className="lg:hidden p-2 rounded-lg text-white border border-white/8 bg-white/3"
           aria-label={isOpen ? "Close menu" : "Open menu"}
         >
           {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -145,7 +145,7 @@ export default function SiteNav({ name }: { name: string }) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="lg:hidden overflow-hidden bg-[#0B1020]/95 backdrop-blur-xl border-b border-white/[0.08]"
+            className="lg:hidden overflow-hidden bg-[#0B1020]/95 backdrop-blur-xl border-b border-white/8"
           >
             <nav className="max-w-7xl mx-auto px-5 py-4 flex flex-col gap-1">
               {NAV_LINKS.map((link) => (
@@ -156,7 +156,7 @@ export default function SiteNav({ name }: { name: string }) {
                     "text-left px-3.5 py-2.5 rounded-lg text-sm font-medium tracking-wide transition-colors",
                     activeSection === link.id
                       ? "bg-[#4F8CFF]/10 text-white border border-[#4F8CFF]/20"
-                      : "text-muted-foreground hover:text-white hover:bg-white/[0.03]"
+                      : "text-muted-foreground hover:text-white hover:bg-white/3"
                   )}
                 >
                   {link.label}

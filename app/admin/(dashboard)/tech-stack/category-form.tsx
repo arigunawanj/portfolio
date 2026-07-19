@@ -55,7 +55,7 @@ export function CategoryForm({ item, action }: CategoryFormProps) {
       <div className="xl:col-span-7 space-y-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-xl relative overflow-hidden backdrop-blur-md dark:bg-black/40 dark:border-white/5 p-6 sm:p-8">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/30 to-transparent" />
             
             <div className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
