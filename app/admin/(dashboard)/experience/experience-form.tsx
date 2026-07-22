@@ -20,7 +20,8 @@ import {
   Check,
   Plus,
   Trash2,
-  ListTodo
+  ListTodo,
+  Image as ImageIcon
 } from "lucide-react"
 
 interface ExperienceFormProps {
@@ -48,6 +49,7 @@ export function ExperienceForm({ item, action }: ExperienceFormProps) {
 
   const initialDescription = Array.isArray(item?.description) ? (item!.description as string[]) : []
   const initialSkills = Array.isArray(item?.skills) ? (item!.skills as string[]) : []
+  const initialImages = Array.isArray(item?.images) ? (item!.images as string[]) : []
 
   const [form, setForm] = useState({
     position: item?.position || "",
@@ -62,6 +64,10 @@ export function ExperienceForm({ item, action }: ExperienceFormProps) {
   // Description bullets list
   const [bulletsList, setBulletsList] = useState<string[]>(initialDescription)
   const [newBulletText, setNewBulletText] = useState("")
+
+  // Real work photos list
+  const [imagesList, setImagesList] = useState<string[]>(initialImages)
+  const [newImageUrl, setNewImageUrl] = useState("")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -82,6 +88,16 @@ export function ExperienceForm({ item, action }: ExperienceFormProps) {
     setBulletsList((prev) => prev.filter((_, i) => i !== idx))
   }
 
+  const addImage = () => {
+    if (!newImageUrl.trim()) return
+    setImagesList((prev) => [...prev, newImageUrl.trim()])
+    setNewImageUrl("")
+  }
+
+  const removeImage = (idx: number) => {
+    setImagesList((prev) => prev.filter((_, i) => i !== idx))
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSaving(true)
@@ -93,6 +109,7 @@ export function ExperienceForm({ item, action }: ExperienceFormProps) {
     formData.append("location", form.location)
     formData.append("description", bulletsList.join("\n"))
     formData.append("skills", form.skills)
+    formData.append("images", imagesList.join("\n"))
     formData.append("companyUrl", form.companyUrl)
     formData.append("color", form.color)
     formData.append("order", String(item?.order ?? 0))
@@ -271,6 +288,71 @@ export function ExperienceForm({ item, action }: ExperienceFormProps) {
                   transition={{ duration: 0.2 }}
                   className="space-y-5"
                 >
+                  {/* Real work photos manager */}
+                  <div className="space-y-3">
+                    <Label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400 flex items-center gap-1.5">
+                      <ImageIcon className="h-3.5 w-3.5 text-primary" /> Work Photos (optional, real photos only)
+                    </Label>
+
+                    <div className="flex gap-2">
+                      <Input
+                        value={newImageUrl}
+                        onChange={(e) => setNewImageUrl(e.target.value)}
+                        placeholder="Paste real photo URL here..."
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault()
+                            addImage()
+                          }
+                        }}
+                        className="bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl dark:bg-slate-950/40 dark:border-slate-850 dark:text-white"
+                      />
+                      <Button
+                        type="button"
+                        onClick={addImage}
+                        size="icon"
+                        className="h-10 w-10 shrink-0 rounded-xl"
+                        title="Add photo link"
+                      >
+                        <Plus className="h-5 w-5" />
+                      </Button>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[220px] overflow-y-auto pr-1">
+                      <AnimatePresence initial={false}>
+                        {imagesList.map((url, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            className="relative aspect-video bg-muted border border-border/60 rounded-xl overflow-hidden group/image shadow-sm"
+                          >
+                            <img src={url} alt={`Work photo ${idx + 1}`} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder-image.jpg" }} />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/image:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="icon"
+                                onClick={() => removeImage(idx)}
+                                className="h-8 w-8 rounded-lg"
+                                title="Remove photo"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+
+                      {imagesList.length === 0 && (
+                        <div className="col-span-full text-center py-6 text-xs text-muted-foreground italic bg-muted/20 border border-dashed rounded-xl">
+                          No photos added. This section stays hidden on the live site until you add real ones here.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="companyUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Company Website Link</Label>
                     <Input id="companyUrl" name="companyUrl" value={form.companyUrl} onChange={handleChange} placeholder="https://company.com..." className="bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white" />

@@ -20,6 +20,7 @@ function readForm(formData: FormData) {
     description: String(formData.get("description") ?? ""),
     achievements: linesToArray(formData.get("achievements")),
     courses: linesToArray(formData.get("courses")),
+    images: linesToArray(formData.get("images")),
     thesisTitle: String(formData.get("thesisTitle") ?? "") || null,
     thesisAdvisor: String(formData.get("thesisAdvisor") ?? "") || null,
     thesisAbstract: String(formData.get("thesisAbstract") ?? "") || null,

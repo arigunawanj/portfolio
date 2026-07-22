@@ -103,6 +103,7 @@ model WorkExperience {
   location    String
   description Json
   skills      Json
+  images      Json?
   companyUrl  String?
   color       String   @default("from-blue-500/20 to-indigo-500/20")
   order       Int      @default(0)
@@ -117,6 +118,7 @@ model Education {
   description    String   @db.Text
   achievements   Json
   courses        Json
+  images         Json?
   thesisTitle    String?
   thesisAdvisor  String?
   thesisAbstract String?  @db.Text

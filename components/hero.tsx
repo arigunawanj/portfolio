@@ -1,8 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { ArrowRight, Download, MapPin } from "lucide-react"
+import { Terminal, TypingAnimation, AnimatedSpan } from "@/components/ui/terminal"
+import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { BorderBeam } from "@/components/ui/border-beam"
+import { NumberTicker } from "@/components/ui/number-ticker"
 
 type HeroProfile = {
   name: string
@@ -15,22 +18,15 @@ type HeroProfile = {
   linkedinUrl: string | null
 }
 
+type HeroStats = {
+  yearsExperience: number
+  projectsShipped: number
+  certifications: number
+}
+
 const FAVORITE_TECH = ["Next.js", "Laravel", "TypeScript", "React", "Docker", "PostgreSQL", "Redis", "AWS"]
 
-export default function Hero({ profile }: { profile: HeroProfile }) {
-  const [typedText, setTypedText] = useState("")
-  const targetCommand = "whoami"
-
-  useEffect(() => {
-    let index = 0
-    const interval = setInterval(() => {
-      index++
-      setTypedText(targetCommand.substring(0, index))
-      if (index >= targetCommand.length) clearInterval(interval)
-    }, 90)
-    return () => clearInterval(interval)
-  }, [])
-
+export default function Hero({ profile, stats }: { profile: HeroProfile; stats: HeroStats }) {
   return (
     <section
       id="home"
@@ -44,15 +40,18 @@ export default function Hero({ profile }: { profile: HeroProfile }) {
           transition={{ duration: 0.5 }}
           className="lg:col-span-7 text-left"
         >
-          <div className="flex items-center gap-2 text-xs md:text-sm mb-5 font-departure text-white/50">
-            <span className="text-[#22C55E]">ari@portfolio</span>
-            <span>:</span>
-            <span className="text-[#8B5CF6]">~$</span>
-            <span className="text-white font-bold">
-              {typedText}
-              <span className="terminal-cursor" />
-            </span>
-          </div>
+          <Terminal className="max-w-sm mb-6 text-xs" sequence={false}>
+            <TypingAnimation duration={50}>$ whoami</TypingAnimation>
+            <AnimatedSpan delay={900} className="text-[#4F8CFF] font-bold">
+              → {profile.name}
+            </AnimatedSpan>
+            <AnimatedSpan delay={1200} className="text-muted-foreground">
+              role: {profile.role}
+            </AnimatedSpan>
+            <AnimatedSpan delay={1500} className="text-[#22C55E]">
+              ✓ available for new projects
+            </AnimatedSpan>
+          </Terminal>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-departure font-black text-white leading-tight tracking-tight text-balance">
             {profile.name}
@@ -78,18 +77,18 @@ export default function Hero({ profile }: { profile: HeroProfile }) {
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-3 pt-6">
-            <a
-              href="#projects"
-              onClick={(e) => {
-                e.preventDefault()
-                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
-              }}
-              className="flex items-center gap-2 px-5 py-2.5 bg-[#4F8CFF] hover:bg-[#4F8CFF]/90 text-white rounded-lg text-sm font-departure font-bold shadow-[0_4px_15px_rgba(79,140,255,0.25)] transition-all scale-100 hover:scale-[1.02] active:scale-95"
+          <div className="flex flex-wrap items-center gap-3 pt-6">
+            <ShimmerButton
+              onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+              background="#4F8CFF"
+              shimmerColor="#ffffff"
+              className="text-sm font-departure font-bold px-5 py-2.5"
             >
-              Explore Projects
-              <ArrowRight className="w-4 h-4" />
-            </a>
+              <span className="flex items-center gap-2">
+                Explore Projects
+                <ArrowRight className="w-4 h-4" />
+              </span>
+            </ShimmerButton>
             <a
               href="/resume.pdf"
               download
@@ -98,6 +97,35 @@ export default function Hero({ profile }: { profile: HeroProfile }) {
               Download CV
               <Download className="w-4 h-4" />
             </a>
+          </div>
+
+          {/* Stats strip */}
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3 pt-8 mt-8 border-t border-white/5">
+            <div>
+              <div className="text-2xl font-departure font-black text-white flex items-baseline gap-0.5">
+                <NumberTicker value={stats.yearsExperience} className="text-white" />
+                <span className="text-[#4F8CFF]">+</span>
+              </div>
+              <span className="text-[9px] font-bold text-muted-foreground/60 tracking-widest font-departure uppercase">
+                Years Experience
+              </span>
+            </div>
+            <div>
+              <div className="text-2xl font-departure font-black text-white">
+                <NumberTicker value={stats.projectsShipped} className="text-white" />
+              </div>
+              <span className="text-[9px] font-bold text-muted-foreground/60 tracking-widest font-departure uppercase">
+                Projects Shipped
+              </span>
+            </div>
+            <div>
+              <div className="text-2xl font-departure font-black text-white">
+                <NumberTicker value={stats.certifications} className="text-white" />
+              </div>
+              <span className="text-[9px] font-bold text-muted-foreground/60 tracking-widest font-departure uppercase">
+                Certifications
+              </span>
+            </div>
           </div>
 
           <div className="pt-8 mt-8 border-t border-white/5">
@@ -133,6 +161,7 @@ export default function Hero({ profile }: { profile: HeroProfile }) {
                 alt={profile.name}
                 className="w-full h-full object-cover"
               />
+              <BorderBeam size={80} duration={8} colorFrom="#4F8CFF" colorTo="#8B5CF6" />
             </div>
           </div>
         </motion.div>

@@ -44,6 +44,14 @@ export default async function Home() {
     color: p.color,
   }))
 
+  const earliestYear = experiences.reduce<number | null>((min, e) => {
+    const match = e.duration.match(/\d{4}/)
+    if (!match) return min
+    const year = Number(match[0])
+    return min === null || year < min ? year : min
+  }, null)
+  const yearsExperience = earliestYear ? Math.max(1, new Date().getFullYear() - earliestYear) : 1
+
   return (
     <div className="relative min-h-screen w-full bg-[#0B1020] text-foreground font-jetbrains overflow-x-hidden">
       {/* Ambient background */}
@@ -55,7 +63,16 @@ export default async function Home() {
       <SiteNav name={profile?.name || "Ari Gunawan Jatmiko"} />
 
       <main className="relative z-10">
-        {profile && <Hero profile={profile} />}
+        {profile && (
+          <Hero
+            profile={profile}
+            stats={{
+              yearsExperience,
+              projectsShipped: mappedProjects.length,
+              certifications: certifications.length,
+            }}
+          />
+        )}
         <Projects projects={mappedProjects} />
         <TechStack technologies={technologies} />
         <WorkExperience
@@ -67,6 +84,7 @@ export default async function Home() {
             location: e.location,
             description: e.description as string[],
             skills: e.skills as string[],
+            images: (e.images as string[] | null) ?? [],
             companyUrl: e.companyUrl ?? "#",
             color: e.color,
           }))}
@@ -81,6 +99,7 @@ export default async function Home() {
             description: ed.description,
             achievements: ed.achievements as string[],
             courses: ed.courses as string[],
+            images: (ed.images as string[] | null) ?? [],
             thesis:
               ed.thesisTitle || ed.thesisAdvisor || ed.thesisAbstract
                 ? {

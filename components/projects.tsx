@@ -2,8 +2,18 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ExternalLink, Github, BookOpen, CheckCircle } from "lucide-react"
+import { ExternalLink, Github, BookOpen, CheckCircle, Layers, Sparkles, Rocket } from "lucide-react"
 import SectionHeader from "./section-header"
+import { Safari } from "@/components/ui/safari"
+import { BentoGrid, BentoCard } from "@/components/ui/bento-grid"
+
+function getDomain(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "")
+  } catch {
+    return url.replace(/https?:\/\/(www\.)?/, "").split("/")[0] || "preview"
+  }
+}
 
 type Project = {
   id: number
@@ -44,27 +54,30 @@ export default function Projects({ projects }: { projects: Project[] }) {
                 transition={{ duration: 0.4, delay: Math.min(idx, 5) * 0.05 }}
                 className="group flex flex-col rounded-xl border border-white/6 bg-[#161D2F]/40 hover:border-[#4F8CFF]/25 hover:bg-[#161D2F]/60 transition-all duration-300 overflow-hidden"
               >
-                <div className="relative aspect-video overflow-hidden bg-[#121826]/60 shrink-0">
-                  <img
-                    src={project.images[0] || "/placeholder.jpg"}
-                    alt={project.title}
-                    className="w-full h-full object-cover opacity-90 group-hover:scale-[1.04] transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-[#0B1020] via-[#0B1020]/10 to-transparent pointer-events-none" />
-                  {idx === 0 && (
-                    <span className="absolute top-3 left-3 text-[9px] bg-[#4F8CFF]/90 text-white px-2 py-0.5 rounded uppercase font-semibold font-ibm tracking-wider">
-                      Featured
-                    </span>
-                  )}
-                  <div className="absolute bottom-3 left-3 flex flex-wrap gap-1">
-                    {project.tags.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-1.5 py-0.5 bg-[#0B1020]/80 backdrop-blur-md border border-white/10 text-[9px] text-white/80 font-ibm font-medium rounded"
-                      >
-                        {tag}
+                <div className="relative shrink-0 bg-[#121826]/60 p-3 pb-0">
+                  <div className="flex items-center justify-between mb-2 px-0.5">
+                    {idx === 0 ? (
+                      <span className="text-[9px] bg-[#4F8CFF]/90 text-white px-2 py-0.5 rounded uppercase font-semibold font-ibm tracking-wider">
+                        Featured
                       </span>
-                    ))}
+                    ) : <span />}
+                    <div className="flex flex-wrap gap-1 justify-end">
+                      {project.tags.slice(0, 2).map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-1.5 py-0.5 bg-white/5 border border-white/10 text-[9px] text-white/70 font-ibm font-medium rounded"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-t-lg group-hover:scale-[1.02] transition-transform duration-500 origin-bottom">
+                    <Safari
+                      url={getDomain(project.demoLink)}
+                      imageSrc={project.images[0] || undefined}
+                      className="w-full"
+                    />
                   </div>
                 </div>
 
@@ -142,14 +155,42 @@ export default function Projects({ projects }: { projects: Project[] }) {
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 min-h-0 text-left">
-                <div className="w-full rounded-xl overflow-hidden border border-white/5 relative aspect-video">
-                  <img
-                    src={selectedCaseStudy.images[0] || "/placeholder.jpg"}
-                    alt={selectedCaseStudy.title}
-                    className="w-full h-full object-cover"
+                <Safari
+                  url={getDomain(selectedCaseStudy.demoLink)}
+                  imageSrc={selectedCaseStudy.images[0] || undefined}
+                  className="w-full"
+                />
+
+                {/* Quick facts */}
+                <BentoGrid className="grid-cols-1 sm:grid-cols-3 auto-rows-32 gap-3">
+                  <BentoCard
+                    name="Tech Stack"
+                    className="col-span-1"
+                    Icon={Layers}
+                    description={`${selectedCaseStudy.tags.length} technologies · ${selectedCaseStudy.tags.slice(0, 2).join(", ")}${selectedCaseStudy.tags.length > 2 ? "…" : ""}`}
+                    href={selectedCaseStudy.demoLink}
+                    cta="View stack"
+                    background={<div className="absolute inset-0 bg-linear-to-br from-[#4F8CFF]/10 to-transparent" />}
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-[#121826] via-transparent to-transparent" />
-                </div>
+                  <BentoCard
+                    name="Features Shipped"
+                    className="col-span-1"
+                    Icon={Sparkles}
+                    description={`${selectedCaseStudy.features.length} key features built and documented`}
+                    href={selectedCaseStudy.demoLink}
+                    cta="See features"
+                    background={<div className="absolute inset-0 bg-linear-to-br from-[#8B5CF6]/10 to-transparent" />}
+                  />
+                  <BentoCard
+                    name="Status"
+                    className="col-span-1"
+                    Icon={Rocket}
+                    description={selectedCaseStudy.demoLink && selectedCaseStudy.demoLink !== "#" ? "Live and deployed" : "In repository"}
+                    href={selectedCaseStudy.demoLink !== "#" ? selectedCaseStudy.demoLink : selectedCaseStudy.githubLink}
+                    cta="Open"
+                    background={<div className="absolute inset-0 bg-linear-to-br from-[#22C55E]/10 to-transparent" />}
+                  />
+                </BentoGrid>
 
                 <div className="space-y-2">
                   <h4 className="text-sm font-bold font-departure text-[#4F8CFF] uppercase tracking-wider">
