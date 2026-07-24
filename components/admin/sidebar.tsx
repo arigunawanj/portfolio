@@ -22,7 +22,8 @@ import {
   Moon,
   Menu,
   X,
-  Sparkles
+  Sparkles,
+  Palette
 } from "lucide-react"
 
 const NAV_ITEMS = [
@@ -34,6 +35,7 @@ const NAV_ITEMS = [
   { href: "/admin/certifications", label: "Certifications", icon: Award },
   { href: "/admin/tech-stack", label: "Tech Stack", icon: Layers },
   { href: "/admin/about", label: "About", icon: Info },
+  { href: "/admin/appearance", label: "Appearance", icon: Palette },
   { href: "/admin/users", label: "Users", icon: Users },
 ]
 
