@@ -7,6 +7,7 @@ import WorkExperience from "@/components/work-experience"
 import Education from "@/components/education"
 import Certification from "@/components/certification"
 import Contact from "@/components/contact"
+import ChainDivider from "@/components/ui/chain-divider"
 
 export default async function Home() {
   const [profile, projects, experiences, education, certifications, techCategories] = await Promise.all([
@@ -73,8 +74,11 @@ export default async function Home() {
             }}
           />
         )}
+        <ChainDivider />
         <Projects projects={mappedProjects} />
+        <ChainDivider />
         <TechStack technologies={technologies} />
+        <ChainDivider />
         <WorkExperience
           experiences={experiences.map((e) => ({
             id: e.id,
@@ -89,6 +93,7 @@ export default async function Home() {
             color: e.color,
           }))}
         />
+        <ChainDivider />
         <Education
           education={education.map((ed) => ({
             id: ed.id,
@@ -111,6 +116,7 @@ export default async function Home() {
             color: ed.color,
           }))}
         />
+        <ChainDivider />
         <Certification
           certifications={certifications.map((c) => ({
             id: c.id,
@@ -125,7 +131,12 @@ export default async function Home() {
             icon: c.icon,
           }))}
         />
-        {profile && <Contact profile={profile} />}
+        {profile && (
+          <>
+            <ChainDivider />
+            <Contact profile={profile} />
+          </>
+        )}
       </main>
     </div>
   )
