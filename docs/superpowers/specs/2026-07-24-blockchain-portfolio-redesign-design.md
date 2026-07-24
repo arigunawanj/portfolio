@@ -51,7 +51,7 @@ Applies to: `components/projects.tsx`, `components/work-experience.tsx`, `compon
 ## 5. Nav & contact polish
 
 - `components/site-nav.tsx`: adopt `.glass-panel` treatment (already scroll-aware per existing behavior) for consistency with the new card/hero language.
-- `components/contact.tsx`: primary CTA button gets blockchain-dev-flavored copy/micro-interaction (e.g. a brief "confirming…" state before success, evoking a tx confirmation). Kept subtle — functional mailto/form behavior unchanged, this is a hover/click micro-interaction layer only.
+- `components/contact.tsx`: there is no submit form here today — it's a grid of outbound connection links (GitHub/LinkedIn/Instagram/WhatsApp/Email) plus a location badge. These link cards adopt the same `.glass-panel` + index-cycled accent glow treatment as Section 4's cards, for visual consistency with the rest of the page. The existing "READY FOR REMOTE / HYBRID" badge switches to the new `--chain` accent color as a small on-brand touch. No fabricated interactions — behavior (external links, mailto) unchanged.
 
 ## 6. Responsive & verification
 
