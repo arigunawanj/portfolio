@@ -14,7 +14,7 @@ export function Contact({ contact }: { contact: ContactVM }) {
         <h2 className="font-heading text-4xl md:text-6xl font-bold mb-6" style={{ color: "var(--pf-cream)" }}>Let&apos;s build something</h2>
         <p className="mb-8" style={{ color: "var(--pf-muted-fg)" }}>{contact.location}</p>
         {contact.email && (
-          <a href={`mailto:${contact.email}`} className="inline-block px-8 py-4 rounded-xl font-medium transition hover:scale-105 mb-8" style={{ background: "var(--pf-coral)", color: "var(--pf-bg-deep)" }}>
+          <a href={`mailto:${contact.email}`} className="inline-block cursor-pointer px-8 py-4 rounded-xl font-medium transition hover:scale-105 mb-8" style={{ background: "var(--pf-coral)", color: "var(--pf-bg-deep)" }}>
             {contact.email}
           </a>
         )}

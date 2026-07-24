@@ -9,6 +9,7 @@ export function Hero({ contact, aboutTraits, funFacts }: { contact: ContactVM; a
   const onMove = (e: React.MouseEvent) => {
     const el = card.current
     if (!el) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const r = el.getBoundingClientRect()
     const x = (e.clientX - r.left) / r.width - 0.5
     const y = (e.clientY - r.top) / r.height - 0.5
@@ -31,8 +32,8 @@ export function Hero({ contact, aboutTraits, funFacts }: { contact: ContactVM; a
           <p className="mt-3 text-xl md:text-2xl" style={{ color: "var(--pf-coral)" }}>{contact.role}</p>
           <p className="mt-5 max-w-md leading-relaxed" style={{ color: "var(--pf-muted-fg)" }}>{contact.heroDescription}</p>
           <div className="mt-8 flex gap-4">
-            <a href="#projects-scene" className="px-6 py-3 rounded-xl font-medium transition hover:scale-105" style={{ background: "var(--pf-coral)", color: "var(--pf-bg-deep)" }}>View Projects</a>
-            <a href="#contact-scene" className="px-6 py-3 rounded-xl font-medium border transition hover:scale-105" style={{ borderColor: "var(--pf-teal-glow)", color: "var(--pf-sand)" }}>Get in Touch</a>
+            <a href="#projects-scene" className="pf-focusable cursor-pointer px-6 py-3 rounded-xl font-medium transition hover:scale-105" style={{ background: "var(--pf-coral)", color: "var(--pf-bg-deep)" }}>View Projects</a>
+            <a href="#contact-scene" className="pf-focusable cursor-pointer px-6 py-3 rounded-xl font-medium border transition hover:scale-105" style={{ borderColor: "var(--pf-teal-glow)", color: "var(--pf-sand)" }}>Get in Touch</a>
           </div>
         </div>
         <div className="flex justify-center">

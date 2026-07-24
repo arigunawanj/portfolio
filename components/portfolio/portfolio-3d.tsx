@@ -31,7 +31,8 @@ export function Portfolio3D({ data, appearance }: { data: PortfolioData; appeara
   const { activeScene } = useScrollTimeline(use3D)
 
   return (
-    <main className="relative w-full" style={{ background: "var(--pf-bg-deep)" }}>
+    <main id="main" className="relative w-full" style={{ background: "var(--pf-bg-deep)" }}>
+      <a href="#hero-scene" className="pf-skip-link">Skip to content</a>
       {use3D ? (
         <SceneCanvas scene={activeScene} accent={appearance.accentColor} />
       ) : (

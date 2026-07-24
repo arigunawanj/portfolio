@@ -327,3 +327,37 @@ layer(base);
   --pf-heading-font: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 .font-heading { font-family: var(--pf-heading-font); }
+
+/* Portfolio a11y + smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+[data-scene] {
+  scroll-margin-top: 0;
+}
+.pf-focusable:focus-visible,
+[data-scene] a:focus-visible {
+  outline: 2px solid var(--pf-coral);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+.pf-skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--pf-coral);
+  color: var(--pf-bg-deep);
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.pf-skip-link:focus {
+  top: 1rem;
+}
