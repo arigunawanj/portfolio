@@ -285,3 +285,24 @@ layer(base);
     }
   }
 }
+@layer utilities {
+  .deck-hud-corners::before,
+  .deck-hud-corners::after {
+    content: "";
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-color: rgba(79, 140, 255, 0.35);
+    border-style: solid;
+  }
+  .deck-hud-corners::before {
+    top: 14px;
+    left: 14px;
+    border-width: 1px 0 0 1px;
+  }
+  .deck-hud-corners::after {
+    bottom: 14px;
+    right: 14px;
+    border-width: 0 1px 1px 0;
+  }
+}
