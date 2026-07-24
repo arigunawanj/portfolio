@@ -7,7 +7,8 @@ import WorkExperience from "@/components/work-experience"
 import Education from "@/components/education"
 import Certification from "@/components/certification"
 import Contact from "@/components/contact"
-import ChainDivider from "@/components/ui/chain-divider"
+import { DeckProvider } from "@/components/deck/deck-provider"
+import { Deck } from "@/components/deck/deck"
 
 export default async function Home() {
   const [profile, projects, experiences, education, certifications, techCategories] = await Promise.all([
@@ -63,81 +64,83 @@ export default async function Home() {
 
       <SiteNav name={profile?.name || "Ari Gunawan Jatmiko"} />
 
-      <main className="relative z-10">
-        {profile && (
-          <Hero
-            profile={profile}
-            stats={{
-              yearsExperience,
-              projectsShipped: mappedProjects.length,
-              certifications: certifications.length,
-            }}
-          />
-        )}
-        <ChainDivider />
-        <Projects projects={mappedProjects} />
-        <ChainDivider />
-        <TechStack technologies={technologies} />
-        <ChainDivider />
-        <WorkExperience
-          experiences={experiences.map((e) => ({
-            id: e.id,
-            position: e.position,
-            company: e.company,
-            duration: e.duration,
-            location: e.location,
-            description: e.description as string[],
-            skills: e.skills as string[],
-            images: (e.images as string[] | null) ?? [],
-            companyUrl: e.companyUrl ?? "#",
-            color: e.color,
-          }))}
+      <DeckProvider>
+        <Deck
+          slides={{
+            home: profile ? (
+              <Hero
+                profile={profile}
+                stats={{
+                  yearsExperience,
+                  projectsShipped: mappedProjects.length,
+                  certifications: certifications.length,
+                }}
+              />
+            ) : (
+              <div />
+            ),
+            projects: <Projects projects={mappedProjects} />,
+            skills: <TechStack technologies={technologies} />,
+            experience: (
+              <WorkExperience
+                experiences={experiences.map((e) => ({
+                  id: e.id,
+                  position: e.position,
+                  company: e.company,
+                  duration: e.duration,
+                  location: e.location,
+                  description: e.description as string[],
+                  skills: e.skills as string[],
+                  images: (e.images as string[] | null) ?? [],
+                  companyUrl: e.companyUrl ?? "#",
+                  color: e.color,
+                }))}
+              />
+            ),
+            education: (
+              <Education
+                education={education.map((ed) => ({
+                  id: ed.id,
+                  degree: ed.degree,
+                  institution: ed.institution,
+                  duration: ed.duration,
+                  location: ed.location,
+                  description: ed.description,
+                  achievements: ed.achievements as string[],
+                  courses: ed.courses as string[],
+                  images: (ed.images as string[] | null) ?? [],
+                  thesis:
+                    ed.thesisTitle || ed.thesisAdvisor || ed.thesisAbstract
+                      ? {
+                          title: ed.thesisTitle ?? "",
+                          advisor: ed.thesisAdvisor ?? "",
+                          abstract: ed.thesisAbstract ?? "",
+                        }
+                      : null,
+                  color: ed.color,
+                }))}
+              />
+            ),
+            certs: (
+              <Certification
+                certifications={certifications.map((c) => ({
+                  id: c.id,
+                  name: c.name,
+                  issuer: c.issuer,
+                  date: c.date,
+                  description: c.description,
+                  credentialId: c.credentialId ?? "",
+                  credentialUrl: c.credentialUrl ?? "#",
+                  skills: c.skills as string[],
+                  color: c.color,
+                  icon: c.icon,
+                }))}
+              />
+            ),
+            contact: profile ? <Contact profile={profile} /> : <div />,
+          }}
         />
-        <ChainDivider />
-        <Education
-          education={education.map((ed) => ({
-            id: ed.id,
-            degree: ed.degree,
-            institution: ed.institution,
-            duration: ed.duration,
-            location: ed.location,
-            description: ed.description,
-            achievements: ed.achievements as string[],
-            courses: ed.courses as string[],
-            images: (ed.images as string[] | null) ?? [],
-            thesis:
-              ed.thesisTitle || ed.thesisAdvisor || ed.thesisAbstract
-                ? {
-                    title: ed.thesisTitle ?? "",
-                    advisor: ed.thesisAdvisor ?? "",
-                    abstract: ed.thesisAbstract ?? "",
-                  }
-                : null,
-            color: ed.color,
-          }))}
-        />
-        <ChainDivider />
-        <Certification
-          certifications={certifications.map((c) => ({
-            id: c.id,
-            name: c.name,
-            issuer: c.issuer,
-            date: c.date,
-            description: c.description,
-            credentialId: c.credentialId ?? "",
-            credentialUrl: c.credentialUrl ?? "#",
-            skills: c.skills as string[],
-            color: c.color,
-            icon: c.icon,
-          }))}
-        />
-        {profile && (
-          <>
-            <ChainDivider />
-            <Contact profile={profile} />
-          </>
-        )}
-      </main>
+      </DeckProvider>
     </div>
   )
 }
