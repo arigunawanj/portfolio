@@ -764,11 +764,11 @@ Replace it with:
             whileInView={{ y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.4, delay: Math.min(idx, 5) * 0.05 }}
-            className="relative p-3.5 rounded-xl glass-panel transition-all duration-300 flex flex-col justify-between"
+            className="group relative p-3.5 rounded-xl glass-panel transition-all duration-300 flex flex-col justify-between"
             style={{ borderColor: `${getAccentColor(idx)}22` }}
           >
             <div
-              className="absolute -top-1 -left-1 w-2 h-2 rounded-full opacity-0 hover:opacity-100 transition-opacity blur-[2px] pointer-events-none"
+              className="absolute -top-1 -left-1 w-2 h-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity blur-[2px]"
               style={{ backgroundColor: getAccentColor(idx) }}
             />
             {showRowConnector(idx, certifications.length, 3) && (
