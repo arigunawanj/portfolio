@@ -22,7 +22,9 @@ import {
   Twitter,
   Globe,
   Save,
-  Monitor
+  Monitor,
+  Terminal,
+  Cpu
 } from "lucide-react"
 
 interface ProfileClientProps {
@@ -88,10 +90,10 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-mono-pf">
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-gradient">Profile & Contact</h1>
-        <p className="text-sm text-muted-foreground mt-1">Configure your personal brand, contact info, social links, and SEO tags.</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white uppercase">Profile Configuration</h1>
+        <p className="text-xs text-muted-foreground mt-1">// manage_site_identity: active</p>
       </div>
 
       {/* Grid split layout */}
@@ -99,7 +101,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         {/* Left Side: Form Content & Tab Navigation */}
         <div className="xl:col-span-7 space-y-6">
           {/* Tab Navigation Menu (Dock style) */}
-          <div className="flex flex-wrap gap-1.5 p-1.5 bg-muted/60 border border-border/80 rounded-2xl backdrop-blur-md dark:bg-black/30 dark:border-white/5">
+          <div className="flex flex-wrap gap-1.5 p-1.5 bg-black/40 border border-white/5 rounded-2xl backdrop-blur-md">
             {TABS.map((tab) => {
               const TabIcon = tab.icon
               const isActive = activeTab === tab.id
@@ -108,20 +110,20 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+                  className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                     isActive 
-                      ? "text-primary-foreground" 
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "text-white" 
+                      : "text-muted-foreground hover:text-white"
                   }`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="active-profile-tab"
-                      className="absolute inset-0 bg-primary rounded-xl shadow-lg shadow-primary/15"
+                      className="absolute inset-0 bg-primary/15 border-l border-primary rounded-xl"
                       transition={{ type: "spring", stiffness: 350, damping: 26 }}
                     />
                   )}
-                  <TabIcon className={`h-4 w-4 relative z-10 ${isActive ? "animate-pulse" : ""}`} />
+                  <TabIcon className={`h-3.5 w-3.5 relative z-10 ${isActive ? "text-primary animate-pulse" : ""}`} />
                   <span className="relative z-10">{tab.label}</span>
                 </button>
               )
@@ -130,8 +132,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
           {/* Form Card (Responsive Light/Dark theme styles) */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="bg-card text-card-foreground border border-border/70 rounded-2xl shadow-xl relative overflow-hidden backdrop-blur-md dark:bg-black/40 dark:border-white/5 group">
-              <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/30 to-transparent" />
+            <div className="border border-white/5 rounded-2xl relative overflow-hidden backdrop-blur-md bg-black/40 group">
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-linear-to-r from-transparent via-primary/30 to-transparent" />
               
               <div className="p-6 sm:p-8 space-y-6">
                 <AnimatePresence mode="wait">
@@ -146,34 +148,34 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-2">
-                          <Label htmlFor="name" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Full Name</Label>
+                          <Label htmlFor="name" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Identity.Name</Label>
                           <div className="relative">
-                            <User className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="name" name="name" value={form.name} onChange={handleChange} required className="pl-11 bg-background border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-primary focus-visible:border-primary/50 h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:placeholder-slate-600 dark:focus-visible:ring-primary/50" />
+                            <User className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Input id="name" name="name" value={form.name} onChange={handleChange} required className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="role" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Role / Professional Title</Label>
+                          <Label htmlFor="role" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Identity.Title</Label>
                           <div className="relative">
-                            <Sparkles className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="role" name="role" value={form.role} onChange={handleChange} required className="pl-11 bg-background border-border/80 text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-primary focus-visible:border-primary/50 h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:placeholder-slate-600 dark:focus-visible:ring-primary/50" />
+                            <Sparkles className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Input id="role" name="role" value={form.role} onChange={handleChange} required className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                           </div>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="photoUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Profile Photo URL</Label>
-                        <Input id="photoUrl" name="photoUrl" value={form.photoUrl} onChange={handleChange} required className="bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                        <Label htmlFor="photoUrl" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Photo.Source</Label>
+                        <Input id="photoUrl" name="photoUrl" value={form.photoUrl} onChange={handleChange} required className="h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-2">
-                          <Label htmlFor="logoUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Branding Logo URL</Label>
-                          <Input id="logoUrl" name="logoUrl" value={form.logoUrl} onChange={handleChange} required className="bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                          <Label htmlFor="logoUrl" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Branding.Logo</Label>
+                          <Input id="logoUrl" name="logoUrl" value={form.logoUrl} onChange={handleChange} required className="h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="faviconUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Favicon Icon URL</Label>
-                          <Input id="faviconUrl" name="faviconUrl" value={form.faviconUrl} onChange={handleChange} required className="bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                          <Label htmlFor="faviconUrl" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Branding.Favicon</Label>
+                          <Input id="faviconUrl" name="faviconUrl" value={form.faviconUrl} onChange={handleChange} required className="h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                         </div>
                       </div>
                     </motion.div>
@@ -189,13 +191,13 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                       className="space-y-5"
                     >
                       <div className="space-y-2">
-                        <Label htmlFor="heroBadge" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Hero Banner Badge</Label>
-                        <Input id="heroBadge" name="heroBadge" value={form.heroBadge} onChange={handleChange} required className="bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                        <Label htmlFor="heroBadge" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Hero.Badge</Label>
+                        <Input id="heroBadge" name="heroBadge" value={form.heroBadge} onChange={handleChange} required className="h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="heroDescription" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Hero Description</Label>
-                        <Textarea id="heroDescription" name="heroDescription" value={form.heroDescription} onChange={handleChange} rows={6} required className="bg-background border-border/80 text-foreground focus-visible:ring-primary rounded-xl transition-all resize-none p-4 dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                        <Label htmlFor="heroDescription" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Hero.Synopsis</Label>
+                        <Textarea id="heroDescription" name="heroDescription" value={form.heroDescription} onChange={handleChange} rows={6} required className="bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all resize-none p-4" />
                       </div>
                     </motion.div>
                   )}
@@ -211,26 +213,26 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-2">
-                          <Label htmlFor="email" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Primary Email</Label>
+                          <Label htmlFor="email" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Mail.Endpoint</Label>
                           <div className="relative">
-                            <Mail className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="email" name="email" type="email" value={form.email} onChange={handleChange} required className="pl-11 bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                            <Mail className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Input id="email" name="email" type="email" value={form.email} onChange={handleChange} required className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="phone" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Phone Number</Label>
+                          <Label htmlFor="phone" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Phone.Signature</Label>
                           <div className="relative">
-                            <Phone className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="phone" name="phone" value={form.phone} onChange={handleChange} className="pl-11 bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                            <Phone className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Input id="phone" name="phone" value={form.phone} onChange={handleChange} className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                           </div>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="location" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Current Location</Label>
+                        <Label htmlFor="location" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// Geolocation.Coordinates</Label>
                         <div className="relative">
-                          <MapPin className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                          <Input id="location" name="location" value={form.location} onChange={handleChange} className="pl-11 bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                          <MapPin className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                          <Input id="location" name="location" value={form.location} onChange={handleChange} className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                         </div>
                       </div>
                     </motion.div>
@@ -247,43 +249,43 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-2">
-                          <Label htmlFor="githubUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">GitHub Link</Label>
+                          <Label htmlFor="githubUrl" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// URL.GitHub</Label>
                           <div className="relative">
-                            <Github className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="githubUrl" name="githubUrl" value={form.githubUrl} onChange={handleChange} placeholder="https://github.com/..." className="pl-11 bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                            <Github className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Input id="githubUrl" name="githubUrl" value={form.githubUrl} onChange={handleChange} placeholder="https://github.com/..." className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="linkedinUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">LinkedIn Link</Label>
+                          <Label htmlFor="linkedinUrl" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// URL.LinkedIn</Label>
                           <div className="relative">
-                            <Linkedin className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="linkedinUrl" name="linkedinUrl" value={form.linkedinUrl} onChange={handleChange} placeholder="https://linkedin.com/in/..." className="pl-11 bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                            <Linkedin className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Input id="linkedinUrl" name="linkedinUrl" value={form.linkedinUrl} onChange={handleChange} placeholder="https://linkedin.com/in/..." className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                           </div>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-2">
-                          <Label htmlFor="instagramUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Instagram Link</Label>
+                          <Label htmlFor="instagramUrl" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// URL.Instagram</Label>
                           <div className="relative">
-                            <Instagram className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="instagramUrl" name="instagramUrl" value={form.instagramUrl} onChange={handleChange} placeholder="https://instagram.com/..." className="pl-11 bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                            <Instagram className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Input id="instagramUrl" name="instagramUrl" value={form.instagramUrl} onChange={handleChange} placeholder="https://instagram.com/..." className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="gitlabUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">GitLab Link</Label>
+                          <Label htmlFor="gitlabUrl" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// URL.GitLab</Label>
                           <div className="relative">
-                            <Gitlab className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                            <Input id="gitlabUrl" name="gitlabUrl" value={form.gitlabUrl} onChange={handleChange} placeholder="https://gitlab.com/..." className="pl-11 bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                            <Gitlab className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                            <Input id="gitlabUrl" name="gitlabUrl" value={form.gitlabUrl} onChange={handleChange} placeholder="https://gitlab.com/..." className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                           </div>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="twitterUrl" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Twitter/X Link</Label>
+                        <Label htmlFor="twitterUrl" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// URL.Twitter_X</Label>
                         <div className="relative">
-                          <Twitter className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                          <Input id="twitterUrl" name="twitterUrl" value={form.twitterUrl} onChange={handleChange} placeholder="https://x.com/..." className="pl-11 bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                          <Twitter className="absolute left-3.5 top-3.5 h-3.5 w-3.5 text-muted-foreground/60" />
+                          <Input id="twitterUrl" name="twitterUrl" value={form.twitterUrl} onChange={handleChange} placeholder="https://x.com/..." className="pl-10 h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                         </div>
                       </div>
                     </motion.div>
@@ -299,18 +301,18 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                       className="space-y-5"
                     >
                       <div className="space-y-2">
-                        <Label htmlFor="metaTitle" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">SEO Meta Title</Label>
-                        <Input id="metaTitle" name="metaTitle" value={form.metaTitle} onChange={handleChange} required className="bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                        <Label htmlFor="metaTitle" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// SEO.Meta_Title</Label>
+                        <Input id="metaTitle" name="metaTitle" value={form.metaTitle} onChange={handleChange} required className="h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="metaDescription" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">SEO Meta Description</Label>
-                        <Textarea id="metaDescription" name="metaDescription" value={form.metaDescription} onChange={handleChange} rows={5} required className="bg-background border-border/80 text-foreground focus-visible:ring-primary rounded-xl transition-all resize-none p-4 dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                        <Label htmlFor="metaDescription" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// SEO.Meta_Description</Label>
+                        <Textarea id="metaDescription" name="metaDescription" value={form.metaDescription} onChange={handleChange} rows={5} required className="bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all resize-none p-4" />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="metaKeywords" className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">SEO Keywords (comma separated)</Label>
-                        <Input id="metaKeywords" name="metaKeywords" value={form.metaKeywords} onChange={handleChange} placeholder="portfolio, software, react" className="bg-background border-border/80 text-foreground focus-visible:ring-primary h-10 rounded-xl transition-all dark:bg-slate-950/40 dark:border-slate-850 dark:text-white dark:focus-visible:ring-primary/50" />
+                        <Label htmlFor="metaKeywords" className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">// SEO.Meta_Keywords</Label>
+                        <Input id="metaKeywords" name="metaKeywords" value={form.metaKeywords} onChange={handleChange} placeholder="portfolio, software, react" className="h-10 bg-slate-950/40 border-white/5 text-xs text-white placeholder-white/15 focus-visible:ring-primary/45 rounded-xl transition-all" />
                       </div>
                     </motion.div>
                   )}
@@ -322,19 +324,19 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             <Button
               type="submit"
               disabled={isSaving}
-              className="w-full sm:w-auto px-8 shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all rounded-xl h-11 active:scale-[0.98] bg-primary text-primary-foreground hover:bg-primary/90"
+              className="w-full sm:w-auto px-6 bg-linear-to-r from-primary to-indigo-600 hover:from-primary/95 hover:to-indigo-600/95 text-white font-bold tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all rounded-xl active:scale-[0.98] h-10 cursor-pointer"
             >
               {isSaving ? (
                 <span className="flex items-center gap-2">
-                  <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Saving Changes...
+                  SIGNING_COMMIT...
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  <Save className="h-4 w-4" /> Save Profile
+                  <Save className="h-3.5 w-3.5" /> COMMIT_PROFILE_TO_LEDGER
                 </span>
               )}
             </Button>
@@ -343,53 +345,53 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
         {/* Right Side: Sticky Browser Shell Preview */}
         <div className="xl:col-span-5 xl:sticky xl:top-8 space-y-4">
-          <div className="flex items-center gap-2 px-1">
+          <div className="flex items-center gap-2 px-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
             <Monitor className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider dark:text-slate-400">Live Preview Shell</span>
+            <span>Node State Preview</span>
           </div>
 
           {/* Browser Window Mockup Frame */}
-          <div className="bg-background border border-border/80 rounded-2xl overflow-hidden shadow-2xl relative group dark:bg-slate-900 dark:border-slate-800">
+          <div className="border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative bg-black/60 backdrop-blur-xl">
             {/* Top Bar of the Browser Window */}
-            <div className="bg-muted/50 dark:bg-slate-950/80 px-4 py-3 flex items-center justify-between border-b border-border/40 dark:border-slate-800/80">
+            <div className="bg-slate-950/80 px-4 py-3 flex items-center justify-between border-b border-white/5">
               {/* Fake Window Controls */}
               <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
               </div>
               
               {/* Fake Address Bar */}
-              <div className="w-full max-w-[260px] mx-auto bg-background border border-border/50 rounded-lg py-1 px-3 text-[10px] text-muted-foreground font-mono select-all truncate flex items-center justify-center gap-1.5 dark:bg-slate-900/50 dark:border-slate-800/50 dark:text-slate-400">
-                <span className="text-emerald-500 dark:text-emerald-400">https://</span>
+              <div className="w-full max-w-[200px] mx-auto bg-slate-900/50 border border-white/5 rounded-lg py-1 px-3 text-[9px] text-slate-400 font-mono select-all truncate flex items-center justify-center gap-1.5">
+                <span className="text-emerald-400">https://</span>
                 <span>localhost:3000</span>
               </div>
               
               {/* Fake Spacer */}
-              <div className="w-12" />
+              <div className="w-8" />
             </div>
 
             {/* Browser Viewport Area (Actual Simulator) */}
-            <div className="relative min-h-[480px] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.08),transparent)] bg-background p-6 space-y-8 select-none text-foreground overflow-hidden dark:bg-slate-950 dark:text-white dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.2),rgba(255,255,255,0))]">
+            <div className="relative min-h-[460px] bg-slate-950 p-6 space-y-8 select-none text-white overflow-hidden">
               {/* Ambient glows */}
-              <div className="absolute top-10 right-[-30px] w-48 h-48 bg-primary/10 rounded-full blur-[60px]" />
-              <div className="absolute bottom-[-30px] left-[-30px] w-36 h-36 bg-purple-500/10 rounded-full blur-[50px]" />
+              <div className="absolute top-10 right-[-30px] w-48 h-48 bg-primary/5 rounded-full blur-[60px]" />
+              <div className="absolute bottom-[-30px] left-[-30px] w-36 h-36 bg-purple-500/5 rounded-full blur-[50px]" />
 
               {/* simulated header brand navbar */}
-              <div className="flex items-center justify-between border-b border-border/40 dark:border-slate-800/40 pb-4 relative z-10">
+              <div className="flex items-center justify-between border-b border-white/5 pb-4 relative z-10">
                 <div className="flex items-center gap-2">
                   {form.logoUrl ? (
-                    <img src={form.logoUrl} alt="Logo" className="h-5 w-auto object-contain max-w-[90px]" onError={(e) => { (e.target as HTMLElement).style.display = 'none' }} />
+                    <img src={form.logoUrl} alt="Logo" className="h-4 w-auto object-contain max-w-[90px]" onError={(e) => { (e.target as HTMLElement).style.display = 'none' }} />
                   ) : (
                     <span className="font-extrabold text-xs tracking-tight text-primary">PORTFOLIO</span>
                   )}
                 </div>
                 
-                <div className="flex items-center gap-3 text-[9px] text-muted-foreground font-semibold uppercase tracking-wider dark:text-slate-400">
+                <div className="flex items-center gap-3 text-[8px] text-slate-400 font-semibold uppercase tracking-wider">
                   <span>Home</span>
                   <span>About</span>
                   <span>Projects</span>
-                  <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 dark:bg-primary/20 dark:border-primary/30">CV</span>
+                  <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">CV</span>
                 </div>
               </div>
 
@@ -397,8 +399,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               <div className="flex flex-col items-center text-center space-y-5 relative z-10 pt-4">
                 {/* Simulated Badge */}
                 {form.heroBadge && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[9px] font-extrabold tracking-widest uppercase bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:text-emerald-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 mr-2 animate-pulse" />
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[8px] font-extrabold tracking-widest uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2 animate-pulse" />
                     {form.heroBadge}
                   </span>
                 )}
@@ -406,11 +408,11 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                 {/* Profile Photo */}
                 <div className="relative">
                   <div className="absolute inset-0 bg-linear-to-tr from-primary to-purple-500 rounded-full blur-md scale-105 animate-pulse opacity-60" />
-                  <div className="relative w-28 h-28 rounded-full overflow-hidden border-[3px] border-background bg-muted dark:border-slate-900 dark:bg-slate-900">
+                  <div className="relative w-24 h-24 rounded-full overflow-hidden border-[3px] border-slate-900 bg-slate-900">
                     {form.photoUrl ? (
-                      <img src={form.photoUrl} alt={form.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder-user.jpg' }} />
+                      <img src={form.photoUrl} alt={form.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder-user.jpg' }} />
                     ) : (
-                      <div className="w-full h-full bg-muted flex items-center justify-center font-bold text-xs text-muted-foreground">
+                      <div className="w-full h-full bg-slate-900 flex items-center justify-center font-bold text-xs text-slate-600">
                         No Photo
                       </div>
                     )}
@@ -419,65 +421,30 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
                 {/* Title & Role */}
                 <div className="space-y-1.5 max-w-[280px]">
-                  <h2 className="text-xl font-black text-gradient tracking-tight leading-none truncate">{form.name || "Ari Gunawan Jatmiko"}</h2>
-                  <p className="text-xs font-bold text-muted-foreground dark:text-slate-300 tracking-wide">{form.role || "Software Developer"}</p>
+                  <h2 className="text-lg font-black text-white tracking-tight leading-none truncate">{form.name || "Ari Gunawan Jatmiko"}</h2>
+                  <p className="text-[10px] font-bold text-slate-300 tracking-wide">{form.role || "Software Developer"}</p>
                 </div>
 
                 {/* Description */}
-                <p className="text-[11px] text-muted-foreground leading-relaxed max-w-[320px] bg-muted/30 p-3.5 rounded-xl border border-border/40 backdrop-blur-sm min-h-[60px] line-clamp-3 dark:bg-slate-900/50 dark:border-slate-800/40 dark:text-slate-400">
+                <p className="text-[10px] text-slate-400 leading-relaxed max-w-[320px] bg-slate-900/50 p-3.5 rounded-xl border border-white/5 backdrop-blur-sm min-h-[60px] line-clamp-3">
                   {form.heroDescription || "Specialized in building high-performance web applications..."}
                 </p>
 
-                {/* Contacts & Location */}
-                <div className="grid grid-cols-1 gap-1.5 text-[10px] text-muted-foreground border-t border-border/20 pt-4 w-full max-w-[300px] dark:text-slate-400 dark:border-slate-900">
-                  {form.location && (
-                    <div className="flex items-center justify-center gap-1.5">
-                      <MapPin className="h-3 w-3 text-primary" />
-                      <span>{form.location}</span>
-                    </div>
-                  )}
-                  {form.email && (
-                    <div className="flex items-center justify-center gap-1.5">
-                      <Mail className="h-3 w-3 text-primary" />
-                      <span className="truncate max-w-[180px]">{form.email}</span>
-                    </div>
-                  )}
-                  {form.phone && (
-                    <div className="flex items-center justify-center gap-1.5">
-                      <Phone className="h-3 w-3 text-primary" />
-                      <span>{form.phone}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Social icons */}
-                <div className="flex items-center justify-center gap-2 pt-2">
-                  <SocialIcon url={form.githubUrl} icon={Github} />
-                  <SocialIcon url={form.linkedinUrl} icon={Linkedin} />
-                  <SocialIcon url={form.instagramUrl} icon={Instagram} />
-                  <SocialIcon url={form.gitlabUrl} icon={Gitlab} />
-                  <SocialIcon url={form.twitterUrl} icon={Twitter} />
+                {/* Simulated Ledger Payload */}
+                <div className="w-full max-w-[280px] bg-black/40 border border-white/5 rounded-xl p-3 text-[8.5px] font-semibold text-left text-teal-400 space-y-1">
+                  <p className="text-[8px] text-primary uppercase font-bold tracking-widest">// onchain_profile_payload</p>
+                  <p className="text-white/60">{"{"}</p>
+                  <p className="pl-3 truncate">"name": "{form.name}",</p>
+                  <p className="pl-3 truncate">"role": "{form.role}",</p>
+                  <p className="pl-3 truncate">"email": "{form.email || "null"}",</p>
+                  <p className="pl-3">"status": "synchronized"</p>
+                  <p className="text-white/60">{"}"}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  )
-}
-
-function SocialIcon({ url, icon: IconComponent }: { url: string; icon: any }) {
-  const hasUrl = !!url
-  return (
-    <div
-      className={`p-2 rounded-full border transition-all duration-300 ${
-        hasUrl
-          ? "bg-primary/10 border-primary/20 text-primary shadow-sm hover:bg-primary hover:text-white dark:border-primary/30 dark:hover:text-white scale-105 cursor-pointer"
-          : "bg-muted/30 border-border/30 text-muted-foreground/30 dark:bg-slate-950/40 dark:border-slate-900 dark:text-slate-700"
-      }`}
-    >
-      <IconComponent className="h-3.5 w-3.5" />
     </div>
   )
 }

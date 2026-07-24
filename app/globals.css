@@ -136,27 +136,27 @@ layer(base);
 
 @layer base {
   :root {
-    --background: 226 50% 8%; /* #0B1020 */
+    --background: 222 47% 5%; /* #080b11 */
     --foreground: 220 20% 90%;
-    --card: 223 36% 14%; /* #161D2F */
+    --card: 223 38% 8%; /* #0a0d16 */
     --card-foreground: 220 20% 95%;
-    --popover: 223 36% 14%;
+    --popover: 223 38% 8%;
     --popover-foreground: 220 20% 95%;
-    --primary: 219 100% 66%; /* #4F8CFF (Electric Blue) */
+    --primary: 245 100% 66%; /* #6366f1 (Indigo Highlight) */
     --primary-foreground: 210 20% 98%;
-    --secondary: 262 83% 58%; /* #8B5CF6 (Purple) */
+    --secondary: 172 66% 50%; /* #14b8a6 (Teal Glow) */
     --secondary-foreground: 210 20% 98%;
-    --muted: 222 30% 18%;
+    --muted: 222 30% 12%;
     --muted-foreground: 220 15% 65%;
-    --accent: 219 100% 66%;
+    --accent: 245 100% 66%;
     --accent-foreground: 210 20% 98%;
-    --border: 220 20% 90% / 0.08; /* rgba(255,255,255,.08) */
-    --input: 220 20% 90% / 0.08;
-    --ring: 219 100% 66%;
-    --chain: 159 79% 52%; /* #22E5A0 (crypto cyan-green accent) */
+    --border: 220 20% 90% / 0.05; /* Faint line overlay */
+    --input: 220 20% 90% / 0.05;
+    --ring: 245 100% 66%;
+    --chain: 172 66% 50%;
     --chain-foreground: 210 20% 98%;
-    --glass-bg: 223 36% 14% / 0.4;
-    --glass-border: 220 20% 90% / 0.08;
+    --glass-bg: 223 38% 8% / 0.4;
+    --glass-border: 220 20% 90% / 0.05;
     --radius: 1rem;
 
     --font-departure: 'DepartureMono', monospace;
@@ -166,27 +166,27 @@ layer(base);
   }
 
   .dark {
-    --background: 226 50% 8%;
+    --background: 222 47% 5%;
     --foreground: 220 20% 90%;
-    --card: 223 36% 14%;
+    --card: 223 38% 8%;
     --card-foreground: 220 20% 95%;
-    --popover: 223 36% 14%;
+    --popover: 223 38% 8%;
     --popover-foreground: 220 20% 95%;
-    --primary: 219 100% 66%;
+    --primary: 245 100% 66%;
     --primary-foreground: 210 20% 98%;
-    --secondary: 262 83% 58%;
+    --secondary: 172 66% 50%;
     --secondary-foreground: 210 20% 98%;
-    --muted: 222 30% 18%;
+    --muted: 222 30% 12%;
     --muted-foreground: 220 15% 65%;
-    --accent: 219 100% 66%;
+    --accent: 245 100% 66%;
     --accent-foreground: 210 20% 98%;
-    --border: 220 20% 90% / 0.08;
-    --input: 220 20% 90% / 0.08;
-    --ring: 219 100% 66%;
-    --chain: 159 79% 52%;
+    --border: 220 20% 90% / 0.05;
+    --input: 220 20% 90% / 0.05;
+    --ring: 245 100% 66%;
+    --chain: 172 66% 50%;
     --chain-foreground: 210 20% 98%;
-    --glass-bg: 223 36% 14% / 0.4;
-    --glass-border: 220 20% 90% / 0.08;
+    --glass-bg: 223 38% 8% / 0.4;
+    --glass-border: 220 20% 90% / 0.05;
   }
   .theme {
     --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
@@ -201,7 +201,7 @@ layer(base);
 
   body {
     @apply text-foreground antialiased selection:bg-primary/30 selection:text-primary-foreground font-jetbrains;
-    background-color: #0B1020;
+    background-color: var(--pf-bg-deep);
     overflow-x: hidden;
   }
 
@@ -315,19 +315,19 @@ layer(base);
 }
 
 :root {
-  --pf-bg-deep: #0F2A2E;
-  --pf-bg-panel: #16383C;
-  --pf-teal: #2A6F74;
-  --pf-teal-glow: #3E9B94;
-  --pf-coral: #E8785B;
-  --pf-coral-soft: #F0A48C;
-  --pf-sand: #E8D9C0;
-  --pf-cream: #F4EEE3;
-  --pf-muted-fg: #9DB3B0;
+  --pf-bg-deep: #080b11;
+  --pf-bg-panel: #0f131d;
+  --pf-teal: #14b8a6;
+  --pf-teal-glow: #2dd4bf;
+  --pf-coral: #6366f1;
+  --pf-coral-soft: #818cf8;
+  --pf-sand: #cbd5e1;
+  --pf-cream: #f8fafc;
+  --pf-muted-fg: #94a3b8;
   --pf-heading-font: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --pf-mono-font: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
-  --pf-line: color-mix(in srgb, var(--pf-teal-glow) 22%, transparent);
-  --pf-line-soft: color-mix(in srgb, var(--pf-teal-glow) 10%, transparent);
+  --pf-line: color-mix(in srgb, var(--pf-coral) 12%, transparent);
+  --pf-line-soft: color-mix(in srgb, var(--pf-coral) 3%, transparent);
 }
 .font-heading { font-family: var(--pf-heading-font); }
 .font-mono-pf { font-family: var(--pf-mono-font); }
@@ -361,14 +361,32 @@ layer(base);
 .pf-panel {
   position: relative;
   border: 1px solid var(--pf-line);
-  background: color-mix(in srgb, var(--pf-bg-panel) 55%, transparent);
-  backdrop-filter: blur(6px);
+  background: color-mix(in srgb, var(--pf-bg-panel) 60%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  overflow: hidden;
 }
-.pf-panel:hover {
-  border-color: color-mix(in srgb, var(--pf-coral) 55%, transparent);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--pf-coral) 25%, transparent),
-    0 12px 40px color-mix(in srgb, var(--pf-coral) 12%, transparent);
+.pf-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(99, 102, 241, 0.12),
+    transparent 60%
+  );
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.pf-panel:hover::before {
+  opacity: 1;
+}
+.pf-panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* Corner brackets — decorative L-frames on a container */
@@ -420,7 +438,7 @@ layer(base);
 @keyframes pf-scan { 0% { top: -40%; } 100% { top: 100%; } }
 
 /* Glow text accent */
-.pf-glow-text { text-shadow: 0 0 24px color-mix(in srgb, var(--pf-coral) 45%, transparent); }
+.pf-glow-text { text-shadow: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .pf-cursor::after,
@@ -461,4 +479,52 @@ html {
 }
 .pf-skip-link:focus {
   top: 1rem;
+}
+
+/* ==========================================================================
+   Admin CMS Cockpit Overrides (Morphed theme styles for all forms and lists)
+   ========================================================================== */
+.bg-mesh input:not([type="checkbox"]),
+.bg-mesh textarea,
+.bg-mesh select {
+  font-family: 'DepartureMono', 'JetBrains Mono', monospace !important;
+  background-color: rgba(2, 6, 23, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+  border-radius: 0.75rem !important;
+  font-size: 11px !important;
+  padding: 0.5rem 0.85rem !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.bg-mesh input:not([type="checkbox"]):focus,
+.bg-mesh textarea:focus,
+.bg-mesh select:focus {
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15) !important;
+  outline: none !important;
+}
+
+.bg-mesh label {
+  font-family: 'DepartureMono', 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.15em !important;
+  color: #94a3b8 !important;
+  text-transform: uppercase !important;
+}
+
+.bg-mesh h1 {
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: -0.01em !important;
+}
+
+.bg-mesh button[type="submit"] {
+  font-family: 'DepartureMono', 'JetBrains Mono', monospace !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  border-radius: 0.75rem !important;
 }

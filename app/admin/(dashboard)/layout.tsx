@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma"
 import AdminSidebar from "@/components/admin/sidebar"
 import { Toaster } from "@/components/ui/sonner"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   robots: {
     index: false,
