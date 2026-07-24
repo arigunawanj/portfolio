@@ -38,6 +38,13 @@ export function Portfolio3D({ data, appearance }: { data: PortfolioData; appeara
       ) : (
         <div className="fixed inset-0 -z-0" style={{ background: "radial-gradient(circle at 50% 30%, var(--pf-bg-panel), var(--pf-bg-deep))" }} />
       )}
+      <div className="pf-grid-overlay" aria-hidden />
+      {/* top status bar */}
+      <div className="fixed top-0 inset-x-0 z-20 hidden md:flex items-center justify-between px-6 py-3 font-mono-pf text-[10px] tracking-wider" style={{ color: "var(--pf-muted-fg)" }}>
+        <span style={{ color: "var(--pf-teal-glow)" }}>◆ portfolio.sol</span>
+        <span>{"{ "}<span style={{ color: "var(--pf-coral)" }}>ari</span>.jatmiko{" }"}</span>
+        <span className="flex items-center gap-2"><span className="pf-status-dot" /> connected</span>
+      </div>
       <Hero contact={data.contact} aboutTraits={data.aboutTraits} funFacts={data.funFacts} />
       <Tech tech={data.tech} />
       <Projects projects={data.projects} />
