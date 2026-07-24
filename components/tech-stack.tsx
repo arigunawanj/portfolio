@@ -31,7 +31,7 @@ export default function TechStack({ technologies }: TechStackProps) {
   const categories = Object.keys(technologies)
 
   return (
-    <section id="skills" className="relative py-16 md:py-24 font-jetbrains">
+    <section id="skills" className="relative py-10 font-jetbrains w-full">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <SectionHeader
           command="tree skills/"

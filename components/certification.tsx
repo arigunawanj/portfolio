@@ -28,7 +28,7 @@ export default function Certification({ certifications }: CertificationProps) {
   const [activeCert, setActiveCert] = useState<CertificationItem | null>(null)
 
   return (
-    <section id="certs" className="relative py-16 md:py-24 font-jetbrains">
+    <section id="certs" className="relative py-10 font-jetbrains w-full">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
         <SectionHeader command="ls certs/" title="Certifications" />
 

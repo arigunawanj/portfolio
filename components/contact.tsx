@@ -66,7 +66,7 @@ export default function Contact({ profile }: { profile: ContactProfile }) {
   const currentYear = new Date().getFullYear()
 
   return (
-    <section id="contact" className="relative py-16 md:py-24 font-jetbrains">
+    <section id="contact" className="relative py-10 font-jetbrains w-full">
       <div className="max-w-3xl mx-auto px-5 md:px-8">
         <SectionHeader
           command="connect --with-me"

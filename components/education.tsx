@@ -26,7 +26,7 @@ export default function Education({ education }: { education: EducationItem[] })
   const [lightboxImage, setLightboxImage] = useState<string | null>(null)
 
   return (
-    <section id="education" className="relative py-16 md:py-24 font-jetbrains">
+    <section id="education" className="relative py-10 font-jetbrains w-full">
       <div className="max-w-4xl mx-auto px-5 md:px-8">
         <SectionHeader command="cat education.md" title="Academic background" />
 

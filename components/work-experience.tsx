@@ -25,7 +25,7 @@ export default function WorkExperience({ experiences }: { experiences: Experienc
   const [lightboxImage, setLightboxImage] = useState<string | null>(null)
 
   return (
-    <section id="experience" className="relative py-16 md:py-24 font-jetbrains">
+    <section id="experience" className="relative py-10 font-jetbrains w-full">
       <div className="max-w-5xl mx-auto px-5 md:px-8">
         <SectionHeader
           command="cat experience.log"

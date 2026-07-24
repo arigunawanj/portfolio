@@ -35,7 +35,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<Project | null>(null)
 
   return (
-    <section id="projects" className="relative py-16 md:py-24 font-jetbrains">
+    <section id="projects" className="relative py-10 font-jetbrains w-full">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <SectionHeader
           command="ls projects/"
