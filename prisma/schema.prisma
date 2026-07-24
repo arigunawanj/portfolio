@@ -139,3 +139,13 @@ model Certification {
   icon          String   @default("Zap")
   order         Int      @default(0)
 }
+
+model Appearance {
+  id          Int      @id @default(1)
+  palette     String   @default("teal-coral")
+  motionLevel String   @default("full")
+  enable3D    Boolean  @default(true)
+  accentColor String   @default("#E8785B")
+  headingFont String   @default("Space Grotesk")
+  updatedAt   DateTime @updatedAt
+}
