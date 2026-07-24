@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@400;500;600;700&display=swap')
 layer(base);
 
 @import 'tailwindcss';
@@ -313,3 +313,17 @@ layer(base);
     display: none;
   }
 }
+
+:root {
+  --pf-bg-deep: #0F2A2E;
+  --pf-bg-panel: #16383C;
+  --pf-teal: #2A6F74;
+  --pf-teal-glow: #3E9B94;
+  --pf-coral: #E8785B;
+  --pf-coral-soft: #F0A48C;
+  --pf-sand: #E8D9C0;
+  --pf-cream: #F4EEE3;
+  --pf-muted-fg: #9DB3B0;
+  --pf-heading-font: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+.font-heading { font-family: var(--pf-heading-font); }
