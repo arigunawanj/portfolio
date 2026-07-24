@@ -6,6 +6,14 @@ import { Terminal, TypingAnimation, AnimatedSpan } from "@/components/ui/termina
 import { ShimmerButton } from "@/components/ui/shimmer-button"
 import { BorderBeam } from "@/components/ui/border-beam"
 import { NumberTicker } from "@/components/ui/number-ticker"
+import dynamic from "next/dynamic"
+
+const NodeNetworkCanvas = dynamic(() => import("@/components/ui/node-network-canvas"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 rounded-full bg-linear-to-tr from-[#4F8CFF]/20 to-[#8B5CF6]/20 blur-2xl" />
+  ),
+})
 
 type HeroProfile = {
   name: string
@@ -70,11 +78,19 @@ export default function Hero({ profile, stats }: { profile: HeroProfile; stats: 
             {profile.heroDescription || "Building scalable products and high-performance applications."}
           </p>
 
-          <div className="flex items-center gap-2 py-1.5 px-3.5 mt-5 bg-[#22C55E]/5 border border-[#22C55E]/15 rounded-lg w-fit">
-            <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse" />
-            <span className="text-[11px] font-bold text-[#22C55E] tracking-wider uppercase font-ibm">
-              {profile.heroBadge || "Available for Opportunities"}
-            </span>
+          <div className="flex flex-wrap items-center gap-2 pt-5">
+            <div className="flex items-center gap-2 py-1.5 px-3.5 bg-[#22C55E]/5 border border-[#22C55E]/15 rounded-lg w-fit">
+              <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse" />
+              <span className="text-[11px] font-bold text-[#22C55E] tracking-wider uppercase font-ibm">
+                {profile.heroBadge || "Available for Opportunities"}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 py-1.5 px-3.5 bg-chain/5 border border-chain/20 rounded-lg w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-chain" />
+              <span className="text-[11px] font-bold text-chain tracking-wider uppercase font-ibm">
+                On-chain verified
+              </span>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 pt-6">
@@ -153,9 +169,11 @@ export default function Hero({ profile, stats }: { profile: HeroProfile; stats: 
           className="lg:col-span-5 flex justify-center lg:justify-end"
         >
           <div className="w-60 h-60 md:w-72 md:h-72 lg:w-80 lg:h-80 relative flex items-center justify-center select-none">
-            <div className="absolute inset-0 rounded-full bg-linear-to-tr from-[#4F8CFF]/20 to-[#8B5CF6]/20 blur-2xl" />
+            <div className="absolute inset-0 rounded-full overflow-hidden">
+              <NodeNetworkCanvas />
+            </div>
             <div className="absolute inset-3 rounded-full border border-dashed border-[#4F8CFF]/30 animate-[spin_40s_linear_infinite]" />
-            <div className="absolute inset-6 rounded-full overflow-hidden border-4 border-[#121826] bg-[#121826] shadow-[0_10px_30px_rgba(0,0,0,0.4)] relative z-10">
+            <div className="absolute inset-6 rounded-full overflow-hidden border border-white/10 backdrop-blur-sm bg-[#121826]/70 shadow-[0_10px_30px_rgba(0,0,0,0.4)] relative z-10">
               <img
                 src={profile.photoUrl || "/placeholder-user.jpg"}
                 alt={profile.name}
