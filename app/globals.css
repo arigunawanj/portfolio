@@ -306,3 +306,10 @@ layer(base);
     border-width: 0 1px 1px 0;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-hud-corners::before,
+  .deck-hud-corners::after {
+    display: none;
+  }
+}

@@ -43,7 +43,7 @@ export function DeckHud() {
           <button
             key={s.key}
             onClick={() => goTo(s.index)}
-            className="group flex items-center gap-2.5 cursor-pointer"
+            className="group flex items-center gap-2.5 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F8CFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1020]"
             aria-label={`Go to ${s.label}`}
           >
             <span
