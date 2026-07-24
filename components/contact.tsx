@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { Github, Linkedin, Instagram, Mail, Phone, ExternalLink, ArrowUp } from "lucide-react"
 import SectionHeader from "./section-header"
+import { getAccentColor } from "@/lib/accent-colors"
 
 type ContactProfile = {
   name: string
@@ -84,7 +85,8 @@ export default function Contact({ profile }: { profile: ContactProfile }) {
               whileInView={{ y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.35, delay: idx * 0.05 }}
-              className="group flex items-center justify-between p-4 rounded-lg border border-white/6 bg-[#161D2F]/30 hover:bg-[#161D2F]/60 hover:border-[#4F8CFF]/25 transition-all duration-300"
+              className="group relative flex items-center justify-between p-4 rounded-lg glass-panel hover:bg-[#161D2F]/60 transition-all duration-300"
+              style={{ borderColor: `${getAccentColor(idx)}22` }}
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div className="p-2 bg-white/5 rounded border border-white/10 group-hover:bg-[#4F8CFF]/10 group-hover:border-[#4F8CFF]/20 transition-all shrink-0">
@@ -107,7 +109,7 @@ export default function Contact({ profile }: { profile: ContactProfile }) {
         {profile.location && (
           <div className="mt-6 flex items-center justify-between text-[11px] text-muted-foreground/60 font-ibm">
             <span>Based in {profile.location}</span>
-            <span className="font-bold text-[#22C55E]">READY FOR REMOTE / HYBRID</span>
+            <span className="font-bold text-chain">READY FOR REMOTE / HYBRID</span>
           </div>
         )}
       </div>
