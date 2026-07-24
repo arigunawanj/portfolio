@@ -1,11 +1,14 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useDeck } from "./deck-provider"
 import { useDeckInput } from "./use-deck-input"
 import { Slide } from "./slide"
 import { DeckHud } from "./deck-hud"
 import { SLIDES } from "./deck-types"
+
+const DeckCanvas = dynamic(() => import("./deck-canvas"), { ssr: false })
 
 export type DeckSlides = {
   home: React.ReactNode
@@ -55,7 +58,7 @@ export function Deck({ slides }: { slides: DeckSlides }) {
 
   return (
     <div className="fixed inset-0 overflow-hidden" style={{ perspective: 1400 }}>
-      {/* MOUNT POINT: 3D scene (Task 6) renders here, behind slides */}
+      <DeckCanvas />
       <DeckHud />
       <AnimatePresence mode="popLayout" custom={direction}>
         <motion.div
