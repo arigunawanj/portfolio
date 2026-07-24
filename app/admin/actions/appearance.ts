@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
-export const APPEARANCE_DEFAULTS = {
+const APPEARANCE_DEFAULTS = {
   id: 1,
   palette: "teal-coral",
   motionLevel: "full",

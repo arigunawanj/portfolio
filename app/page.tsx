@@ -1,146 +1,22 @@
 import { prisma } from "@/lib/prisma"
-import SiteNav from "@/components/site-nav"
-import Hero from "@/components/hero"
-import Projects from "@/components/projects"
-import TechStack from "@/components/tech-stack"
-import WorkExperience from "@/components/work-experience"
-import Education from "@/components/education"
-import Certification from "@/components/certification"
-import Contact from "@/components/contact"
-import { DeckProvider } from "@/components/deck/deck-provider"
-import { Deck } from "@/components/deck/deck"
+import { mapPortfolioData } from "@/lib/portfolio-data"
+import { getAppearance } from "@/app/admin/actions/appearance"
+import { Portfolio3D } from "@/components/portfolio/portfolio-3d"
 
 export default async function Home() {
-  const [profile, projects, experiences, education, certifications, techCategories] = await Promise.all([
+  const [profile, projects, experiences, education, certifications, techCategories, aboutTraits, funFacts, appearance] = await Promise.all([
     prisma.siteProfile.findUnique({ where: { id: 1 } }),
     prisma.project.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
     prisma.workExperience.findMany({ orderBy: { order: "asc" } }),
     prisma.education.findMany({ orderBy: { order: "asc" } }),
     prisma.certification.findMany({ orderBy: { order: "asc" } }),
     prisma.techCategory.findMany({ orderBy: { order: "asc" }, include: { skills: { orderBy: { order: "asc" } } } }),
+    prisma.aboutTrait.findMany({ orderBy: { order: "asc" } }),
+    prisma.funFact.findMany({ orderBy: { order: "asc" } }),
+    getAppearance(),
   ])
 
-  const technologies = Object.fromEntries(
-    techCategories.map((cat) => [
-      cat.key,
-      {
-        icon: cat.icon,
-        title: cat.title,
-        description: cat.description,
-        skills: cat.skills.map((s) => ({ name: s.name, level: s.level })),
-      },
-    ])
-  )
+  const data = mapPortfolioData({ profile, projects, experiences, education, certifications, techCategories, aboutTraits, funFacts })
 
-  const mappedProjects = projects.map((p) => ({
-    id: p.id,
-    title: p.title,
-    shortDescription: p.shortDescription,
-    description: p.description,
-    images: p.images as string[],
-    tags: p.tags as string[],
-    features: p.features as string[],
-    demoLink: p.demoLink ?? "#",
-    githubLink: p.githubLink ?? "#",
-    fullDescription: p.fullDescription,
-    color: p.color,
-  }))
-
-  const earliestYear = experiences.reduce<number | null>((min, e) => {
-    const match = e.duration.match(/\d{4}/)
-    if (!match) return min
-    const year = Number(match[0])
-    return min === null || year < min ? year : min
-  }, null)
-  const yearsExperience = earliestYear ? Math.max(1, new Date().getFullYear() - earliestYear) : 1
-
-  return (
-    <div className="relative min-h-screen w-full bg-[#0B1020] text-foreground font-jetbrains overflow-x-hidden">
-      {/* Ambient background */}
-      <div className="fixed inset-0 bg-grid-subtle pointer-events-none z-0" />
-      <div className="fixed inset-0 noise-overlay pointer-events-none z-0" />
-      <div className="fixed top-[-300px] left-1/3 w-[600px] h-[600px] bg-[#4F8CFF]/10 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="fixed bottom-[-200px] right-1/4 w-[500px] h-[500px] bg-[#8B5CF6]/6 rounded-full blur-[120px] pointer-events-none z-0" />
-
-      <SiteNav name={profile?.name || "Ari Gunawan Jatmiko"} />
-
-      <DeckProvider>
-        <Deck
-          slides={{
-            home: profile ? (
-              <Hero
-                profile={profile}
-                stats={{
-                  yearsExperience,
-                  projectsShipped: mappedProjects.length,
-                  certifications: certifications.length,
-                }}
-              />
-            ) : (
-              <div />
-            ),
-            projects: <Projects projects={mappedProjects} />,
-            skills: <TechStack technologies={technologies} />,
-            experience: (
-              <WorkExperience
-                experiences={experiences.map((e) => ({
-                  id: e.id,
-                  position: e.position,
-                  company: e.company,
-                  duration: e.duration,
-                  location: e.location,
-                  description: e.description as string[],
-                  skills: e.skills as string[],
-                  images: (e.images as string[] | null) ?? [],
-                  companyUrl: e.companyUrl ?? "#",
-                  color: e.color,
-                }))}
-              />
-            ),
-            education: (
-              <Education
-                education={education.map((ed) => ({
-                  id: ed.id,
-                  degree: ed.degree,
-                  institution: ed.institution,
-                  duration: ed.duration,
-                  location: ed.location,
-                  description: ed.description,
-                  achievements: ed.achievements as string[],
-                  courses: ed.courses as string[],
-                  images: (ed.images as string[] | null) ?? [],
-                  thesis:
-                    ed.thesisTitle || ed.thesisAdvisor || ed.thesisAbstract
-                      ? {
-                          title: ed.thesisTitle ?? "",
-                          advisor: ed.thesisAdvisor ?? "",
-                          abstract: ed.thesisAbstract ?? "",
-                        }
-                      : null,
-                  color: ed.color,
-                }))}
-              />
-            ),
-            certs: (
-              <Certification
-                certifications={certifications.map((c) => ({
-                  id: c.id,
-                  name: c.name,
-                  issuer: c.issuer,
-                  date: c.date,
-                  description: c.description,
-                  credentialId: c.credentialId ?? "",
-                  credentialUrl: c.credentialUrl ?? "#",
-                  skills: c.skills as string[],
-                  color: c.color,
-                  icon: c.icon,
-                }))}
-              />
-            ),
-            contact: profile ? <Contact profile={profile} /> : <div />,
-          }}
-        />
-      </DeckProvider>
-    </div>
-  )
+  return <Portfolio3D data={data} appearance={{ motionLevel: appearance.motionLevel, enable3D: appearance.enable3D, accentColor: appearance.accentColor }} />
 }
