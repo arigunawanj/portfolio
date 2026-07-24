@@ -6,6 +6,8 @@ import { ExternalLink, Github, BookOpen, CheckCircle, Layers, Sparkles, Rocket }
 import SectionHeader from "./section-header"
 import { Safari } from "@/components/ui/safari"
 import { BentoGrid, BentoCard } from "@/components/ui/bento-grid"
+import { getAccentColor } from "@/lib/accent-colors"
+import { showRowConnector } from "@/lib/grid-connectors"
 
 function getDomain(url: string) {
   try {
@@ -52,8 +54,27 @@ export default function Projects({ projects }: { projects: Project[] }) {
                 whileInView={{ y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.4, delay: Math.min(idx, 5) * 0.05 }}
-                className="group flex flex-col rounded-xl border border-white/6 bg-[#161D2F]/40 hover:border-[#4F8CFF]/25 hover:bg-[#161D2F]/60 transition-all duration-300 overflow-hidden"
+                className="group relative flex flex-col rounded-xl glass-panel transition-all duration-300"
+                style={{ borderColor: `${getAccentColor(idx)}22` }}
               >
+                <div
+                  className="absolute -top-1 -left-1 w-2 h-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity blur-[2px]"
+                  style={{ backgroundColor: getAccentColor(idx) }}
+                />
+                {showRowConnector(idx, projects.length, 3) && (
+                  <div className="hidden lg:block absolute top-8 -right-3.5 z-10 w-3.5 h-px">
+                    <div
+                      className="w-full h-full"
+                      style={{
+                        background: `linear-gradient(to right, ${getAccentColor(idx)}66, ${getAccentColor(idx + 1)}66)`,
+                      }}
+                    />
+                    <span
+                      className="absolute right-0 top-1/2 -translate-y-1/2 -mr-0.5 w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: getAccentColor(idx + 1) }}
+                    />
+                  </div>
+                )}
                 <div className="relative shrink-0 bg-[#121826]/60 p-3 pb-0">
                   <div className="flex items-center justify-between mb-2 px-0.5">
                     {idx === 0 ? (
