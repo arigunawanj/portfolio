@@ -4,6 +4,8 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Award, ExternalLink, Calendar, ShieldCheck, X } from "lucide-react"
 import SectionHeader from "./section-header"
+import { getAccentColor } from "@/lib/accent-colors"
+import { showRowConnector } from "@/lib/grid-connectors"
 
 type CertificationItem = {
   id: number
@@ -38,8 +40,27 @@ export default function Certification({ certifications }: CertificationProps) {
             whileInView={{ y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.4, delay: Math.min(idx, 5) * 0.05 }}
-            className="p-3.5 rounded-xl border border-white/4 bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10 transition-all duration-300 flex flex-col justify-between"
+            className="relative p-3.5 rounded-xl glass-panel transition-all duration-300 flex flex-col justify-between"
+            style={{ borderColor: `${getAccentColor(idx)}22` }}
           >
+            <div
+              className="absolute -top-1 -left-1 w-2 h-2 rounded-full opacity-0 hover:opacity-100 transition-opacity blur-[2px] pointer-events-none"
+              style={{ backgroundColor: getAccentColor(idx) }}
+            />
+            {showRowConnector(idx, certifications.length, 3) && (
+              <div className="hidden lg:block absolute top-8 -right-2.5 z-10 w-2.5 h-px">
+                <div
+                  className="w-full h-full"
+                  style={{
+                    background: `linear-gradient(to right, ${getAccentColor(idx)}66, ${getAccentColor(idx + 1)}66)`,
+                  }}
+                />
+                <span
+                  className="absolute right-0 top-1/2 -translate-y-1/2 -mr-0.5 w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: getAccentColor(idx + 1) }}
+                />
+              </div>
+            )}
             <div className="space-y-2">
               {/* Badge/Issuer & Date */}
               <div className="flex items-center justify-between gap-2 text-[8px] md:text-[9px] text-muted-foreground/80 font-ibm font-medium uppercase tracking-wider">
