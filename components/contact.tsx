@@ -88,6 +88,10 @@ export default function Contact({ profile }: { profile: ContactProfile }) {
               className="group relative flex items-center justify-between p-4 rounded-lg glass-panel hover:bg-[#161D2F]/60 transition-all duration-300"
               style={{ borderColor: `${getAccentColor(idx)}22` }}
             >
+              <div
+                className="absolute -top-1 -left-1 w-2 h-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity blur-[2px]"
+                style={{ backgroundColor: getAccentColor(idx) }}
+              />
               <div className="flex items-center gap-3 min-w-0">
                 <div className="p-2 bg-white/5 rounded border border-white/10 group-hover:bg-[#4F8CFF]/10 group-hover:border-[#4F8CFF]/20 transition-all shrink-0">
                   {conn.icon}
