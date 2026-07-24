@@ -43,7 +43,7 @@ No changes to existing `--primary`/`--secondary`/`--background` values.
 Applies to: `components/projects.tsx`, `components/work-experience.tsx`, `components/education.tsx`, `components/certification.tsx`.
 
 - Card surface switches to the shared `.glass-panel` utility (backdrop-blur, translucent bg, subtle border) instead of today's flat `bg-[#161D2F]/40`.
-- Card border/glow tint uses each item's existing `color` field (already present on Project/WorkExperience/Education/Certification records — no schema change) at low opacity, brightening on hover.
+- Card border/glow tint: the DB `color` field is a Tailwind gradient-class fragment (e.g. `"from-blue-500/20 to-cyan-500/20"`) that is typed on every model but never actually rendered anywhere today — interpolating raw DB strings into Tailwind classes doesn't work under JIT purge (arbitrary runtime strings aren't statically analyzable), so it's not usable directly as-is. Instead, glow color cycles a fixed 3-color accent array (`[primary, secondary, chain]`, i.e. `#4F8CFF` / `#8B5CF6` / the new chain accent) by card index, applied via inline `style` (CSS custom property), at low opacity, brightening on hover. The `color` DB field itself is left untouched (out of scope — no schema/admin changes).
 - On hover, a small "node dot" glow appears at a card corner.
 - For grid layouts with ≥2 columns at a given breakpoint: an SVG connector line animates (`pathLength` via framer-motion, triggered on scroll-into-view) between horizontally-adjacent cards, suggesting linked blocks.
 - Connectors are hidden below `md` breakpoint where grids collapse to a single column — no connector logic needed for 1-col layouts, avoids awkward mobile lines.
