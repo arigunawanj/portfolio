@@ -42,6 +42,9 @@ layer(base);
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
 
+  --color-chain: hsl(var(--chain));
+  --color-chain-foreground: hsl(var(--chain-foreground));
+
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
 
@@ -150,6 +153,10 @@ layer(base);
     --border: 220 20% 90% / 0.08; /* rgba(255,255,255,.08) */
     --input: 220 20% 90% / 0.08;
     --ring: 219 100% 66%;
+    --chain: 159 79% 52%; /* #22E5A0 (crypto cyan-green accent) */
+    --chain-foreground: 210 20% 98%;
+    --glass-bg: 223 36% 14% / 0.4;
+    --glass-border: 220 20% 90% / 0.08;
     --radius: 1rem;
 
     --font-departure: 'DepartureMono', monospace;
@@ -176,6 +183,10 @@ layer(base);
     --border: 220 20% 90% / 0.08;
     --input: 220 20% 90% / 0.08;
     --ring: 219 100% 66%;
+    --chain: 159 79% 52%;
+    --chain-foreground: 210 20% 98%;
+    --glass-bg: 223 36% 14% / 0.4;
+    --glass-border: 220 20% 90% / 0.08;
   }
   .theme {
     --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
@@ -242,5 +253,13 @@ layer(base);
     50% {
       opacity: 0;
     }
+  }
+
+  /* Frosted glass surface for cards, nav, and panels */
+  .glass-panel {
+    background: hsl(var(--glass-bg));
+    border: 1px solid hsl(var(--glass-border));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 }
