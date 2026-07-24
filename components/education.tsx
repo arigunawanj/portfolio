@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { GraduationCap, Calendar, MapPin, BookOpen, Quote, Award, ChevronDown, ChevronUp, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import SectionHeader from "./section-header"
+import { getAccentColor } from "@/lib/accent-colors"
 
 type EducationItem = {
   id: number
@@ -60,11 +61,10 @@ export default function Education({ education }: { education: EducationItem[] })
 
                   <div
                     className={cn(
-                      "p-5 rounded-xl border transition-all duration-300",
-                      isExpanded
-                        ? "bg-[#161D2F] border-white/8 shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
-                        : "border-white/5 bg-[#161D2F]/20 hover:bg-[#161D2F]/40 hover:border-white/10"
+                      "p-5 rounded-xl glass-panel transition-all duration-300",
+                      isExpanded ? "shadow-[0_10px_30px_rgba(0,0,0,0.25)]" : "hover:bg-[#161D2F]/40"
                     )}
+                    style={{ borderColor: isExpanded ? `${getAccentColor(idx)}55` : undefined }}
                   >
                     <div
                       onClick={() => setExpandedId(isExpanded ? null : item.id)}
