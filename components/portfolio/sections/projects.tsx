@@ -1,12 +1,12 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { ProjectVM } from "@/lib/portfolio-data"
 import { SectionHead } from "./section-head"
 import { BorderBeam } from "@/components/ui/border-beam"
-import { Github, ExternalLink, Blocks } from "lucide-react"
+import { Github, ExternalLink, Blocks, ChevronLeft, ChevronRight, ZoomIn, X } from "lucide-react"
 import { toast } from "sonner"
 
 export function Projects({ 
@@ -181,6 +181,12 @@ interface ProjectDetailModalProps {
 function ProjectDetailModal({ project, onClose, onAudit }: ProjectDetailModalProps) {
   const [scanStatus, setScanStatus] = useState<"idle" | "scanning" | "success">("idle")
   const [scanProgress, setScanProgress] = useState(0)
+  const [activeImage, setActiveImage] = useState(0)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+
+  const images = project.images ?? []
+  const prevImage = () => setActiveImage((i) => (i - 1 + images.length) % images.length)
+  const nextImage = () => setActiveImage((i) => (i + 1) % images.length)
 
   const handleStartScan = () => {
     setScanStatus("scanning")
@@ -218,6 +224,73 @@ function ProjectDetailModal({ project, onClose, onAudit }: ProjectDetailModalPro
             ✕
           </button>
         </div>
+
+        {/* Image gallery */}
+        {images.length > 0 && (
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(true)}
+              aria-label="Open full-size image"
+              className="group/gallery relative h-56 w-full rounded-2xl overflow-hidden border border-white/10 bg-black/40 cursor-zoom-in block"
+            >
+              <Image
+                key={images[activeImage]}
+                src={images[activeImage]}
+                alt={`${project.title} screenshot ${activeImage + 1}`}
+                fill
+                sizes="(max-width: 768px) 100vw, 576px"
+                className="object-cover"
+              />
+
+              <div className="absolute inset-0 bg-black/0 group-hover/gallery:bg-black/20 transition-colors flex items-center justify-center">
+                <ZoomIn className="h-6 w-6 text-white opacity-0 group-hover/gallery:opacity-90 transition-opacity" />
+              </div>
+
+              {images.length > 1 && (
+                <>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => { e.stopPropagation(); prevImage() }}
+                    aria-label="Previous image"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/60 border border-white/10 text-white hover:bg-black/80 cursor-pointer transition"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </span>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => { e.stopPropagation(); nextImage() }}
+                    aria-label="Next image"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/60 border border-white/10 text-white hover:bg-black/80 cursor-pointer transition"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </span>
+                  <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 border border-white/10 text-[10px] text-white/80">
+                    {activeImage + 1}/{images.length}
+                  </span>
+                </>
+              )}
+            </button>
+
+            {images.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {images.map((src, idx) => (
+                  <button
+                    key={src}
+                    onClick={() => setActiveImage(idx)}
+                    aria-label={`Show image ${idx + 1}`}
+                    className="relative h-12 w-16 shrink-0 rounded-lg overflow-hidden border cursor-pointer transition"
+                    style={{ borderColor: idx === activeImage ? "var(--pf-teal-glow)" : "var(--pf-line)" }}
+                  >
+                    <Image src={src} alt="" fill sizes="64px" className="object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Content */}
         <div className="space-y-4 text-xs">
@@ -294,6 +367,112 @@ function ProjectDetailModal({ project, onClose, onAudit }: ProjectDetailModalPro
           </button>
         </div>
       </motion.div>
+
+      {/* Full-size image lightbox with swipe navigation */}
+      <AnimatePresence>
+        {lightboxOpen && (
+          <ImageLightbox
+            images={images}
+            activeIndex={activeImage}
+            title={project.title}
+            onPrev={prevImage}
+            onNext={nextImage}
+            onClose={() => setLightboxOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
+  )
+}
+
+interface ImageLightboxProps {
+  images: string[]
+  activeIndex: number
+  title: string
+  onPrev: () => void
+  onNext: () => void
+  onClose: () => void
+}
+
+function ImageLightbox({ images, activeIndex, title, onPrev, onNext, onClose }: ImageLightboxProps) {
+  const SWIPE_THRESHOLD = 60
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") onPrev()
+      else if (e.key === "ArrowRight") onNext()
+      else if (e.key === "Escape") onClose()
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [onPrev, onNext, onClose])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-60 flex items-center justify-center bg-black/95 p-4"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        aria-label="Close full-size image"
+        className="absolute top-4 right-4 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 cursor-pointer transition"
+      >
+        <X className="h-5 w-5" />
+      </button>
+
+      {images.length > 1 && (
+        <span className="absolute top-4 left-4 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[11px] font-mono-pf text-white/80">
+          {activeIndex + 1}/{images.length}
+        </span>
+      )}
+
+      {images.length > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onPrev() }}
+          aria-label="Previous image"
+          className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 cursor-pointer transition"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+      )}
+
+      <motion.div
+        key={images[activeIndex]}
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0 }}
+        drag={images.length > 1 ? "x" : false}
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.3}
+        onDragEnd={(_, info) => {
+          if (info.offset.x > SWIPE_THRESHOLD) onPrev()
+          else if (info.offset.x < -SWIPE_THRESHOLD) onNext()
+        }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-4xl h-[70vh] cursor-grab active:cursor-grabbing"
+      >
+        <Image
+          src={images[activeIndex]}
+          alt={`${title} screenshot ${activeIndex + 1}`}
+          fill
+          sizes="90vw"
+          className="object-contain pointer-events-none"
+          draggable={false}
+        />
+      </motion.div>
+
+      {images.length > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onNext() }}
+          aria-label="Next image"
+          className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 cursor-pointer transition"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      )}
+    </motion.div>
   )
 }

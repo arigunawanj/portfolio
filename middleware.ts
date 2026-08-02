@@ -14,12 +14,15 @@ export async function middleware(request: NextRequest) {
 async function handle(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (pathname === "/admin/login") {
-    return NextResponse.next()
-  }
-
   const token = request.cookies.get(COOKIE_NAME)?.value
   const session = token ? await verifySessionToken(token) : null
+
+  if (pathname === "/admin/login") {
+    if (session) {
+      return NextResponse.redirect(new URL("/admin", request.url))
+    }
+    return NextResponse.next()
+  }
 
   if (!session) {
     const loginUrl = new URL("/admin/login", request.url)
