@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -45,6 +46,57 @@ export async function updateEducation(id: number, formData: FormData) {
 
 export async function deleteEducation(id: number) {
   await prisma.education.delete({ where: { id } })
+  revalidatePath("/")
+  revalidatePath("/admin/education")
+}
+
+interface ImportEducationInput {
+  id?: number
+  degree: string
+  institution: string
+  duration: string
+  location: string
+  description: string
+  achievements: unknown
+  courses: unknown
+  images?: unknown
+  thesisTitle?: string | null
+  thesisAdvisor?: string | null
+  thesisAbstract?: string | null
+  color?: string
+  order?: number
+}
+
+export async function importEducation(items: ImportEducationInput[]) {
+  const ops = items.map((item) => {
+    const data = {
+      degree: item.degree,
+      institution: item.institution,
+      duration: item.duration,
+      location: item.location,
+      description: item.description,
+      achievements: (item.achievements ?? []) as Prisma.InputJsonValue,
+      courses: (item.courses ?? []) as Prisma.InputJsonValue,
+      images: (item.images ?? []) as Prisma.InputJsonValue,
+      thesisTitle: item.thesisTitle ?? null,
+      thesisAdvisor: item.thesisAdvisor ?? null,
+      thesisAbstract: item.thesisAbstract ?? null,
+      color: item.color ?? "from-blue-500/20 to-indigo-500/20",
+      order: item.order ?? 0,
+    }
+
+    if (item.id) {
+      return prisma.education.upsert({
+        where: { id: item.id },
+        update: data,
+        create: { id: item.id, ...data },
+      })
+    }
+
+    return prisma.education.create({ data })
+  })
+
+  await prisma.$transaction(ops)
   revalidatePath("/")
   revalidatePath("/admin/education")
 }

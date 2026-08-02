@@ -3,18 +3,61 @@
 import { useEffect, useRef, useState } from "react"
 import { Reorder, useDragControls } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
-import { deleteEducation, updateEducationOrder } from "../../actions/education"
-import { GripVertical, Edit2, Trash2, Calendar, MapPin, GraduationCap } from "lucide-react"
+import { deleteEducation, importEducation, updateEducationOrder } from "../../actions/education"
+import { GripVertical, Edit2, Trash2, Calendar, MapPin, GraduationCap, Download, Upload } from "lucide-react"
 
 interface EducationListClientProps {
   initialEducation: any[]
 }
 
 export default function EducationListClient({ initialEducation }: EducationListClientProps) {
+  const router = useRouter()
   const [items, setItems] = useState(initialEducation)
+  const [isImporting, setIsImporting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const skipNextOrderSaveRef = useRef(true)
+
+  useEffect(() => {
+    skipNextOrderSaveRef.current = true
+    setItems(initialEducation)
+  }, [initialEducation])
+
+  const handleExport = () => {
+    const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `education-export-${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ""
+    if (!file) return
+
+    setIsImporting(true)
+    try {
+      const text = await file.text()
+      const parsed = JSON.parse(text)
+      const importItems = Array.isArray(parsed) ? parsed : [parsed]
+      await importEducation(importItems)
+      toast.success(`Imported ${importItems.length} education entr${importItems.length === 1 ? "y" : "ies"} successfully!`, {
+        description: "Existing entries were updated, new ones were added.",
+      })
+      router.refresh()
+    } catch (error) {
+      toast.error("Failed to import JSON.", {
+        description: error instanceof Error ? error.message : "Invalid file format.",
+      })
+    } finally {
+      setIsImporting(false)
+    }
+  }
 
   // Only one updateEducationOrder request may be in flight at a time. Concurrent
   // requests can resolve out of order (dev server / network jitter), letting an
@@ -65,8 +108,39 @@ export default function EducationListClient({ initialEducation }: EducationListC
 
   return (
     <div className="space-y-4">
-      <div className="p-3 bg-muted/40 border border-border/40 rounded-xl text-xs text-muted-foreground flex items-center gap-2">
-        💡 <span>Drag the grab handle (<GripVertical className="inline h-3.5 w-3.5" />) next to any academic card to reorder it dynamically.</span>
+      <div className="p-3 bg-muted/40 border border-border/40 rounded-xl text-xs text-muted-foreground flex items-center justify-between gap-3 flex-wrap">
+        <span className="flex items-center gap-2">
+          💡 Drag the grab handle (<GripVertical className="inline h-3.5 w-3.5" />) next to any academic card to reorder it dynamically.
+        </span>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            onChange={handleImportFile}
+            className="hidden"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isImporting}
+            onClick={() => fileInputRef.current?.click()}
+            className="h-9 rounded-xl text-xs gap-1.5"
+          >
+            <Upload className="h-3.5 w-3.5" /> {isImporting ? "Importing..." : "Import JSON"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            className="h-9 rounded-xl text-xs gap-1.5"
+          >
+            <Download className="h-3.5 w-3.5" /> Export JSON
+          </Button>
+        </div>
       </div>
 
       {items.length === 0 ? (

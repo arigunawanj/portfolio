@@ -4,6 +4,67 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
+interface ImportSkillInput {
+  id?: number
+  name: string
+  level: number
+  order?: number
+}
+
+interface ImportCategoryInput {
+  id?: number
+  key: string
+  icon: string
+  title: string
+  description: string
+  order?: number
+  skills?: ImportSkillInput[]
+}
+
+export async function importCategories(items: ImportCategoryInput[]) {
+  await prisma.$transaction(async (tx) => {
+    for (const item of items) {
+      const data = {
+        key: item.key,
+        icon: item.icon,
+        title: item.title,
+        description: item.description,
+        order: item.order ?? 0,
+      }
+
+      const category = item.id
+        ? await tx.techCategory.upsert({
+            where: { id: item.id },
+            update: data,
+            create: { id: item.id, ...data },
+          })
+        : await tx.techCategory.create({ data })
+
+      for (const skill of item.skills ?? []) {
+        const skillData = {
+          categoryId: category.id,
+          name: skill.name,
+          level: skill.level,
+          order: skill.order ?? 0,
+        }
+
+        if (skill.id) {
+          await tx.techSkill.upsert({
+            where: { id: skill.id },
+            update: skillData,
+            create: { id: skill.id, ...skillData },
+          })
+        } else {
+          await tx.techSkill.create({ data: skillData })
+        }
+      }
+    }
+  })
+
+  revalidatePath("/")
+  revalidatePath("/admin/tech-stack")
+}
+
 function readCategoryForm(formData: FormData) {
   return {
     key: String(formData.get("key") ?? ""),

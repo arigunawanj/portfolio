@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -42,6 +43,51 @@ export async function updateCertification(id: number, formData: FormData) {
 
 export async function deleteCertification(id: number) {
   await prisma.certification.delete({ where: { id } })
+  revalidatePath("/")
+  revalidatePath("/admin/certifications")
+}
+
+interface ImportCertificationInput {
+  id?: number
+  name: string
+  issuer: string
+  date: string
+  description: string
+  credentialId?: string | null
+  credentialUrl?: string | null
+  skills: unknown
+  color?: string
+  icon?: string
+  order?: number
+}
+
+export async function importCertifications(items: ImportCertificationInput[]) {
+  const ops = items.map((item) => {
+    const data = {
+      name: item.name,
+      issuer: item.issuer,
+      date: item.date,
+      description: item.description,
+      credentialId: item.credentialId ?? null,
+      credentialUrl: item.credentialUrl ?? null,
+      skills: (item.skills ?? []) as Prisma.InputJsonValue,
+      color: item.color ?? "from-blue-500/20 via-indigo-500/20 to-blue-600/20",
+      icon: item.icon ?? "Zap",
+      order: item.order ?? 0,
+    }
+
+    if (item.id) {
+      return prisma.certification.upsert({
+        where: { id: item.id },
+        update: data,
+        create: { id: item.id, ...data },
+      })
+    }
+
+    return prisma.certification.create({ data })
+  })
+
+  await prisma.$transaction(ops)
   revalidatePath("/")
   revalidatePath("/admin/certifications")
 }

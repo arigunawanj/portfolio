@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react"
 import { Reorder, useDragControls } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { deleteExperience, updateExperienceOrder } from "../../actions/experience"
+import { deleteExperience, importExperiences, updateExperienceOrder } from "../../actions/experience"
 import {
   GripVertical,
   Edit2,
@@ -17,7 +18,9 @@ import {
   Search,
   CheckCircle2,
   Building,
-  Wrench
+  Wrench,
+  Download,
+  Upload
 } from "lucide-react"
 
 interface ExperienceListClientProps {
@@ -25,9 +28,51 @@ interface ExperienceListClientProps {
 }
 
 export default function ExperienceListClient({ initialExperiences }: ExperienceListClientProps) {
+  const router = useRouter()
   const [items, setItems] = useState(initialExperiences)
   const [search, setSearch] = useState("")
+  const [isImporting, setIsImporting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const skipNextOrderSaveRef = useRef(true)
+
+  useEffect(() => {
+    skipNextOrderSaveRef.current = true
+    setItems(initialExperiences)
+  }, [initialExperiences])
+
+  const handleExport = () => {
+    const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `experience-export-${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ""
+    if (!file) return
+
+    setIsImporting(true)
+    try {
+      const text = await file.text()
+      const parsed = JSON.parse(text)
+      const importItems = Array.isArray(parsed) ? parsed : [parsed]
+      await importExperiences(importItems)
+      toast.success(`Imported ${importItems.length} experience(s) successfully!`, {
+        description: "Existing entries were updated, new ones were added.",
+      })
+      router.refresh()
+    } catch (error) {
+      toast.error("Failed to import JSON.", {
+        description: error instanceof Error ? error.message : "Invalid file format.",
+      })
+    } finally {
+      setIsImporting(false)
+    }
+  }
 
   // Only one updateExperienceOrder request may be in flight at a time. Concurrent
   // requests can resolve out of order (dev server / network jitter), letting an
@@ -141,6 +186,35 @@ export default function ExperienceListClient({ initialExperiences }: ExperienceL
         </div>
         <div className="text-[10px] font-bold text-muted-foreground/80 hidden sm:block uppercase tracking-wider px-2">
           💡 Drag handle (<GripVertical className="inline h-3.5 w-3.5" />) to sort
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            onChange={handleImportFile}
+            className="hidden"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isImporting}
+            onClick={() => fileInputRef.current?.click()}
+            className="h-9 rounded-xl text-xs gap-1.5"
+          >
+            <Upload className="h-3.5 w-3.5" /> {isImporting ? "Importing..." : "Import JSON"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            className="h-9 rounded-xl text-xs gap-1.5"
+          >
+            <Download className="h-3.5 w-3.5" /> Export JSON
+          </Button>
         </div>
       </div>
 

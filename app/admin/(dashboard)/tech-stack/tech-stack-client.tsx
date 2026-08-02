@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { Reorder, useDragControls } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,6 +11,7 @@ import {
   createSkill,
   deleteCategory,
   deleteSkill,
+  importCategories,
   updateSkill,
   updateCategoryOrder,
   updateSkillOrder,
@@ -25,7 +27,9 @@ import {
   Settings,
   Smartphone,
   Check,
-  Trash2
+  Trash2,
+  Download,
+  Upload
 } from "lucide-react"
 
 interface Skill {
@@ -62,8 +66,45 @@ const CATEGORY_ICONS: Record<string, any> = {
 }
 
 export default function TechStackClient({ initialCategories }: TechStackClientProps) {
+  const router = useRouter()
   const [categories, setCategories] = useState<Category[]>(initialCategories)
+  const [isImporting, setIsImporting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const skipNextOrderSaveRef = useRef(true)
+
+  const handleExport = () => {
+    const blob = new Blob([JSON.stringify(categories, null, 2)], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `tech-stack-export-${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ""
+    if (!file) return
+
+    setIsImporting(true)
+    try {
+      const text = await file.text()
+      const parsed = JSON.parse(text)
+      const importItems = Array.isArray(parsed) ? parsed : [parsed]
+      await importCategories(importItems)
+      toast.success(`Imported ${importItems.length} categor${importItems.length === 1 ? "y" : "ies"} successfully!`, {
+        description: "Existing categories & skills were updated, new ones were added.",
+      })
+      router.refresh()
+    } catch (error) {
+      toast.error("Failed to import JSON.", {
+        description: error instanceof Error ? error.message : "Invalid file format.",
+      })
+    } finally {
+      setIsImporting(false)
+    }
+  }
 
   useEffect(() => {
     skipNextOrderSaveRef.current = true
@@ -171,8 +212,39 @@ export default function TechStackClient({ initialCategories }: TechStackClientPr
 
   return (
     <div className="space-y-4">
-      <div className="p-3 bg-muted/40 border border-border/40 rounded-xl text-xs text-muted-foreground flex items-center gap-2">
-        💡 <span>Drag the grab handle (<GripVertical className="inline h-3.5 w-3.5" />) next to any category card or skill block to reorder them.</span>
+      <div className="p-3 bg-muted/40 border border-border/40 rounded-xl text-xs text-muted-foreground flex items-center justify-between gap-3 flex-wrap">
+        <span className="flex items-center gap-2">
+          💡 Drag the grab handle (<GripVertical className="inline h-3.5 w-3.5" />) next to any category card or skill block to reorder them.
+        </span>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            onChange={handleImportFile}
+            className="hidden"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isImporting}
+            onClick={() => fileInputRef.current?.click()}
+            className="h-9 rounded-xl text-xs gap-1.5"
+          >
+            <Upload className="h-3.5 w-3.5" /> {isImporting ? "Importing..." : "Import JSON"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            className="h-9 rounded-xl text-xs gap-1.5"
+          >
+            <Download className="h-3.5 w-3.5" /> Export JSON
+          </Button>
+        </div>
       </div>
 
       <Reorder.Group axis="y" values={categories} onReorder={handleCategoryReorder} className="space-y-6">
