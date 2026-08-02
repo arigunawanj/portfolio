@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Reorder, useDragControls } from "framer-motion"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -14,16 +14,53 @@ interface EducationListClientProps {
 
 export default function EducationListClient({ initialEducation }: EducationListClientProps) {
   const [items, setItems] = useState(initialEducation)
+  const skipNextOrderSaveRef = useRef(true)
 
-  const handleReorder = async (newOrder: any[]) => {
-    setItems(newOrder)
-    const ids = newOrder.map((e) => e.id)
-    
-    toast.promise(updateEducationOrder(ids), {
+  // Only one updateEducationOrder request may be in flight at a time. Concurrent
+  // requests can resolve out of order (dev server / network jitter), letting an
+  // earlier, stale request overwrite a later, correct one. Queue instead.
+  const savingRef = useRef(false)
+  const pendingIdsRef = useRef<number[] | null>(null)
+
+  const persistOrder = (ids: number[]) => {
+    if (savingRef.current) {
+      pendingIdsRef.current = ids
+      return
+    }
+    savingRef.current = true
+    const request = updateEducationOrder(ids)
+    toast.promise(request, {
       loading: "Saving new order...",
       success: "Education order updated successfully!",
       error: "Failed to update education order.",
     })
+    request.catch(() => {}).finally(() => {
+      savingRef.current = false
+      if (pendingIdsRef.current) {
+        const next = pendingIdsRef.current
+        pendingIdsRef.current = null
+        persistOrder(next)
+      }
+    })
+  }
+
+  // Debounces off the committed `items` state (not a callback param) so the
+  // persisted order always matches what's actually rendered, even though
+  // framer-motion's Reorder fires onReorder many times mid-drag.
+  useEffect(() => {
+    if (skipNextOrderSaveRef.current) {
+      skipNextOrderSaveRef.current = false
+      return
+    }
+    const timeout = setTimeout(() => {
+      persistOrder(items.map((e) => e.id))
+    }, 500)
+    return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items])
+
+  const handleReorder = (newOrder: any[]) => {
+    setItems(newOrder)
   }
 
   return (
@@ -61,7 +98,8 @@ function EducationItem({ e, onDelete }: { e: any; onDelete: (id: number) => void
       value={e}
       dragListener={false}
       dragControls={dragControls}
-      whileDrag={{ 
+      layout="position"
+      whileDrag={{
         scale: 1.015, 
         boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
         borderColor: "var(--primary)"

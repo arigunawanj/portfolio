@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Reorder, useDragControls } from "framer-motion"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -63,23 +63,93 @@ const CATEGORY_ICONS: Record<string, any> = {
 
 export default function TechStackClient({ initialCategories }: TechStackClientProps) {
   const [categories, setCategories] = useState<Category[]>(initialCategories)
+  const skipNextOrderSaveRef = useRef(true)
 
   useEffect(() => {
+    skipNextOrderSaveRef.current = true
     setCategories(initialCategories)
   }, [initialCategories])
 
-  const handleCategoryReorder = async (newOrder: Category[]) => {
-    setCategories(newOrder)
-    const ids = newOrder.map((cat) => cat.id)
-    
-    toast.promise(updateCategoryOrder(ids), {
+  // Only one updateCategoryOrder request may be in flight at a time. Concurrent
+  // requests can resolve out of order (dev server / network jitter), letting an
+  // earlier, stale request overwrite a later, correct one. Queue instead.
+  const categorySavingRef = useRef(false)
+  const categoryPendingIdsRef = useRef<number[] | null>(null)
+
+  const persistCategoryOrder = (ids: number[]) => {
+    if (categorySavingRef.current) {
+      categoryPendingIdsRef.current = ids
+      return
+    }
+    categorySavingRef.current = true
+    const request = updateCategoryOrder(ids)
+    toast.promise(request, {
       loading: "Saving category order...",
       success: "Category order updated successfully!",
       error: "Failed to update category order.",
     })
+    request.catch(() => {}).finally(() => {
+      categorySavingRef.current = false
+      if (categoryPendingIdsRef.current) {
+        const next = categoryPendingIdsRef.current
+        categoryPendingIdsRef.current = null
+        persistCategoryOrder(next)
+      }
+    })
   }
 
-  const handleSkillReorder = async (categoryId: number, newSkillOrder: Skill[]) => {
+  // Keyed on category ids only (not the whole `categories` array) so nested
+  // skill-order edits don't spuriously retrigger a category-order save.
+  const categoryIdsKey = categories.map((cat) => cat.id).join(",")
+
+  // Debounces off the committed state (not a callback param) so the persisted
+  // order always matches what's actually rendered, even though framer-motion's
+  // Reorder fires onReorder many times mid-drag.
+  useEffect(() => {
+    if (skipNextOrderSaveRef.current) {
+      skipNextOrderSaveRef.current = false
+      return
+    }
+    const timeout = setTimeout(() => {
+      persistCategoryOrder(categoryIdsKey.split(",").filter(Boolean).map(Number))
+    }, 500)
+    return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryIdsKey])
+
+  const handleCategoryReorder = (newOrder: Category[]) => {
+    setCategories(newOrder)
+  }
+
+  // Per-category debounce + single-flight queue for skill order, since each
+  // category's skill list reorders independently of the others.
+  const skillSavingRef = useRef<Map<number, boolean>>(new Map())
+  const skillPendingRef = useRef<Map<number, number[]>>(new Map())
+  const skillTimeoutRef = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map())
+
+  const persistSkillOrder = (categoryId: number, ids: number[]) => {
+    if (skillSavingRef.current.get(categoryId)) {
+      skillPendingRef.current.set(categoryId, ids)
+      return
+    }
+    skillSavingRef.current.set(categoryId, true)
+    const request = updateSkillOrder(ids)
+    toast.promise(request, {
+      loading: "Saving skill order...",
+      success: "Skills order updated successfully!",
+      error: "Failed to update skills order.",
+    })
+    request.catch(() => {}).finally(() => {
+      skillSavingRef.current.set(categoryId, false)
+      const pending = skillPendingRef.current.get(categoryId)
+      if (pending) {
+        skillPendingRef.current.delete(categoryId)
+        persistSkillOrder(categoryId, pending)
+      }
+    })
+  }
+
+  const handleSkillReorder = (categoryId: number, newSkillOrder: Skill[]) => {
     setCategories((prev) =>
       prev.map((cat) => {
         if (cat.id === categoryId) {
@@ -89,12 +159,14 @@ export default function TechStackClient({ initialCategories }: TechStackClientPr
       })
     )
 
-    const ids = newSkillOrder.map((s) => s.id)
-    toast.promise(updateSkillOrder(ids), {
-      loading: "Saving skill order...",
-      success: "Skills order updated successfully!",
-      error: "Failed to update skills order.",
-    })
+    const existingTimeout = skillTimeoutRef.current.get(categoryId)
+    if (existingTimeout) clearTimeout(existingTimeout)
+    skillTimeoutRef.current.set(
+      categoryId,
+      setTimeout(() => {
+        persistSkillOrder(categoryId, newSkillOrder.map((s) => s.id))
+      }, 500)
+    )
   }
 
   return (
@@ -146,7 +218,8 @@ function CategoryItem({
       value={cat}
       dragListener={false}
       dragControls={categoryDragControls}
-      whileDrag={{ 
+      layout="position"
+      whileDrag={{
         scale: 1.015, 
         boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
         borderColor: "var(--primary)"
@@ -277,7 +350,8 @@ function SkillItem({
       value={skill}
       dragListener={false}
       dragControls={skillDragControls}
-      whileDrag={{ 
+      layout="position"
+      whileDrag={{
         scale: 1.015, 
         boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
         borderColor: "var(--primary)"

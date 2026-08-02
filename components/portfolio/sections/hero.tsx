@@ -84,7 +84,7 @@ export function Hero({ contact, aboutTraits, funFacts }: { contact: ContactVM; a
           {/* Subheading Role block */}
           <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono-pf text-sm">
             <span style={{ color: "var(--pf-muted-fg)" }}>validator_role<span style={{ color: "var(--pf-teal-glow)" }}>:</span></span>
-            <span style={{ color: "var(--pf-coral)" }}>fullstack_web3_dev()</span>
+            <span style={{ color: "var(--pf-coral)" }}>{contact.role}</span>
             {contact.heroBadge && (
               <span className="inline-flex items-center gap-2 px-3 py-0.5 rounded-md border font-mono-pf text-xs" style={{ borderColor: "var(--pf-line)", color: "var(--pf-sand)", background: "rgba(99, 102, 241, 0.05)" }}>
                 <span className="pf-status-dot" /> {contact.heroBadge}

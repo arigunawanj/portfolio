@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Reorder, useDragControls } from "framer-motion"
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
@@ -21,20 +21,58 @@ interface FunFactsListClientProps {
 
 export default function FunFactsListClient({ initialFunFacts }: FunFactsListClientProps) {
   const [items, setItems] = useState<FunFact[]>(initialFunFacts)
+  const skipNextOrderSaveRef = useRef(true)
 
   useEffect(() => {
+    skipNextOrderSaveRef.current = true
     setItems(initialFunFacts)
   }, [initialFunFacts])
 
-  const handleReorder = async (newOrder: FunFact[]) => {
-    setItems(newOrder)
-    const ids = newOrder.map((f) => f.id)
-    
-    toast.promise(updateFunFactOrder(ids), {
+  // Only one updateFunFactOrder request may be in flight at a time. Concurrent
+  // requests can resolve out of order (dev server / network jitter), letting an
+  // earlier, stale request overwrite a later, correct one. Queue instead.
+  const savingRef = useRef(false)
+  const pendingIdsRef = useRef<number[] | null>(null)
+
+  const persistOrder = (ids: number[]) => {
+    if (savingRef.current) {
+      pendingIdsRef.current = ids
+      return
+    }
+    savingRef.current = true
+    const request = updateFunFactOrder(ids)
+    toast.promise(request, {
       loading: "Saving new order...",
       success: "Fun facts order updated!",
       error: "Failed to update order.",
     })
+    request.catch(() => {}).finally(() => {
+      savingRef.current = false
+      if (pendingIdsRef.current) {
+        const next = pendingIdsRef.current
+        pendingIdsRef.current = null
+        persistOrder(next)
+      }
+    })
+  }
+
+  // Debounces off the committed `items` state (not a callback param) so the
+  // persisted order always matches what's actually rendered, even though
+  // framer-motion's Reorder fires onReorder many times mid-drag.
+  useEffect(() => {
+    if (skipNextOrderSaveRef.current) {
+      skipNextOrderSaveRef.current = false
+      return
+    }
+    const timeout = setTimeout(() => {
+      persistOrder(items.map((f) => f.id))
+    }, 500)
+    return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items])
+
+  const handleReorder = (newOrder: FunFact[]) => {
+    setItems(newOrder)
   }
 
   return (
@@ -96,7 +134,8 @@ function FunFactItem({ f, onDelete }: { f: FunFact; onDelete: (id: number) => vo
       value={f}
       dragListener={false}
       dragControls={dragControls}
-      whileDrag={{ 
+      layout="position"
+      whileDrag={{
         scale: 1.015, 
         boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
         borderColor: "var(--primary)"

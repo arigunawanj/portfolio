@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Reorder, useDragControls } from "framer-motion"
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
@@ -26,20 +26,58 @@ interface TraitsListClientProps {
 
 export default function TraitsListClient({ title, category, initialTraits }: TraitsListClientProps) {
   const [traits, setTraits] = useState<Trait[]>(initialTraits)
+  const skipNextOrderSaveRef = useRef(true)
 
   useEffect(() => {
+    skipNextOrderSaveRef.current = true
     setTraits(initialTraits)
   }, [initialTraits])
 
-  const handleReorder = async (newOrder: Trait[]) => {
-    setTraits(newOrder)
-    const ids = newOrder.map((t) => t.id)
-    
-    toast.promise(updateTraitOrder(ids), {
+  // Only one updateTraitOrder request may be in flight at a time. Concurrent
+  // requests can resolve out of order (dev server / network jitter), letting an
+  // earlier, stale request overwrite a later, correct one. Queue instead.
+  const savingRef = useRef(false)
+  const pendingIdsRef = useRef<number[] | null>(null)
+
+  const persistOrder = (ids: number[]) => {
+    if (savingRef.current) {
+      pendingIdsRef.current = ids
+      return
+    }
+    savingRef.current = true
+    const request = updateTraitOrder(ids)
+    toast.promise(request, {
       loading: "Saving new order...",
       success: `${title} order updated!`,
       error: "Failed to update order.",
     })
+    request.catch(() => {}).finally(() => {
+      savingRef.current = false
+      if (pendingIdsRef.current) {
+        const next = pendingIdsRef.current
+        pendingIdsRef.current = null
+        persistOrder(next)
+      }
+    })
+  }
+
+  // Debounces off the committed `traits` state (not a callback param) so the
+  // persisted order always matches what's actually rendered, even though
+  // framer-motion's Reorder fires onReorder many times mid-drag.
+  useEffect(() => {
+    if (skipNextOrderSaveRef.current) {
+      skipNextOrderSaveRef.current = false
+      return
+    }
+    const timeout = setTimeout(() => {
+      persistOrder(traits.map((t) => t.id))
+    }, 500)
+    return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [traits])
+
+  const handleReorder = (newOrder: Trait[]) => {
+    setTraits(newOrder)
   }
 
   return (
@@ -111,7 +149,8 @@ function TraitItem({ t, onDelete }: { t: Trait; onDelete: (id: number) => void }
       value={t}
       dragListener={false}
       dragControls={dragControls}
-      whileDrag={{ 
+      layout="position"
+      whileDrag={{
         scale: 1.015, 
         boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
         borderColor: "var(--primary)"

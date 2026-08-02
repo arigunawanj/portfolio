@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Reorder, useDragControls } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { deleteProject, updateProjectOrder } from "../../actions/projects"
+import { deleteProject, importProjects, updateProjectOrder } from "../../actions/projects"
 import {
   GripVertical,
   Edit2,
@@ -18,7 +19,9 @@ import {
   Search,
   CheckCircle2,
   FolderDot,
-  FileEdit
+  FileEdit,
+  Download,
+  Upload
 } from "lucide-react"
 
 interface ProjectListClientProps {
@@ -26,18 +29,97 @@ interface ProjectListClientProps {
 }
 
 export default function ProjectListClient({ initialProjects }: ProjectListClientProps) {
+  const router = useRouter()
   const [projects, setProjects] = useState(initialProjects)
   const [search, setSearch] = useState("")
+  const [isImporting, setIsImporting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const skipNextOrderSaveRef = useRef(true)
 
-  const handleReorder = async (newOrder: any[]) => {
-    setProjects(newOrder)
-    const ids = newOrder.map((p) => p.id)
-    
-    toast.promise(updateProjectOrder(ids), {
+  // Only one updateProjectOrder request may be in flight at a time. Concurrent
+  // requests can resolve out of order (dev server / network jitter), letting an
+  // earlier, stale request overwrite a later, correct one. Queue instead.
+  const savingRef = useRef(false)
+  const pendingIdsRef = useRef<number[] | null>(null)
+
+  const persistOrder = (ids: number[]) => {
+    if (savingRef.current) {
+      pendingIdsRef.current = ids
+      return
+    }
+    savingRef.current = true
+    const request = updateProjectOrder(ids)
+    toast.promise(request, {
       loading: "Saving new order...",
       success: "Sorting order updated successfully!",
       error: "Failed to update sorting order.",
     })
+    request.catch(() => {}).finally(() => {
+      savingRef.current = false
+      if (pendingIdsRef.current) {
+        const next = pendingIdsRef.current
+        pendingIdsRef.current = null
+        persistOrder(next)
+      }
+    })
+  }
+
+  useEffect(() => {
+    skipNextOrderSaveRef.current = true
+    setProjects(initialProjects)
+  }, [initialProjects])
+
+  // Debounces off the committed `projects` state (not a callback param) so the
+  // persisted order always matches what's actually rendered, even though
+  // framer-motion's Reorder fires onReorder many times mid-drag.
+  useEffect(() => {
+    if (skipNextOrderSaveRef.current) {
+      skipNextOrderSaveRef.current = false
+      return
+    }
+    const timeout = setTimeout(() => {
+      persistOrder(projects.map((p) => p.id))
+    }, 500)
+    return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projects])
+
+  const handleExport = () => {
+    const blob = new Blob([JSON.stringify(projects, null, 2)], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `projects-export-${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ""
+    if (!file) return
+
+    setIsImporting(true)
+    try {
+      const text = await file.text()
+      const parsed = JSON.parse(text)
+      const items = Array.isArray(parsed) ? parsed : [parsed]
+      await importProjects(items)
+      toast.success(`Imported ${items.length} project(s) successfully!`, {
+        description: "Existing projects were updated, new ones were added.",
+      })
+      router.refresh()
+    } catch (error) {
+      toast.error("Failed to import JSON.", {
+        description: error instanceof Error ? error.message : "Invalid file format.",
+      })
+    } finally {
+      setIsImporting(false)
+    }
+  }
+
+  const handleReorder = (newOrder: any[]) => {
+    setProjects(newOrder)
   }
 
   // Count stats
@@ -103,6 +185,35 @@ export default function ProjectListClient({ initialProjects }: ProjectListClient
         <div className="text-[10px] font-bold text-muted-foreground/80 hidden sm:block uppercase tracking-wider px-2">
           💡 Drag handle (<GripVertical className="inline h-3.5 w-3.5" />) to sort
         </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            onChange={handleImportFile}
+            className="hidden"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isImporting}
+            onClick={() => fileInputRef.current?.click()}
+            className="h-9 rounded-xl text-xs gap-1.5"
+          >
+            <Upload className="h-3.5 w-3.5" /> {isImporting ? "Importing..." : "Import JSON"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            className="h-9 rounded-xl text-xs gap-1.5"
+          >
+            <Download className="h-3.5 w-3.5" /> Export JSON
+          </Button>
+        </div>
       </div>
 
       {filteredProjects.length === 0 ? (
@@ -138,7 +249,8 @@ function ProjectItem({ project, onDelete }: { project: any; onDelete: (id: numbe
       value={project}
       dragListener={false}
       dragControls={dragControls}
-      whileDrag={{ 
+      layout="position"
+      whileDrag={{
         scale: 1.015, 
         boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
         borderColor: "var(--primary)"

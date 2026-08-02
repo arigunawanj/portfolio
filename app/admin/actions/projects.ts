@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -30,7 +31,7 @@ function readForm(formData: FormData) {
     demoLink: String(formData.get("demoLink") ?? "") || null,
     githubLink: String(formData.get("githubLink") ?? "") || null,
     color: String(formData.get("color") ?? "from-blue-500/20 to-cyan-500/20"),
-    published: formData.get("published") === "on",
+    published: formData.get("published") === "true",
     order: Number(formData.get("order") ?? 0),
   }
 }
@@ -51,6 +52,55 @@ export async function updateProject(id: number, formData: FormData) {
 
 export async function deleteProject(id: number) {
   await prisma.project.delete({ where: { id } })
+  revalidatePath("/")
+  revalidatePath("/admin/projects")
+}
+
+interface ImportProjectInput {
+  id?: number
+  title: string
+  shortDescription: string
+  description: string
+  fullDescription: string
+  images: unknown
+  tags: unknown
+  features: unknown
+  demoLink?: string | null
+  githubLink?: string | null
+  color?: string
+  published?: boolean
+  order?: number
+}
+
+export async function importProjects(items: ImportProjectInput[]) {
+  const ops = items.map((item) => {
+    const data = {
+      title: item.title,
+      shortDescription: item.shortDescription,
+      description: item.description,
+      fullDescription: item.fullDescription,
+      images: (item.images ?? []) as Prisma.InputJsonValue,
+      tags: (item.tags ?? []) as Prisma.InputJsonValue,
+      features: (item.features ?? []) as Prisma.InputJsonValue,
+      demoLink: item.demoLink ?? null,
+      githubLink: item.githubLink ?? null,
+      color: item.color ?? "from-blue-500/20 to-cyan-500/20",
+      published: item.published ?? true,
+      order: item.order ?? 0,
+    }
+
+    if (item.id) {
+      return prisma.project.upsert({
+        where: { id: item.id },
+        update: data,
+        create: { id: item.id, ...data },
+      })
+    }
+
+    return prisma.project.create({ data })
+  })
+
+  await prisma.$transaction(ops)
   revalidatePath("/")
   revalidatePath("/admin/projects")
 }
